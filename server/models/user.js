@@ -68,6 +68,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods = {
+  // check trùng password
   isCorrectPassword: async function (password) {
     return await bcrypt.compare(password, this.password);
   },
