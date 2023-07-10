@@ -43,13 +43,16 @@ var userSchema = new mongoose.Schema(
     refreshToken: {
       type: String,
     },
+
     passwordChangedAt: {
       type: String,
     },
     passwordResetToken: {
+      // lưu token
       type: String,
     },
     passwordResetExpires: {
+      // thời gian có giá trị còn hạn của token ở trên khoảng 5 hay 10 phút gì đấy
       type: String,
     },
   },
@@ -72,6 +75,7 @@ userSchema.methods = {
   isCorrectPassword: async function (password) {
     return await bcrypt.compare(password, this.password);
   },
+  // đổi mật khẩu qua mail
   createPasswordChangedToken: function () {
     const resetToken = crypto.randomBytes(32).toString("hex");
     this.passwordResetToken = crypto
