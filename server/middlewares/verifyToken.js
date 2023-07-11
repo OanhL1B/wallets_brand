@@ -25,7 +25,18 @@ const verifyAccessToken = asyncHandler(async (req, res, next) => {
   }
 });
 
-// phân quyền
+// là nhân viên hoặc là admin thì có quyền
+const isAdminOrEmployee = asyncHandler((req, res, next) => {
+  const { role } = req.user;
+  if (role !== "admin" || role !== "employee")
+    return res.status(401).json({
+      success: false,
+      mes: " REQUIRE ADMIN ROLE OR EMPLOYEE ROLE",
+    });
+  next();
+});
+
+// admin thì có quyền
 const isAdmin = asyncHandler((req, res, next) => {
   const { role } = req.user;
   if (role !== "admin")
@@ -39,4 +50,5 @@ const isAdmin = asyncHandler((req, res, next) => {
 module.exports = {
   verifyAccessToken,
   isAdmin,
+  isAdminOrEmployee,
 };
