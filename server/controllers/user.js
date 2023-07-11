@@ -151,7 +151,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
 // người dùng đổi mật khẩu
 const resetPassword = asyncHandler(async (req, res) => {
   const { password, token } = req.body;
-  if (!password || !token) throw new Error("Missing imputs");
+  if (!password || !token) throw new Error("Missing imputs ");
   const passwordResetToken = crypto
     .createHash("sha256")
     .update(token)
