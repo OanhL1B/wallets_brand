@@ -28,7 +28,7 @@ const verifyAccessToken = asyncHandler(async (req, res, next) => {
 // là nhân viên hoặc là admin thì có quyền
 const isAdminOrEmployee = asyncHandler((req, res, next) => {
   const { role } = req.user;
-  if (role !== "admin" || role !== "employee")
+  if (role !== "admin" && role !== "employee")
     return res.status(401).json({
       success: false,
       mes: " REQUIRE ADMIN ROLE OR EMPLOYEE ROLE",
