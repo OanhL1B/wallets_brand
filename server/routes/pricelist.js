@@ -9,7 +9,7 @@ router.post("/", [verifyAccessToken, isAdminOrEmployee], ctrls.createPricelist);
 router.get("/", ctrls.getPricelists);
 
 router.put(
-  "/:plid",
+  "/:id",
   [verifyAccessToken, isAdminOrEmployee],
   ctrls.updatePricelist
 );

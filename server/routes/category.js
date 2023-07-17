@@ -11,15 +11,15 @@ router.post("/", [verifyAccessToken, isAdminOrEmployee], ctrls.createCategory);
 router.get("/", ctrls.getCategories);
 
 router.put(
-  "/:cid",
+  "/:id",
   [verifyAccessToken, isAdminOrEmployee],
   ctrls.updateCategory
 );
 router.delete(
-  "/:cid",
+  "/",
   [verifyAccessToken, isAdminOrEmployee],
   ctrls.deleteCategory
 );
-router.get("/:cid", ctrls.getCategory);
+router.get("/:id", ctrls.getCategory);
 
 module.exports = router;
