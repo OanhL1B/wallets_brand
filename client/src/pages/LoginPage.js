@@ -1,10 +1,10 @@
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../redux/actions/loginActions";
 import Spinner from "../utils/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -25,7 +25,7 @@ const LoginPage = () => {
   const login = (e) => {
     e.preventDefault();
     setLoading(true);
-    dispatch(userLogin({ username: username, password: password }, navigate));
+    dispatch(userLogin({ email: username, password: password }, navigate));
   };
   useEffect(() => {
     if (store.errors) {

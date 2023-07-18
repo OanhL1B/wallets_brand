@@ -1,4 +1,4 @@
 import { APIPUBLIC } from "../config/config";
 
 export const userLogin = (formData) =>
-  APIPUBLIC.post("/api/auth/signin", formData);
+  APIPUBLIC.post("api/user/login", formData);

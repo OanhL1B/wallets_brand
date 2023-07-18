@@ -1,32 +1,17 @@
 import { toast } from "react-toastify";
 import { LOGIN, SET_ERRORS } from "../actionTypes";
-import { APIPUBLIC } from "../config/config";
+import * as api from "../api/adminapi";
 
 export const userLogin = (formData, navigate) => async (dispatch) => {
   try {
-    const { data } = await APIPUBLIC.userLogin(formData);
-
-    if (data.status === "success") {
-      const { roles } = data.retObj;
-      const userRole = roles[0];
-
-      // Bổ sung trường "role" vào đối tượng dữ liệu người dùng
-      const userData = { ...data, role: userRole };
-
-      dispatch({ type: LOGIN, data: userData });
+    const { data } = await api.userLogin(formData);
+    console.log("data", data);
+    if (data.success === true) {
+      dispatch({ type: LOGIN, data: data });
       toast.success("Đăng nhập thành công!");
-      if (userRole === "ROLE_SINHVIEN") {
-        localStorage.setItem("studentUser", JSON.stringify(userData));
-        navigate("/admin/studentHome");
-      } else if (userRole === "ROLE_ADMIN") {
-        localStorage.setItem("adminUser", JSON.stringify(userData));
-        navigate("/admin/home");
-      } else {
-        localStorage.setItem("teacherUser", JSON.stringify(userData));
-        navigate("/admin/teacherHome");
-      }
+      navigate("/dashboard");
     } else {
-      toast.error("Username hoặc Password chưa đúng!");
+      toast.error("email hoặc mật khẩu hoặc mật khẩu chưa đúng!");
     }
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });

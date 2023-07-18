@@ -12,7 +12,7 @@ const register = asyncHandler(async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
   if (!email || !password || !lastName || !firstName)
     return res.status(400).json({
-      sucess: false,
+      success: false,
       mes: "Missing inputs", // Thiếu 1 trong 4 trường thì nó sẽ báo lỗi liền
     });
 
@@ -21,7 +21,7 @@ const register = asyncHandler(async (req, res) => {
   else {
     const newUser = await User.create(req.body);
     return res.status(200).json({
-      sucess: newUser ? true : false,
+      success: newUser ? true : false,
       mes: newUser
         ? "Register is successfully. Please go login~"
         : "Something went wrong",
@@ -30,41 +30,80 @@ const register = asyncHandler(async (req, res) => {
 });
 
 // Refresh token => Cấp mới access token
-// Access token => Xác thực người dùng, quân quyên người dùng
+// Access token => Xác thực người dùng, phân quyền người dùng
+// const login = asyncHandler(async (req, res) => {
+//   const { email, password } = req.body;
+//   if (!email || !password)
+//     return res.status(400).json({
+//       success: false,
+//       mes: "Missing inputs",
+//     });
+
+//   // plain object
+//   const response = await User.findOne({ email });
+//   if (response && (await response.isCorrectPassword(password))) {
+//     // Tách password và role ra khỏi response
+//     const { password, role, refreshToken, ...userData } = response.toObject();
+//     // Tạo access token
+//     const accessToken = generateAccessToken(response._id, role);
+//     // Tạo refresh token
+//     const newRefreshToken = generateRefreshToken(response._id);
+//     // Lưu refresh token vào database
+//     await User.findByIdAndUpdate(
+//       response._id,
+//       { refreshToken: newRefreshToken },
+//       { new: true }
+//     );
+//     // Lưu refresh token vào cookie
+//     res.cookie("refreshToken", newRefreshToken, {
+//       httpOnly: true,
+//       maxAge: 7 * 24 * 60 * 60 * 1000,
+//     });
+//     return res.status(200).json({
+//       success: true,
+//       accessToken,
+//       userData,
+//     });
+//   } else {
+//     throw new Error("Invalid credentials!");
+//   }
+// });
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password)
+  if (!email || !password) {
     return res.status(400).json({
-      sucess: false,
+      success: false,
       mes: "Missing inputs",
     });
-  // plain object
-  const response = await User.findOne({ email });
-  if (response && (await response.isCorrectPassword(password))) {
-    // Tách password và role ra khỏi response
-    const { password, role, refreshToken, ...userData } = response.toObject();
-    // Tạo access token
-    const accessToken = generateAccessToken(response._id, role);
-    // Tạo refresh token
-    const newRefreshToken = generateRefreshToken(response._id);
-    // Lưu refresh token vào database
+  }
+
+  const user = await User.findOne({ email });
+  if (user && (await user.isCorrectPassword(password))) {
+    const { password, role, refreshToken, ...userData } = user.toObject();
+    const accessToken = generateAccessToken(user._id, role);
+    const newRefreshToken = generateRefreshToken(user._id);
+
     await User.findByIdAndUpdate(
-      response._id,
+      user._id,
       { refreshToken: newRefreshToken },
       { new: true }
     );
-    // Lưu refresh token vào cookie
+
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+
     return res.status(200).json({
-      sucess: true,
+      success: true,
       accessToken,
       userData,
     });
   } else {
-    throw new Error("Invalid credentials!");
+    return res.status(401).json({
+      success: false,
+      message: "Mật khẩu hoặc password chưa đúng!",
+    });
   }
 });
 
