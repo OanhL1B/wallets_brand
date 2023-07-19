@@ -1,12 +1,12 @@
 import React from "react";
-import Sidebar from "./SideBar";
-import Header from "./Header";
+import Sidebar from "../SideBar";
+import Header from "../Header";
 import Body from "./Body";
 
-const AdminHome = () => {
+const AddCategory = () => {
   return (
     <div className="flex">
-      <div className="h-screen overflow-y-hidden bg-[#ffffff] shadow-2xl">
+      <div className="h-screen overflow-y-hidden bg-white shadow-2xl">
         <Sidebar></Sidebar>
       </div>
       <div className="flex flex-col flex-auto bg-lite">
@@ -17,4 +17,4 @@ const AdminHome = () => {
   );
 };
 
-export default AdminHome;
+export default AddCategory;

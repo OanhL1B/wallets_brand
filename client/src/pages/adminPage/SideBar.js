@@ -1,10 +1,16 @@
-import { NavLink } from "react-router-dom";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import GroupIcon from "@mui/icons-material/Group";
+import React, { useState } from "react";
+import CAMELIA from "./logo.png";
+import PriceChangeIcon from "@mui/icons-material/PriceChange";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
 import HomeIcon from "@mui/icons-material/Home";
-import PTIT from "./logo.png";
-import React from "react";
-import SchoolIcon from "@mui/icons-material/School";
+import GroupIcon from "@mui/icons-material/Group";
+import CategoryIcon from "@mui/icons-material/Category";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { NavLink } from "react-router-dom";
+import CategorySubMenu from "./category/CategorySubMenu";
 
 const isNotActiveStyle =
   "flex items-center px-5 gap-3 text-icon-color hover:text-primary transition-all duration-200 ease-in-out capitalize  py-2 my-1";
@@ -12,11 +18,16 @@ const isActiveStyle =
   "svg: flex items-center bg-primary bg-opacity-20 px-5 gap-3 text-primary font-bold hover:text-primary  transition-all duration-200 ease-in-out capitalize hover:bg-gray-200  py-2 my-1";
 
 const Sidebar = () => {
+  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+
+  const handleSubMenuToggle = () => {
+    setIsSubMenuOpen(!isSubMenuOpen);
+  };
   return (
-    <div className="flex-[0.2] w-[268px] h-full">
-      <div className="h-full pt-4 ml-1 space-y-8 bg-[#fffff] ">
+    <div className="w-[268px] h-full  ">
+      <div className="h-full pt-4 ml-1 space-y-8 bg-[#fffff]">
         <div>
-          <img src={PTIT} alt="" className="h-[50px] mx-auto mb-3" />
+          <img src={CAMELIA} alt="" className="h-[50px] mx-auto mb-3" />
         </div>
         <div className="" style={{ marginTop: 0 }}>
           <NavLink
@@ -34,10 +45,32 @@ const Sidebar = () => {
               isActive ? isActiveStyle : isNotActiveStyle
             }
           >
-            <HomeIcon className="" />
+            <AccountCircleIcon className="" />
             <h1 className="font-normal">Profile</h1>
           </NavLink>
         </div>
+
+        <div className="mt-0" style={{ marginTop: 0 }}>
+          <div className="dropdown-container">
+            <div
+              className={`dropdown-trigger ${
+                isSubMenuOpen ? isActiveStyle : isNotActiveStyle
+              }`}
+            >
+              <div className="flex justify-between w-full">
+                <div className="flex gap-x-2">
+                  <CategoryIcon />
+                  <h1 className="font-normal">Categories</h1>
+                </div>
+                <div onClick={handleSubMenuToggle}>
+                  <ArrowDropDownIcon />
+                </div>
+              </div>
+            </div>
+            {isSubMenuOpen && <CategorySubMenu />}
+          </div>
+        </div>
+
         <div className="mt-0" style={{ marginTop: 0 }}>
           <NavLink
             to="/admin/getdepartmentall"
@@ -45,18 +78,10 @@ const Sidebar = () => {
               isActive ? isActiveStyle : isNotActiveStyle
             }
           >
-            <AssignmentIndIcon className="" />
+            <Inventory2Icon className="" />
             <h1 className="font-normal">Products</h1>
           </NavLink>
-          <NavLink
-            to="/admin/allUnit"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <SchoolIcon className="" />
-            <h1 className="font-normal">Categories</h1>
-          </NavLink>
+
           <NavLink
             to="/admin/student"
             className={({ isActive }) =>
@@ -74,7 +99,7 @@ const Sidebar = () => {
               isActive ? isActiveStyle : isNotActiveStyle
             }
           >
-            <GroupIcon className="" />
+            <AddShoppingCartIcon className="" />
             <h1 className="font-normal">Orders</h1>
           </NavLink>
           <NavLink
@@ -83,7 +108,7 @@ const Sidebar = () => {
               isActive ? isActiveStyle : isNotActiveStyle
             }
           >
-            <GroupIcon className="" />
+            <PriceChangeIcon className="" />
             <h1 className="font-normal">Pricelist</h1>
           </NavLink>
           <NavLink
@@ -92,7 +117,7 @@ const Sidebar = () => {
               isActive ? isActiveStyle : isNotActiveStyle
             }
           >
-            <GroupIcon className="" />
+            <AttachMoneyIcon className="" />
             <h1 className="font-normal">ProductPrice</h1>
           </NavLink>
         </div>

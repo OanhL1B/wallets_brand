@@ -5,7 +5,6 @@ import * as api from "../api/adminapi";
 export const userLogin = (formData, navigate) => async (dispatch) => {
   try {
     const { data } = await api.userLogin(formData);
-    console.log("data", data);
     if (data.success === true) {
       dispatch({ type: LOGIN, data: data });
       toast.success("Đăng nhập thành công!");

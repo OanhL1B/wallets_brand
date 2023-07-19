@@ -8,7 +8,10 @@ import Swal from "sweetalert2";
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  //   const store = useSelector((state) => state);
+  const authDataSelector = (state) => state.admin.authData;
+  const user = useSelector(authDataSelector);
+  console.log("uset", user?.userData?.email);
+
   const logout = () => {
     Swal.fire({
       title: "Bạn có muốn đăng xuất không?",
@@ -29,7 +32,7 @@ const Header = () => {
       <div className="flex items-center"></div>
       <div className="flex items-center mx-5 space-x-3">
         <Avatar />
-        {/* <h1>{store.auth.adminData.role.split("_")[1]}</h1> */}
+        <h1>{user?.userData?.email}</h1>
         <LogoutIcon
           onClick={logout}
           className="transition-all cursor-pointer hover:scale-125 "
