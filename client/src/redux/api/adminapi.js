@@ -9,3 +9,11 @@ export const addCategory = (category) => APIV1.post("/api/category", category);
 export const updateCategory = (updateCategory) =>
   APIV1.put("/api/category", updateCategory);
 export const deleteCategory = (data) => APIV1.delete("api/category", { data });
+
+// pricelist
+
+export const getpricelists = () => APIV1.get("/api/pricelist");
+export const addPriceList = (pricelist) =>
+  APIV1.post("/api/pricelist", pricelist);
+export const updatePriceList = (updatepricelist) =>
+  APIV1.put("/api/pricelist", updatepricelist);

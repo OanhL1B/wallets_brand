@@ -9,29 +9,29 @@ const isNotActiveStyle =
 const isActiveStyle =
   "svg: flex items-center  px-5 gap-3 text-primary font-bold hover:text-primary  transition-all duration-200 ease-in-out capitalize hover:bg-gray-200  py-2 my-1 mx-7";
 
-const CategorySubMenu = () => {
+const PriceListSubMenu = () => {
   return (
     <div className="" style={{ marginTop: 0 }}>
       <NavLink
-        to="/add-category"
+        to="/add-pricelist"
         className={({ isActive }) =>
           isActive ? isActiveStyle : isNotActiveStyle
         }
       >
         <AddIcon />
-        <h1 className="font-normal">Add category</h1>
+        <h1 className="font-normal">Add PriceList</h1>
       </NavLink>
       <NavLink
-        to="/manage-category"
+        to="/manage-pricelist"
         className={({ isActive }) =>
           isActive ? isActiveStyle : isNotActiveStyle
         }
       >
         <LibraryBooksIcon />
-        <h1 className="font-normal">Manager category</h1>
+        <h1 className="font-normal">Manager PriceList</h1>
       </NavLink>
     </div>
   );
 };
 
-export default CategorySubMenu;
+export default PriceListSubMenu;

@@ -11,6 +11,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { NavLink } from "react-router-dom";
 import CategorySubMenu from "./category/CategorySubMenu";
+import PriceListSubMenu from "./pricelist/PriceListSubMenu";
 
 const isNotActiveStyle =
   "flex items-center px-5 gap-3 text-icon-color hover:text-primary transition-all duration-200 ease-in-out capitalize  py-2 my-1";
@@ -19,9 +20,13 @@ const isActiveStyle =
 
 const Sidebar = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+  const [isSubMenuPriceListOpen, setIsSubMenuPriceListOpen] = useState(false);
 
   const handleSubMenuToggle = () => {
     setIsSubMenuOpen(!isSubMenuOpen);
+  };
+  const handleSubMenuPriceListToggle = () => {
+    setIsSubMenuPriceListOpen(!isSubMenuPriceListOpen);
   };
   return (
     <div className="w-[268px] h-full  ">
@@ -70,7 +75,26 @@ const Sidebar = () => {
             {isSubMenuOpen && <CategorySubMenu />}
           </div>
         </div>
-
+        <div className="mt-0" style={{ marginTop: 0 }}>
+          <div className="dropdown-container">
+            <div
+              className={`dropdown-trigger ${
+                isSubMenuPriceListOpen ? isActiveStyle : isNotActiveStyle
+              }`}
+            >
+              <div className="flex justify-between w-full">
+                <div className="flex gap-x-2">
+                  <PriceChangeIcon />
+                  <h1 className="font-normal">Pricelist</h1>
+                </div>
+                <div onClick={handleSubMenuPriceListToggle}>
+                  <ArrowDropDownIcon />
+                </div>
+              </div>
+            </div>
+            {isSubMenuPriceListOpen && <PriceListSubMenu />}
+          </div>
+        </div>
         <div className="mt-0" style={{ marginTop: 0 }}>
           <NavLink
             to="/admin/getdepartmentall"
@@ -102,7 +126,7 @@ const Sidebar = () => {
             <AddShoppingCartIcon className="" />
             <h1 className="font-normal">Orders</h1>
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to="/admin/teacher"
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle
@@ -110,7 +134,7 @@ const Sidebar = () => {
           >
             <PriceChangeIcon className="" />
             <h1 className="font-normal">Pricelist</h1>
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to="/admin/teacher"
             className={({ isActive }) =>

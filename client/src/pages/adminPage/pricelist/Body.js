@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import { useSelector, useDispatch } from "react-redux";
-import { getCategories } from "../../../redux/actions/adminActions";
+import { getpricelists } from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
 import Swal from "sweetalert2";
@@ -22,16 +22,16 @@ const modalStyles = {
 
 const Body = () => {
   const store = useSelector((state) => state);
-  const categories = useSelector((state) => state.admin.allCategory);
-  categories.sort(
-    (a, b) => a.categoryName.charCodeAt(0) - b.categoryName.charCodeAt(0)
+  const pricelists = useSelector((state) => state.admin.allPricelist);
+  pricelists.sort(
+    (a, b) => a.pricelistName.charCodeAt(0) - b.pricelistName.charCodeAt(0)
   );
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedPricelist, setSelectedPricelist] = useState("");
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getCategories());
+    dispatch(getpricelists());
   }, [dispatch]);
 
   useEffect(() => {
@@ -45,37 +45,36 @@ const Body = () => {
   }, [store.errors]);
 
   // Begin-edit
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [value, setValue] = useState({
-    categoryName: "",
-    id: "",
-  });
-  const handleEditClick = (cate) => {
-    setSelectedCategory(cate);
-    setIsModalOpen(true);
-    setValue({
-      categoryName: "",
-      id: cate.id,
-    });
-  };
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    const updatedValue = {};
-    if (value.categoryName !== "") {
-      updatedValue.categoryName = value.categoryName;
-    } else {
-      updatedValue.categoryName = selectedCategory.categoryName;
-    }
+  //   const [isModalOpen, setIsModalOpen] = useState(false);
+  //   const [value, setValue] = useState({
+  //     categoryName: "",
+  //     id: "",
+  //   });
+  //   const handleEditClick = (cate) => {
+  //     setSelectedCategory(cate);
+  //     setIsModalOpen(true);
+  //     setValue({
+  //       categoryName: "",
+  //       id: cate.id,
+  //     });
+  //   };
+  //   const openModal = () => {
+  //     setIsModalOpen(true);
+  //   };
+  //   const closeModal = () => {
+  //     setIsModalOpen(false);
+  //   };
+  //   const handleFormSubmit = (e) => {
+  //     e.preventDefault();
+  //     const updatedValue = {};
+  //     if (value.categoryName !== "") {
+  //       updatedValue.categoryName = value.categoryName;
+  //     } else {
+  //       updatedValue.categoryName = selectedCategory.categoryName;
+  //     }
 
-    // dispatch(updateDepartment({ ...selectedDepartment, ...updatedValue }));
-    // dispatch({ type: UPDATE_DEPARTMENT, payload: false });
-  };
+  // dispatch(updateDepartment({ ...selectedDepartment, ...updatedValue }));
+  // dispatch({ type: UPDATE_DEPARTMENT, payload: false });
 
   // useEffect(() => {
   //   if (store.admin.updatedDepartment) {
@@ -85,10 +84,10 @@ const Body = () => {
   //   }
   // }, [dispatch, store.errors, store.admin.updatedDepartment]);
 
-  const handleModalError = () => {
-    setError({});
-    closeModal();
-  };
+  //   const handleModalError = () => {
+  //     setError({});
+  //     closeModal();
+  //   };
   // End edit
 
   // Begin delete
@@ -131,19 +130,21 @@ const Body = () => {
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
       <div className="w-full my-8 mt-6">
-        {categories?.length !== 0 && (
+        {pricelists?.length !== 0 && (
           <table className="w-full table-auto ">
             <thead className="bg-[#E1EEEE] items-center">
               <tr>
                 <th className="px-4 py-1">Chọn</th>
                 <th className="px-4 py-1">STT</th>
-                <th className="px-4 py-1">Id Category</th>
-                <th className="px-4 py-1">Category Name</th>
+                <th className="px-4 py-1">Id PriceList</th>
+                <th className="px-4 py-1">PriceList Name</th>
+                <th className="px-4 py-1">ApplyDate</th>
+                <th className="px-4 py-1">Status</th>
                 <th className="px-4 py-1">Actions</th>
               </tr>
             </thead>
             <tbody className="">
-              {categories?.map((cate, idx) => (
+              {pricelists?.map((pricelist, idx) => (
                 <tr
                   className="justify-center item-center hover:bg-[#EEF5F5]"
                   key={idx}
@@ -158,17 +159,29 @@ const Body = () => {
                     /> */}
                   </td>
                   <td className="px-4 py-1 text-center border ">{idx + 1}</td>
-                  <td className="px-4 py-1 text-center border">{cate._id}</td>
                   <td className="px-4 py-1 text-center border">
-                    {cate.categoryName}
+                    {pricelist._id}
                   </td>
+                  <td className="px-4 py-1 text-center border">
+                    {pricelist.pricelistName}
+                  </td>
+                  <td className="px-4 py-2 text-center border">
+                    {new Date(pricelist.applyDate).toLocaleDateString("en-GB")}
+                  </td>
+                  {pricelist.isActive === true && (
+                    <td className="px-4 py-2 text-center border">Active</td>
+                  )}
+                  {pricelist.isActive === false && (
+                    <td className="px-4 py-2 text-center border">UnActive</td>
+                  )}
+
                   <td
                     className="items-center justify-center px-4 py-1 mr-0 border"
                     style={{ display: "flex", justifyContent: "center" }}
                   >
                     <button
                       className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
-                      onClick={() => handleEditClick(cate)}
+                      //   onClick={() => handleEditClick(pricelist)}
                     >
                       Sửa
                     </button>
