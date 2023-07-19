@@ -7,7 +7,7 @@ module.exports = {
         primary: ["Epilogue", "sans-serif"],
       },
       colors: {
-        primary: "#157572",
+        primary: "#1DC071",
         secondary: "#6F49FD",
         text1: "#171725",
         text2: "#4B5264",
@@ -27,7 +27,6 @@ module.exports = {
         darkSoft: "#24242C",
         darkStroke: "#3A3A43",
         darkRed: "#422C32",
-        bnthower: "#04605E",
       },
 
       boxShadow: {

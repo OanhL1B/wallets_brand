@@ -1,7 +1,7 @@
 import React from "react";
 
 const Body = () => {
-  return <div></div>;
+  return <div className="bg-lite"></div>;
 };
 
 export default Body;
