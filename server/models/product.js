@@ -17,7 +17,8 @@ var productSchema = new mongoose.Schema(
       ref: "Category",
     },
     images: {
-      type: Array,
+      thumb: String,
+      ortherimg: Array,
     },
     material: {
       type: String,
@@ -25,7 +26,7 @@ var productSchema = new mongoose.Schema(
     size: {
       type: String,
     },
-    feature: {
+    design: {
       type: String,
     },
     color: {

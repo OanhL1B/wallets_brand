@@ -6,10 +6,10 @@ import Body from "./Body";
 const AdminHome = () => {
   return (
     <div className="flex">
-      <div className="h-screen overflow-y-hidden bg-[#ffffff] shadow-2xl">
-        <Sidebar></Sidebar>
+      <div className="h-screen overflow-y-hidden bg-[#fff] sticky top-0 overflow-auto">
+        <Sidebar />
       </div>
-      <div className="flex flex-col flex-auto bg-lite">
+      <div className="flex flex-col flex-auto overflow-auto bg-lite">
         <Header />
         <Body />
       </div>

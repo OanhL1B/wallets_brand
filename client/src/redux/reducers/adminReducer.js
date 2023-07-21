@@ -1,6 +1,7 @@
 import {
   ADD_CATEGORY,
   ADD_PRICELIST,
+  ADD_PRODUCT,
   GET_ALL_CATEGOIES,
   GET_ALL_PRICELIST,
   LOGIN,
@@ -9,6 +10,7 @@ import {
 const initialState = {
   authData: JSON.parse(localStorage.getItem("user")) || null,
   categoryAdded: false,
+  productAdded: false,
   pricelistAdded: false,
   allCategory: [],
   allPricelist: [],
@@ -28,6 +30,11 @@ const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         pricelistAdded: action.payload,
+      };
+    case ADD_PRODUCT:
+      return {
+        ...state,
+        productAdded: action.payload,
       };
     case GET_ALL_CATEGOIES:
       return {

@@ -17,3 +17,10 @@ export const addPriceList = (pricelist) =>
   APIV1.post("/api/pricelist", pricelist);
 export const updatePriceList = (updatepricelist) =>
   APIV1.put("/api/pricelist", updatepricelist);
+
+// product
+export const getProducts = () => APIV1.get("/api/product");
+export const addProduct = (product) => APIV1.post("/api/product", product);
+export const updateProduct = (updateProduct) =>
+  APIV1.put("/api/product", updateProduct);
+export const deleteProduct = (data) => APIV1.delete("api/product", { data });

@@ -30,7 +30,7 @@ export const Form1 = "items-center justify-center w-full";
 export const Form2 =
   "w-[922px] min-h-[300px] py-7 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto";
 
-export const FormItem = "grid grid-cols-4 gap-x-10";
+export const FormItem = "grid grid-cols-2 gap-x-10";
 export const WrapInputLabel = "flex flex-col mb-4";
 export const InputStyle =
   "h-10 py-2 px-3 bg-[#DDDEEE] bg-opacity-50 rounded-md outline-none text-sm";

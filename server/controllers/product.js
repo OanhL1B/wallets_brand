@@ -3,16 +3,51 @@ const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
 
 // xong được api thêm sản phẩm
+
 const createProduct = asyncHandler(async (req, res) => {
-  if (Object.keys(req.body).length === 0) throw new Error("Missing inputs");
-  if (req.body && req.body.productName)
-    req.body.slug = slugify(req.body.productName);
-  const newProduct = await Product.create(req.body);
-  return res.status(200).json({
-    success: newProduct ? true : false,
-    createdProduct: newProduct ? newProduct : "Cannot create new product",
-  });
+  try {
+    const errors = { productError: String };
+    const { productName } = req.body;
+    const existingProduct = await Product.findOne({ productName });
+    if (existingProduct) {
+      errors.productError = "Danh mục này đã tồn tại";
+      return res.status(400).json(errors);
+    }
+    if (req.body && req.body.productName)
+      req.body.slug = slugify(req.body.productName);
+    const newProduct = await Product.create(req.body);
+    await newProduct.save();
+    return res.status(200).json({
+      success: true,
+      message: "Thêm mới sản phẩm  thành công!",
+      retObj: newProduct,
+    });
+  } catch (error) {
+    const errors = { backendError: String };
+    errors.backendError = error;
+    res.status(500).json(errors);
+  }
 });
+
+// const createProduct = asyncHandler(async (req, res) => {
+
+//   if (Object.keys(req.body).length === 0) throw new Error("Missing inputs");
+//   const { productName } = req.body;
+//   const existingCategory = await Category.findOne({ productName });
+//   if (existingCategory) {
+//     errors.categoryError = "Danh mục này đã tồn tại";
+//     return res.status(400).json(errors);
+//   }
+//   if (req.body && req.body.productName)
+//     req.body.slug = slugify(req.body.productName);
+
+//   const newProduct = await Product.create(req.body);
+//   return res.status(200).json({
+//     success: newProduct ? true : false,
+//     createdProduct: newProduct ? newProduct : "Cannot create new product",
+//   });
+// });
+
 // GET theo id sản phẩm
 const getProduct = asyncHandler(async (req, res) => {
   const { pid } = req.params;

@@ -53,7 +53,6 @@ const Body = () => {
       <div className="space-y-3">
         <h1 className="p-2 px-14 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
           Create a Category
-          <CategoryIcon />
         </h1>
         <div className="flex flex-col bg-white rounded-xl">
           <form

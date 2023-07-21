@@ -28,7 +28,7 @@ const Header = () => {
     });
   };
   return (
-    <div className="flex bg-lite items-center justify-between  h-[74px] w-full">
+    <div className="flex bg-lite items-center justify-between  h-[74px] w-full sticky top-0">
       <div className="flex items-center"></div>
       <div className="flex items-center mx-5 space-x-3">
         <Avatar />
