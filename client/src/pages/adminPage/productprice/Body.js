@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import { useSelector, useDispatch } from "react-redux";
-import { getProducts } from "../../../redux/actions/adminActions";
+import { getProductPrices } from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
 import Swal from "sweetalert2";
@@ -22,16 +22,14 @@ const modalStyles = {
 
 const Body = () => {
   const store = useSelector((state) => state);
-  const products = useSelector((state) => state.admin.allProduct);
-  products.sort(
-    (a, b) => a.productName.charCodeAt(0) - b.productName.charCodeAt(0)
-  );
-  const [selectedProduct, setSelectedProduct] = useState("");
+  const productprices = useSelector((state) => state.admin.allProductPrice);
+
+  const [selectedProductPrice, setSelectedProductPrice] = useState("");
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProductPrices());
   }, [dispatch]);
 
   useEffect(() => {
@@ -131,19 +129,21 @@ const Body = () => {
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
       <div className="w-full my-8 mt-6">
-        {products?.length !== 0 && (
+        {productprices?.length !== 0 && (
           <table className="w-full table-auto ">
             <thead className="bg-[#E1EEEE] items-center">
               <tr>
                 <th className="px-4 py-1">Chọn</th>
                 <th className="px-4 py-1">STT</th>
+                <th className="px-4 py-1">Id ProductPrice</th>
                 <th className="px-4 py-1">Id Product</th>
+                <th className="px-4 py-1">Id PriceList</th>
                 <th className="px-4 py-1">Product Name</th>
                 <th className="px-4 py-1">Actions</th>
               </tr>
             </thead>
             <tbody className="">
-              {products?.map((product, idx) => (
+              {productprices?.map((productprice, idx) => (
                 <tr
                   className="justify-center item-center hover:bg-[#EEF5F5]"
                   key={idx}
@@ -159,10 +159,16 @@ const Body = () => {
                   </td>
                   <td className="px-4 py-1 text-center border ">{idx + 1}</td>
                   <td className="px-4 py-1 text-center border">
-                    {product._id}
+                    {productprice._id}
                   </td>
                   <td className="px-4 py-1 text-center border">
-                    {product.productName}
+                    {productprice.productId}
+                  </td>
+                  <td className="px-4 py-1 text-center border">
+                    {productprice.pricelistId}
+                  </td>
+                  <td className="px-4 py-1 text-center border">
+                    {productprice.price}
                   </td>
                   <td
                     className="items-center justify-center px-4 py-1 mr-0 border"

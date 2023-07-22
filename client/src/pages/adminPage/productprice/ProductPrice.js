@@ -3,7 +3,7 @@ import Sidebar from "../SideBar";
 import Header from "../Header";
 import Body from "./Body";
 
-const Product = () => {
+const ProductPrice = () => {
   return (
     <div className="flex">
       <div className="h-screen overflow-y-hidden bg-[#ffffff] shadow-2xl">
@@ -17,4 +17,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default ProductPrice;

@@ -4,7 +4,6 @@ import * as classes from "../../../utils/styles";
 import React, { useEffect, useState } from "react";
 import Spinner from "../../../utils/Spinner";
 import { addCategory } from "../../../redux/actions/adminActions";
-import CategoryIcon from "@mui/icons-material/Category";
 
 const Body = () => {
   const dispatch = useDispatch();

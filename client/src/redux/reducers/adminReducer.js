@@ -2,8 +2,11 @@ import {
   ADD_CATEGORY,
   ADD_PRICELIST,
   ADD_PRODUCT,
+  ADD_PRODUCT_PRICE,
   GET_ALL_CATEGOIES,
   GET_ALL_PRICELIST,
+  GET_ALL_PRODUCT,
+  GET_ALL_PRODUCT_PRICE,
   LOGIN,
 } from "../actionTypes";
 
@@ -12,8 +15,11 @@ const initialState = {
   categoryAdded: false,
   productAdded: false,
   pricelistAdded: false,
+  productpriceAdded: false,
   allCategory: [],
   allPricelist: [],
+  allProduct: [],
+  allProductPrice: [],
 };
 
 const adminReducer = (state = initialState, action) => {
@@ -31,10 +37,16 @@ const adminReducer = (state = initialState, action) => {
         ...state,
         pricelistAdded: action.payload,
       };
+
     case ADD_PRODUCT:
       return {
         ...state,
         productAdded: action.payload,
+      };
+    case ADD_PRODUCT_PRICE:
+      return {
+        ...state,
+        productpriceAdded: action.payload,
       };
     case GET_ALL_CATEGOIES:
       return {
@@ -45,6 +57,16 @@ const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         allPricelist: action.payload,
+      };
+    case GET_ALL_PRODUCT:
+      return {
+        ...state,
+        allProduct: action.payload,
+      };
+    case GET_ALL_PRODUCT_PRICE:
+      return {
+        ...state,
+        allProductPrice: action.payload,
       };
     default:
       return state;

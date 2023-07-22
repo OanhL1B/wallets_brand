@@ -8,6 +8,9 @@ import AddCategory from "./pages/adminPage/addcategory/AddCategory";
 import AddPriceList from "./pages/adminPage/addpricelist/AddPriceList";
 import PriceList from "./pages/adminPage/pricelist/PriceList";
 import AddProduct from "./pages/adminPage/addproduct/AddProduct";
+import Product from "./pages/adminPage/product/Product";
+import AddProductPrice from "./pages/adminPage/addproductprice/AddProductPrice";
+import ProductPrice from "./pages/adminPage/productprice/ProductPrice";
 function App() {
   return (
     <Routes>
@@ -16,9 +19,12 @@ function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/manage-category" element={<Category />} />
       <Route path="/manage-pricelist" element={<PriceList />} />
+      <Route path="/manage-products" element={<Product />} />
+      <Route path="/manage-productprices" element={<ProductPrice />} />
       <Route path="/add-category" element={<AddCategory />} />
       <Route path="/add-pricelist" element={<AddPriceList />} />
       <Route path="/add-product" element={<AddProduct />} />
+      <Route path="/add-productprice" element={<AddProductPrice />} />
     </Routes>
   );
 }

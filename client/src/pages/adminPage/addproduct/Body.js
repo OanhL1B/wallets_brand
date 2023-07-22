@@ -54,7 +54,7 @@ const Body = () => {
     setError({});
     setLoading(true);
 
-    dispatch(addProduct(value, description));
+    dispatch(addProduct({ ...value, description }));
   };
 
   useEffect(() => {
@@ -216,6 +216,7 @@ const Body = () => {
               />
             </div> */}
             <div>
+              <h1 className={classes.LabelStyle}>Description *:</h1>
               <ReactQuill
                 placeholder="Write your description......"
                 modules={modules}

@@ -24,3 +24,14 @@ export const addProduct = (product) => APIV1.post("/api/product", product);
 export const updateProduct = (updateProduct) =>
   APIV1.put("/api/product", updateProduct);
 export const deleteProduct = (data) => APIV1.delete("api/product", { data });
+
+// productprice
+export const getProductPrices = () => APIV1.get("/api/productprice");
+export const addProductPrice = (product) =>
+  APIV1.post("/api/productprice", product);
+export const updateProductPrice = (updateProductPrice) =>
+  APIV1.put("/api/productprice", updateProductPrice);
+export const deleteProductPrice = (data) =>
+  APIV1.delete("api/productprice", { data });
+
+// users
