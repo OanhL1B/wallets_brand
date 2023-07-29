@@ -1,17 +1,18 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Status from "../components/Status";
 import Footer from "../components/Footer";
 import IngNar from "../components/IngNar";
+import Products from "../components/Products";
 
 const Home = () => {
   return (
-    <div className="">
+    <div>
       <Header />
-      {/* <IconBar /> */}
       <Sidebar />
       <Status />
+      <Products />
       <IngNar />
       <Footer />
     </div>

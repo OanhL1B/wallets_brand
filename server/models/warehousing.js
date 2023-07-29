@@ -7,6 +7,9 @@ var warehousingSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Product",
     },
+    productName: {
+      type: String,
+    },
     quantity: {
       type: Number,
       default: 0,

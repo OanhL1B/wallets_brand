@@ -1,4 +1,6 @@
 const Product = require("../models/product");
+const Warehousing = require("../models/warehousing");
+
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
 
@@ -10,13 +12,23 @@ const createProduct = asyncHandler(async (req, res) => {
     const { productName } = req.body;
     const existingProduct = await Product.findOne({ productName });
     if (existingProduct) {
-      errors.productError = "Danh mục này đã tồn tại";
+      errors.productError = "Sản phẩm này đã này đã tồn tại";
       return res.status(400).json(errors);
     }
     if (req.body && req.body.productName)
       req.body.slug = slugify(req.body.productName);
     const newProduct = await Product.create(req.body);
     await newProduct.save();
+
+    const warehousingData = {
+      productId: newProduct._id,
+      productName: newProduct.productName,
+      quantity: req.body.quantity || 0, // Assuming quantity is also sent in the request body
+    };
+    console.log("warehousingData", warehousingData);
+
+    await Warehousing.create(warehousingData);
+
     return res.status(200).json({
       success: true,
       message: "Thêm mới sản phẩm  thành công!",
@@ -28,25 +40,6 @@ const createProduct = asyncHandler(async (req, res) => {
     res.status(500).json(errors);
   }
 });
-
-// const createProduct = asyncHandler(async (req, res) => {
-
-//   if (Object.keys(req.body).length === 0) throw new Error("Missing inputs");
-//   const { productName } = req.body;
-//   const existingCategory = await Category.findOne({ productName });
-//   if (existingCategory) {
-//     errors.categoryError = "Danh mục này đã tồn tại";
-//     return res.status(400).json(errors);
-//   }
-//   if (req.body && req.body.productName)
-//     req.body.slug = slugify(req.body.productName);
-
-//   const newProduct = await Product.create(req.body);
-//   return res.status(200).json({
-//     success: newProduct ? true : false,
-//     createdProduct: newProduct ? newProduct : "Cannot create new product",
-//   });
-// });
 
 // GET theo id sản phẩm
 const getProduct = asyncHandler(async (req, res) => {

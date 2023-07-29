@@ -96,11 +96,13 @@
 import SearchIcon from "@mui/icons-material/Search";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Badge from "@mui/material/Badge";
-import React from "react";
+import React, { useState } from "react";
 // import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log("user", user);
   // const quantity = useSelector((state) => state.cart.quantity);
   const quantity = 10;
   return (
@@ -135,19 +137,28 @@ const Header = () => {
               />
               <SearchIcon className="text-gray-500" style={{ fontSize: 20 }} />
             </div>
+
             <div className="flex items-center space-x-4">
-              <Link
-                to="/register"
-                className="hidden text-sm cursor-pointer md:block"
-              >
-                Đăng Nhập
-              </Link>
-              <Link
-                to="/signin"
-                className="hidden text-sm cursor-pointer md:block"
-              >
-                Đăng ký
-              </Link>
+              {user ? (
+                <div>Đăng xuất</div>
+              ) : (
+                <div className="flex items-center space-x-4">
+                  <Link
+                    to="/login"
+                    className="hidden text-sm cursor-pointer md:block"
+                  >
+                    Đăng Nhập
+                  </Link>
+
+                  <Link
+                    to="/signin"
+                    className="hidden text-sm cursor-pointer md:block"
+                  >
+                    Đăng ký
+                  </Link>
+                </div>
+              )}
+
               <Link to="/cart" className="text-gray-600 hover:text-gray-900">
                 <div className="relative">
                   <Badge color="primary" showZero>

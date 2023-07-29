@@ -1,53 +1,39 @@
 const Footer = () => {
   return (
-    <div className="flex flex-col md:flex-row">
-      <div className="flex flex-col flex-1 p-4">
-        <h1 className="text-3xl font-bold">CAMELIA</h1>
-        <p className="my-4">
-          Camelia puts its heart and soul into every product, giving people
-          minimalism from the smallest things
-        </p>
-        <div className="flex">
-          <div className="flex items-center justify-center w-10 h-10 mr-4 bg-blue-500 rounded-full">
-            {/* <FacebookIcon style={{ color: "white" }} /> */}
-          </div>
-          <div className="flex items-center justify-center w-10 h-10 mr-4 bg-pink-500 rounded-full">
-            {/* <InstagramIcon style={{ color: "white" }} /> */}
-          </div>
-          <div className="flex items-center justify-center w-10 h-10 mr-4 bg-blue-400 rounded-full">
-            {/* <TwitterIcon style={{ color: "white" }} /> */}
-          </div>
-          <div className="flex items-center justify-center w-10 h-10 bg-red-600 rounded-full">
-            {/* <PinterestIcon style={{ color: "white" }} /> */}
-          </div>
+    <div className="flex flex-col items-center px-[10rem] md:flex-row mt-4 bg-[#212121] text-[#999999]">
+      <div className="flex-1 p-4">
+        <h1 className="text-[#c7572b] font-bold text-lg">CAMELIA BRAND</h1>
+
+        <div className="p-2 text-base">
+          Store 1: 633 Nguyễn Đình Chiểu, P.2, Q.3. HCM
         </div>
+        <div className="p-2 text-base">
+          Store 2: 71 Trần Quang Diệu, P14, Q3, HCM
+        </div>
+
+        <div className="p-2 text-base">Hotline : 19001052</div>
+
+        <div className="p-2 text-base">thecameliavn@gmail.com</div>
       </div>
-      <div className="flex-1 hidden p-4 md:block">
-        <h3 className="mb-6 text-xl font-bold">Useful Links</h3>
-        <ul className="flex flex-wrap list-none">
-          <li className="w-1/2 mb-2">Home</li>
-          <li className="w-1/2 mb-2">Cart</li>
-          <li className="w-1/2 mb-2">Backpacks</li>
-          <li className="w-1/2 mb-2">WALLETS</li>
-          <li className="w-1/2 mb-2">TOTE & ACCESSORIES</li>
-          <li className="w-1/2 mb-2">My Account</li>
+      <div className="flex-1 p-4 mb-6 ">
+        <h1 className="mb-4 text-xl font-bold">ĐĂNG KÝ NHẬN TIN</h1>
+        <input
+          type="email"
+          className="w-full p-2 mb-4 bg-white rounded-md outline-none"
+          placeholder="Nhập email của bạn..."
+        />
+        <p>Cập nhật những sản phẩm mới nhất từ Camelia Brand nhé!</p>
+      </div>
+      <div className="flex-1 p-4">
+        <h3 className="text-xl font-bold">BẠN NÊN XEM</h3>
+        <ul className="flex flex-col list-none">
+          <li className="w-1/2 mb-2 text-base">Giới thiệu</li>
+          <li className="w-1/2 mb-2 text-base">Phương thức giao hàng</li>
+          <li className="w-1/2 mb-2 text-base">Phương thức thanh toán</li>
+          <li className="w-1/2 mb-2 text-base">Chính sách bảo hành</li>
+          <li className="w-1/2 mb-2 text-base">Chính sách đổi trả</li>
+          <li className="w-1/2 mb-2 text-base">Chính sách bảo mật</li>
         </ul>
-      </div>
-      <div className="flex-1 p-4 md:bg-pink-50">
-        <h3 className="mb-6 text-xl font-bold">Contact</h3>
-        <div className="flex mb-4">
-          {/* <RoomIcon style={{ marginRight: "10px" }} /> */}
-          <p>97 Man Thiện Hiệp Phú TP Thủ Đức TPHCM</p>
-        </div>
-        <div className="flex mb-4">
-          {/* <PhoneIcon style={{ marginRight: "10px" }} /> */}
-          <p>0961319365</p>
-        </div>
-        <div className="flex">
-          {/* <MailOutlineIcon style={{ marginRight: "10px" }} /> */}
-          <p>vuthihongoanh1903@gamil.com</p>
-        </div>
-        {/* <img className="w-1/2" src="https://i.ibb.co/Qfvn4z6/payment.png" alt="Payment" /> */}
       </div>
     </div>
   );
