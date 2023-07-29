@@ -1,7 +1,6 @@
 const Category = require("../models/category");
 const asyncHandler = require("express-async-handler");
 
-// danh mục thêm check trùng tên danh mục
 const createCategory = asyncHandler(async (req, res) => {
   try {
     const errors = { categoryError: String };

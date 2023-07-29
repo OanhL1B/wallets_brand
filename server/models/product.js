@@ -30,12 +30,9 @@ var productSchema = new mongoose.Schema(
       type: String,
     },
     color: {
-      type: String,
-      enum: ["Black", "Grown", "Red"], // trước mắt để 3 màu vầy thôi
+      type: Array,
     },
-
     slug: {
-      // tạo link đường dẫn ví dụ tên sản phẩm là  ví da rất đẹp thì qua slug là vi-da-rat-dep
       type: String,
       required: true,
       unique: true,
@@ -43,7 +40,6 @@ var productSchema = new mongoose.Schema(
     },
 
     sold: {
-      // số sản phẩm đã bán được
       type: Number,
       default: 0,
     },

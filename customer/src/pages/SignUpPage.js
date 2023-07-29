@@ -6,14 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../utils/Spinner";
 import CAMELIA from "./logo.png";
 import ECLLIPSE from "./ellipse.png";
-import { userLogin } from "../redux/actions/loginActions";
+import { addUser } from "../redux/actions/loginActions";
+import { ADD_USER, SET_ERRORS } from "../redux/actionTypes";
 
 const SignUpPage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [adress, setAdress] = useState("");
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +32,16 @@ const SignUpPage = () => {
   const signin = (e) => {
     e.preventDefault();
     setLoading(true);
-    dispatch(userLogin({ email: email, password: password }, navigate));
+    dispatch(
+      addUser({
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        adress: adress,
+      })
+    );
   };
   useEffect(() => {
     if (store.errors) {
@@ -41,7 +50,29 @@ const SignUpPage = () => {
       setPassword("");
     }
   }, [store.errors]);
+  useEffect(() => {
+    if (store.errors || store.customer.userAdded) {
+      setLoading(false);
+      if (store.customer.userAdded) {
+        setAdress("");
+        setEmail("");
+        setError("");
+        setFirstName("");
+        setLastName("");
+        setPassword("");
+        setPhoneNumber("");
 
+        dispatch({ type: SET_ERRORS, payload: {} });
+        dispatch({ type: ADD_USER, payload: false });
+      }
+    } else {
+      setLoading(true);
+    }
+  }, [store.errors, store.customer.userAdded]);
+
+  useEffect(() => {
+    dispatch({ type: SET_ERRORS, payload: {} });
+  }, []);
   return (
     <div className="relative w-full min-h-screen p-10 bg-lite dark:bg-dark isolate">
       <img

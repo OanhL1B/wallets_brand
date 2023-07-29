@@ -98,12 +98,31 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Badge from "@mui/material/Badge";
 import React, { useState } from "react";
 // import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
 const Header = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   console.log("user", user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   // const quantity = useSelector((state) => state.cart.quantity);
+  const logout = () => {
+    Swal.fire({
+      title: "Bạn có muốn đăng xuất không?",
+      // text: "Mọi !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Đồng ý",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch({ type: "LOGOUT" });
+        navigate("/");
+      }
+    });
+  };
   const quantity = 10;
   return (
     <div>
@@ -140,7 +159,7 @@ const Header = () => {
 
             <div className="flex items-center space-x-4">
               {user ? (
-                <div>Đăng xuất</div>
+                <div onClick={logout}>Đăng xuất</div>
               ) : (
                 <div className="flex items-center space-x-4">
                   <Link

@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { publicRequest } from "../redux/api";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
+import { APIPUBLIC } from "../redux/config/config";
 const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState({});
@@ -16,7 +15,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const res = await publicRequest.get("/product/" + productId);
+        const res = await APIPUBLIC.get("/product/" + productId);
         console.log("res", res);
         setProduct(res.data?.productData);
       } catch {}
