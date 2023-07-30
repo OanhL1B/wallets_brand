@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import { useSelector, useDispatch } from "react-redux";
-import { getCategories } from "../../../redux/actions/adminActions";
+import {
+  getCategories,
+  updateCategory,
+} from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
 import Swal from "sweetalert2";
-import { SET_ERRORS } from "../../../redux/actionTypes";
+import { SET_ERRORS, UPDATE_CATEGORY } from "../../../redux/actionTypes";
 
 const modalStyles = {
   content: {
@@ -23,13 +26,17 @@ const modalStyles = {
 const Body = () => {
   const store = useSelector((state) => state);
   const categories = useSelector((state) => state.admin.allCategory);
+  console.log("qjwhdewjhf", categories);
+  // mảng chứa  categories
   categories.sort(
     (a, b) => a.categoryName.charCodeAt(0) - b.categoryName.charCodeAt(0)
   );
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [id, setId] = useState("");
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
@@ -48,22 +55,25 @@ const Body = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [value, setValue] = useState({
     categoryName: "",
-    id: "",
+    // id: "",
   });
   const handleEditClick = (cate) => {
     setSelectedCategory(cate);
     setIsModalOpen(true);
     setValue({
       categoryName: "",
-      id: cate.id,
+      // id: cate.id,
     });
+    setId(cate._id);
   };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const updatedValue = {};
@@ -73,17 +83,22 @@ const Body = () => {
       updatedValue.categoryName = selectedCategory.categoryName;
     }
 
-    // dispatch(updateDepartment({ ...selectedDepartment, ...updatedValue }));
-    // dispatch({ type: UPDATE_DEPARTMENT, payload: false });
+    dispatch(
+      updateCategory(
+        ...selectedCategory
+        // ...updatedValue,
+      )
+    );
+    dispatch({ type: UPDATE_CATEGORY, payload: false });
   };
 
-  // useEffect(() => {
-  //   if (store.admin.updatedDepartment) {
-  //     setError({});
-  //     closeModal();
-  //     dispatch(getAllDepartment());
-  //   }
-  // }, [dispatch, store.errors, store.admin.updatedDepartment]);
+  useEffect(() => {
+    if (store.admin.updatedCategory) {
+      setError({});
+      closeModal();
+      dispatch(getCategories());
+    }
+  }, [dispatch, store.errors, store.admin.updatedCategory]);
 
   const handleModalError = () => {
     setError({});
@@ -180,7 +195,7 @@ const Body = () => {
         )}
       </div>
       {/* modal edit */}
-      {/* {selectedDepartment ? (
+      {selectedCategory ? (
         <ReactModal
           isOpen={isModalOpen}
           onRequestClose={openModal}
@@ -194,45 +209,34 @@ const Body = () => {
             >
               <div className={classes.FormItem}>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Mã chuyên ngành :</h1>
+                  <h1 className={classes.LabelStyle}>Category Name :</h1>
                   <input
-                    placeholder={selectedDepartment?.maKhoa}
-                    disabled
+                    placeholder={selectedCategory?.categoryName}
                     className={classes.InputStyle}
                     type="text"
-                  />
-                </div>
-                <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Tên chuyên ngành :</h1>
-                  <input
-                    placeholder={selectedDepartment?.tenKhoa}
-                    className={classes.InputStyle}
-                    type="text"
-                    value={value.tenKhoa}
+                    value={value.categoryName}
                     onChange={(e) =>
                       setValue({
                         ...value,
-                        tenKhoa: e.target.value,
+                        categoryName: e.target.value,
                       })
                     }
                   />
                 </div>
-                
               </div>
 
               <div className="flex items-center justify-center mt-10 space-x-6">
                 <button className={classes.adminFormSubmitButton} type="submit">
                   Lưu
                 </button>
-                <Link to="/admin/getdepartmentall" className="btn btn-primary">
-                  <button
-                    className={classes.adminFormClearButton}
-                    type="button"
-                    onClick={() => handleModalError()}
-                  >
-                    Thoát
-                  </button>
-                </Link>
+
+                <button
+                  className={classes.adminFormClearButton}
+                  type="button"
+                  onClick={() => handleModalError()}
+                >
+                  Thoát
+                </button>
               </div>
               <div className="mt-5">
                 {error?.message ? (
@@ -242,7 +246,7 @@ const Body = () => {
             </form>
           </div>
         </ReactModal>
-      ) : null} */}
+      ) : null}
     </div>
   );
 };

@@ -47,10 +47,6 @@ var productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    price: {
-      type: Number,
-      default: 0,
-    },
   },
   {
     timestamps: true,

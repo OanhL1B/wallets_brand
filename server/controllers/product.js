@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const Warehousing = require("../models/warehousing");
+const ProductPrice = require("../models/productprice");
 
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
@@ -42,96 +43,97 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 // GET theo id sản phẩm
-const getProduct = asyncHandler(async (req, res) => {
-  const { pid } = req.params;
-  const product = await Product.findById(pid);
-  return res.status(200).json({
-    success: product ? true : false,
-    productData: product ? product : "Cannot get product",
-  });
-});
 
-// get all sản phẩm
-// Filtering, sorting & pagination
-// const getProducts = asyncHandler(async (req, res) => {
-//   const queries = { ...req.query }; // kiểu dữ liệu tham chiếu
-//   // tách các trường đặt biệt ra khỏi query
-//   const excludeFields = ["limit", "sort", "page", "fields"];
-//   excludeFields.forEach((el) => delete queries[el]);
-
-//   // Fortmat lại các operatoers cho đúng cú pháp của mongoose
-//   let queryString = JSON.stringify(queries);
-//   queryString = queryString.replace(
-//     /\b(gte|gt|lte|lt)\b/g,
-//     (macthedEl) => `$${macthedEl}`
-//   );
-
-//   const formatedQueries = JSON.parse(queryString);
-//   //Filtering
-//   if (queries?.productName)
-//     formatedQueries.productName = {
-//       $regex: queries.productName,
-//       $option: "i",
-//     };
-//   let queryCommand = Product.find(formatedQueries);
-
-//   // excute query
-//   // số lượng sản phẩm thỏa mãn điều kiện !== số lượng sản phẩm trả về 1 lần gọi api
-//   queryCommand.exec(async (err, response) => {
-//     if (err) {
-//       throw new Error(err.message);
-//     }
-//     const counts = await Product.find(formatedQueries).countDocuments();
-//     return res.status(200).json({
-//       success: response ? true : false,
-//       products: response ? response : "Cannot get products",
-//       counts,
-//     });
+// const getProduct = asyncHandler(async (req, res) => {
+//   const { pid } = req.params;
+//   const product = await Product.findById(pid);
+//   return res.status(200).json({
+//     success: product ? true : false,
+//     productData: product ? product : "Cannot get product",
 //   });
-
 // });
-const getProducts = asyncHandler(async (req, res) => {
-  const queries = { ...req.query }; // kiểu dữ liệu tham chiếu
-  // tách các trường đặt biệt ra khỏi query
-  const excludeFields = ["limit", "sort", "page", "fields"];
-  excludeFields.forEach((el) => delete queries[el]);
 
-  // Fortmat lại các operatoers cho đúng cú pháp của mongoose
-  let queryString = JSON.stringify(queries);
-  queryString = queryString.replace(
-    /\b(gte|gt|lte|lt)\b/g,
-    (macthedEl) => `$${macthedEl}`
-  );
-
-  const formatedQueries = JSON.parse(queryString);
-  //Filtering
-  if (queries?.productName)
-    formatedQueries.productName = {
-      $regex: queries.productName,
-      $options: "i",
-    };
-  let queryCommand = Product.find(formatedQueries);
-  //Sorting
-  // if (req.query.sort) {
-  //   const sortBy = req.query.sort.split(",").join(" ");
-  //   query = query.sort(sortBy);
-  // } else {
-  //   query = query.sort("-createdAt");
-  // }
-  // excute query
-  // số lượng sản phẩm thỏa mãn điều kiện !== số lượng sản phẩm trả về 1 lần gọi api
+const getProduct = asyncHandler(async (req, res) => {
   try {
-    const response = await queryCommand.exec(); // use await here
-    const counts = await Product.find(formatedQueries).countDocuments(); // use await here
-    return res.status(200).json({
-      success: response ? true : false,
-      products: response ? response : "Cannot get products",
-      counts,
-    });
-  } catch (err) {
-    throw new Error(err.message);
+    const { pid } = req.params;
+
+    // Retrieve the product
+    const product = await Product.findById(pid);
+
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Product not found" });
+    }
+
+    // Retrieve the quantity from the warehouse
+    const warehouseEntry = await Warehousing.findOne({ productId: pid });
+
+    // Retrieve the price from the productprice collection
+    const priceEntry = await ProductPrice.findOne({ productId: pid });
+
+    const productWithDetails = {
+      ...product.toObject(),
+      quantity: warehouseEntry ? warehouseEntry.quantity : 0,
+      price: priceEntry ? priceEntry.price : 0,
+    };
+
+    res.json({ success: true, data: productWithDetails });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Server error" });
   }
 });
+
+const getProducts = asyncHandler(async (req, res) => {
+  try {
+    const products = await Product.find();
+
+    const productIds = products.map((product) => product._id);
+
+    const quantities = await Warehousing.aggregate([
+      {
+        $match: { productId: { $in: productIds } },
+      },
+      {
+        $group: {
+          _id: "$productId",
+          quantity: { $sum: "$quantity" },
+        },
+      },
+    ]);
+
+    const prices = await ProductPrice.aggregate([
+      {
+        $match: { productId: { $in: productIds } },
+      },
+      {
+        $group: {
+          _id: "$productId",
+          price: { $first: "$price" }, // Assuming 'price' is the same for a specific product across different pricelists
+        },
+      },
+    ]);
+    const productsWithDetails = products.map((product) => {
+      const quantityObj = quantities.find((q) => q._id.equals(product._id));
+      const priceObj = prices.find((p) => p._id.equals(product._id));
+      const quantity = quantityObj ? quantityObj.quantity : 0;
+      const price = priceObj ? priceObj.price : 0;
+
+      return {
+        ...product.toObject(),
+        quantity,
+        price,
+      };
+    });
+
+    res.json({ success: true, data: productsWithDetails });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Server error" });
+  }
+});
+
 const updateProduct = asyncHandler(async (req, res) => {
   const { pid } = req.params;
   if (req.body && req.body.title) req.body.slug = slugify(req.body.title);
@@ -143,6 +145,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     updatedProduct: updatedProduct ? updatedProduct : "Cannot update product",
   });
 });
+
 const deleteProduct = asyncHandler(async (req, res) => {
   const { pid } = req.params;
   const deletedProduct = await Product.findByIdAndDelete(pid);
@@ -159,36 +162,3 @@ module.exports = {
   updateProduct,
   deleteProduct,
 };
-
-// //Sorting
-// if (req.query.sort) {
-//   const sortBy = req.query.sort.split(",").join(" ");
-//   query = query.sort(sortBy);
-// } else {
-//   query = query.sort("-createdAt");
-// }
-
-// //Limiting
-// if (req.query.fields) {
-//   const fields = req.query.fields.split(",").join(" ");
-//   query = query.select(fields);
-// } else {
-//   query = query.select("-__v");
-// }
-
-// //Pagination
-
-// const page = req.query.page;
-// const limit = req.query.limit;
-// const skip = (page - 1) * limit;
-// query = query.skip().limit(limit);
-// if (req.query.page) {
-//   const productCount = await Product.countDocuments();
-//   if (skip >= productCount) throw new Error("This Page does not exists");
-// }
-// console.log(page, limit, skip);
-
-// const product = await query;
-// res.json(product);
-// const getallProduct = await Product.find(queryObj);
-// res.json(getallProduct);

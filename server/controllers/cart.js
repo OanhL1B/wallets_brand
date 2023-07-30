@@ -29,7 +29,9 @@ const addToCart = asyncHandler(async (req, res) => {
 const getCartItems = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
-    const cartItems = await Cart.find({ userId });
+
+    const cartItems = await Cart.find({ userId }).populate("productId"); // populate chia sẻ dữ liệu giữa các object
+
     res.status(200).json({ success: true, retObj: cartItems });
   } catch (error) {
     const errors = { backendError: String };

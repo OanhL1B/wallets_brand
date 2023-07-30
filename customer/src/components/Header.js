@@ -96,17 +96,21 @@
 import SearchIcon from "@mui/icons-material/Search";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Badge from "@mui/material/Badge";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getCartUser } from "../redux/actions";
 const Header = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log("user", user);
+  const quantity = useSelector((state) => state.customer?.userCarts);
+
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCartUser(user?.userData?._id));
+  }, []);
   const navigate = useNavigate();
-  // const quantity = useSelector((state) => state.cart.quantity);
   const logout = () => {
     Swal.fire({
       title: "Bạn có muốn đăng xuất không?",
@@ -123,7 +127,6 @@ const Header = () => {
       }
     });
   };
-  const quantity = 10;
   return (
     <div>
       <div className="w-full h-[50px] bg-[#F5F5F5] text-[#666666] font-normal text-base fixed top-0 z-50 ">
@@ -183,9 +186,9 @@ const Header = () => {
                   <Badge color="primary" showZero>
                     <AddShoppingCartIcon className="text-2xl" />
                   </Badge>
-                  {quantity > 0 && (
+                  {quantity?.length > 0 && (
                     <div className="absolute bottom-3 left-4 flex items-center justify-center w-5 h-5 text-xs text-white bg-[#d61c1f] rounded-full">
-                      {quantity}
+                      {quantity?.length}
                     </div>
                   )}
                 </div>

@@ -8,6 +8,7 @@ import {
   GET_ALL_PRODUCT,
   GET_ALL_PRODUCT_PRICE,
   LOGIN,
+  UPDATE_CATEGORY,
 } from "../actionTypes";
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
   categoryAdded: false,
   productAdded: false,
   pricelistAdded: false,
+  updatedCategory: false,
   productpriceAdded: false,
   allCategory: [],
   allPricelist: [],
@@ -67,6 +69,11 @@ const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         allProductPrice: action.payload,
+      };
+    case UPDATE_CATEGORY:
+      return {
+        ...state,
+        updatedCategory: action.payload,
       };
     default:
       return state;

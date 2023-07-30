@@ -4,7 +4,7 @@ const { verifyAccessToken } = require("../middlewares/verifyToken");
 
 router.post("/", [verifyAccessToken], ctrls.addToCart);
 
-router.get("/", [verifyAccessToken], ctrls.getCartItems);
+router.get("/:userId", [verifyAccessToken], ctrls.getCartItems);
 
 router.put("/:id", [verifyAccessToken], ctrls.updateCartItemQuantity);
 

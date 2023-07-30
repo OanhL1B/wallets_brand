@@ -1,3 +1,4 @@
+//2.
 export const LOGIN = "LOGIN";
 export const SET_ERRORS = "SET_ERRORS";
 export const ADD_CATEGORY = "ADD_CATEGORY";
@@ -8,3 +9,4 @@ export const GET_ALL_CATEGOIES = "GET_ALL_CATEGOIES";
 export const GET_ALL_PRICELIST = "GET_ALL_PRICELIST";
 export const GET_ALL_PRODUCT = "GET_ALL_PRODUCT";
 export const GET_ALL_PRODUCT_PRICE = "GET_ALL_PRODUCT_PRICE";
+export const UPDATE_CATEGORY = "UPDATE_CATEGORY";

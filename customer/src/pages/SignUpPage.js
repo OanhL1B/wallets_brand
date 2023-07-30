@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../utils/Spinner";
 import CAMELIA from "./logo.png";
 import ECLLIPSE from "./ellipse.png";
-import { addUser } from "../redux/actions/loginActions";
 import { ADD_USER, SET_ERRORS } from "../redux/actionTypes";
+import { addUser } from "../redux/actions";
 
 const SignUpPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -29,7 +29,7 @@ const SignUpPage = () => {
     }
   }, [store.errors]);
 
-  const signin = (e) => {
+  const signup = (e) => {
     e.preventDefault();
     setLoading(true);
     dispatch(
@@ -48,6 +48,13 @@ const SignUpPage = () => {
       setLoading(false);
       setEmail("");
       setPassword("");
+      setAdress("");
+      setEmail("");
+      setError("");
+      setFirstName("");
+      setLastName("");
+      setPassword("");
+      setPhoneNumber("");
     }
   }, [store.errors]);
   useEffect(() => {
@@ -96,7 +103,7 @@ const SignUpPage = () => {
         </p>
 
         <form
-          onSubmit={signin}
+          onSubmit={signup}
           className="flex flex-col items-center justify-center w-full space-y-6 duration-1000 bg-white"
         >
           <div className="flex flex-col w-full h-full mb-4 lg:mb-5 gap-y-2 lg:gap-x-3">

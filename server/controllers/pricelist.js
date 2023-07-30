@@ -1,16 +1,10 @@
+// xem lại chức năng kiểu cập nhật giá thì sẽ lấy giá nào ở productprice nha, cái này hơi quan trọng 1 chút, h làm qua
 const Pricelist = require("../models/pricelist");
 
 const Productprice = require("../models/productprice");
 const Product = require("../models/product");
 const asyncHandler = require("express-async-handler");
 
-// const createPricelist = asyncHandler(async (req, res) => {
-//   const response = await Pricelist.create(req.body);
-//   return res.status(200).json({
-//     success: response ? true : false,
-//     retObj: response ? response : "Cannot create new category",
-//   });
-// });
 const createPricelist = async (req, res) => {
   try {
     const { pricelistName, applyDate, isActive } = req.body;

@@ -32,6 +32,10 @@ module.exports = {
       boxShadow: {
         sdprimary: "10px 10px 20px rgba(211, 211, 211, 0.25)",
       },
+      backgroundImage: {
+        bg_product:
+          "url('https://theme.hstatic.net/1000365849/1000614631/14/home_video_bg.jpg?v=174')",
+      },
     },
   },
   plugins: [],

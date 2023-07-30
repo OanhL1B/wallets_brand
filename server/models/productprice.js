@@ -21,23 +21,5 @@ var productpriceSchema = new mongoose.Schema(
   }
 );
 
-// productpriceSchema.pre("save", async function (next) {
-//   const pricelist = await mongoose
-//     .model("Pricelist")
-//     .findById(this.pricelistId);
-//   console.log("pricelist", pricelist);
-
-//   if (pricelist.isActive) {
-//     const product = await mongoose.model("Product").findById(this.productId);
-//     const newPrice = this.price;
-
-//     // Cập nhật giá mới cho sản phẩm
-//     product.price = newPrice;
-//     console.log("newPrice", newPrice);
-//     await product.save();
-//   }
-
-//   next();
-// });
 //Export the model
 module.exports = mongoose.model("Productprice", productpriceSchema);

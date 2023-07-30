@@ -6,7 +6,7 @@ import Spinner from "../utils/Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import CAMELIA from "./logo.png";
 import ECLLIPSE from "./ellipse.png";
-import { userLogin } from "../redux/actions/loginActions";
+import { userLogin } from "../redux/actions";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");

@@ -1,3 +1,4 @@
+//3. 
 import { toast } from "react-toastify";
 import { LOGIN, SET_ERRORS } from "../actionTypes";
 import * as api from "../api/adminapi";
@@ -7,6 +8,7 @@ export const userLogin = (formData, navigate) => async (dispatch) => {
     const { data } = await api.userLogin(formData);
     if (data.success === true) {
       dispatch({ type: LOGIN, data: data });
+      console.log("data", data);
       toast.success("Đăng nhập thành công!");
       navigate("/dashboard");
     } else {

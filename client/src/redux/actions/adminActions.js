@@ -9,6 +9,7 @@ import {
   GET_ALL_PRODUCT,
   GET_ALL_PRODUCT_PRICE,
   SET_ERRORS,
+  UPDATE_CATEGORY,
 } from "../actionTypes";
 import * as api from "../api/adminapi";
 
@@ -133,5 +134,21 @@ export const getProductPrices = () => async (dispatch) => {
     dispatch({ type: GET_ALL_PRODUCT_PRICE, payload: data.retObj });
   } catch (error) {
     console.log("Redux Error", error);
+  }
+};
+
+export const updateCategory = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updateCategory(formData);
+    console.log("data", data);
+    if (data.success === true) {
+      toast.success("Chỉnh sửa Khoa thành công!");
+      dispatch({ type: UPDATE_CATEGORY, payload: true });
+    } else {
+      toast.error("Chỉnh sửa khoa không thành công!");
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
