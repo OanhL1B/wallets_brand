@@ -14,8 +14,8 @@ const Status = () => {
       <div className="items-center w-full">
         <div className="mx-auto ml-[27%]">
           <iframe
-            width={690}
-            height={388}
+            width={790}
+            height={444}
             src="https://www.youtube.com/embed/GTw4fNvorZs"
             title="Welcome to Camelia Brand"
             frameBorder={0}

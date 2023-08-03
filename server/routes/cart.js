@@ -6,7 +6,7 @@ router.post("/", [verifyAccessToken], ctrls.addToCart);
 
 router.get("/:userId", [verifyAccessToken], ctrls.getCartItems);
 
-router.put("/:id", [verifyAccessToken], ctrls.updateCartItemQuantity);
+router.put("/", [verifyAccessToken], ctrls.updateCartItemQuantity);
 
 router.delete("/:id", [verifyAccessToken], ctrls.removeFromCart);
 

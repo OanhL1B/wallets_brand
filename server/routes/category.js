@@ -10,11 +10,7 @@ const {
 router.post("/", [verifyAccessToken, isAdminOrEmployee], ctrls.createCategory);
 router.get("/", ctrls.getCategories);
 
-router.put(
-  "/:id",
-  [verifyAccessToken, isAdminOrEmployee],
-  ctrls.updateCategory
-);
+router.put("/", [verifyAccessToken, isAdminOrEmployee], ctrls.updateCategory);
 router.delete(
   "/",
   [verifyAccessToken, isAdminOrEmployee],

@@ -142,6 +142,48 @@ const Body = () => {
                 </Select>
               </div>
               <div className={classes.WrapInputLabel}>
+                <h1 className={classes.LabelStyle}>Status *:</h1>
+
+                <input
+                  placeholder="Status"
+                  required
+                  className={classes.InputStyle}
+                  type="Status"
+                  value={value.material}
+                  onChange={(e) =>
+                    setValue({ ...value, material: e.target.value })
+                  }
+                />
+              </div>
+              <div className={classes.WrapInputLabel}>
+                <h1 className={classes.LabelStyle}>Price *:</h1>
+
+                <input
+                  placeholder="Price"
+                  required
+                  className={classes.InputStyle}
+                  type="number"
+                  value={value.material}
+                  onChange={(e) =>
+                    setValue({ ...value, material: e.target.value })
+                  }
+                />
+              </div>
+              <div className={classes.WrapInputLabel}>
+                <h1 className={classes.LabelStyle}>Quantity *:</h1>
+
+                <input
+                  placeholder="Quantity"
+                  required
+                  className={classes.InputStyle}
+                  type="number"
+                  value={value.material}
+                  onChange={(e) =>
+                    setValue({ ...value, material: e.target.value })
+                  }
+                />
+              </div>
+              {/* <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Material *:</h1>
 
                 <input
@@ -154,8 +196,8 @@ const Body = () => {
                     setValue({ ...value, material: e.target.value })
                   }
                 />
-              </div>
-              <div className={classes.WrapInputLabel}>
+              </div> */}
+              {/* <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Size *:</h1>
 
                 <input
@@ -166,9 +208,9 @@ const Body = () => {
                   value={value.size}
                   onChange={(e) => setValue({ ...value, size: e.target.value })}
                 />
-              </div>
+              </div> */}
 
-              <div className={classes.WrapInputLabel}>
+              {/* <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Design *:</h1>
 
                 <input
@@ -181,8 +223,8 @@ const Body = () => {
                     setValue({ ...value, design: e.target.value })
                   }
                 />
-              </div>
-              <div className={classes.WrapInputLabel}>
+              </div> */}
+              {/* <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Color *:</h1>
                 <Select
                   required
@@ -199,7 +241,7 @@ const Body = () => {
 
                   <MenuItem value="Black">Black</MenuItem>
                 </Select>
-              </div>
+              </div> */}
             </div>
             {/* <div className={classes.WrapInputLabel}>
               <h1 className={classes.LabelStyle}>Description *:</h1>
@@ -234,7 +276,7 @@ const Body = () => {
               </div>
               <div className="flex flex-col gap-y-5">
                 <h1 className="pb-2 text-sm font-medium text-left">
-                  mèo mèo fjƯQD:
+                  product Image:
                 </h1>
                 <ImageUpload
                   onUploadSuccess={handleUploadSuccess}

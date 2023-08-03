@@ -30,3 +30,4 @@ function App() {
 }
 
 export default App;
+// primary: "#1DC071",

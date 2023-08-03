@@ -32,7 +32,6 @@ const Body = () => {
     (a, b) => a.categoryName.charCodeAt(0) - b.categoryName.charCodeAt(0)
   );
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [id, setId] = useState("");
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();
@@ -55,16 +54,15 @@ const Body = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [value, setValue] = useState({
     categoryName: "",
-    // id: "",
+    categoryId: "",
   });
   const handleEditClick = (cate) => {
     setSelectedCategory(cate);
     setIsModalOpen(true);
     setValue({
       categoryName: "",
-      // id: cate.id,
+      categoryId: cate._id,
     });
-    setId(cate._id);
   };
 
   const openModal = () => {
@@ -82,13 +80,13 @@ const Body = () => {
     } else {
       updatedValue.categoryName = selectedCategory.categoryName;
     }
+    if (value.categoryId !== "") {
+      updatedValue.categoryId = value.categoryId;
+    } else {
+      updatedValue.categoryId = selectedCategory.categoryId;
+    }
 
-    dispatch(
-      updateCategory(
-        ...selectedCategory
-        // ...updatedValue,
-      )
-    );
+    dispatch(updateCategory({ ...selectedCategory, ...updatedValue }));
     dispatch({ type: UPDATE_CATEGORY, payload: false });
   };
 
@@ -150,9 +148,9 @@ const Body = () => {
           <table className="w-full table-auto ">
             <thead className="bg-[#E1EEEE] items-center">
               <tr>
-                <th className="px-4 py-1">Chọn</th>
+                {/* <th className="px-4 py-1">Chọn</th> */}
                 <th className="px-4 py-1">STT</th>
-                <th className="px-4 py-1">Id Category</th>
+                {/* <th className="px-4 py-1">Id Category</th> */}
                 <th className="px-4 py-1">Category Name</th>
                 <th className="px-4 py-1">Actions</th>
               </tr>
@@ -163,29 +161,35 @@ const Body = () => {
                   className="justify-center item-center hover:bg-[#EEF5F5]"
                   key={idx}
                 >
-                  <td className="px-4 py-1 border">
-                    {/* <input
+                  {/* <td className="px-4 py-1 border">
+                    <input
                       onChange={handleInputChange}
                       checked={checkedValue.includes(dep.id)}
                       value={dep.id}
                       type="checkbox"
                       className="accent-[#157572]"
-                    /> */}
-                  </td>
+                    />
+                  </td> */}
                   <td className="px-4 py-1 text-center border ">{idx + 1}</td>
-                  <td className="px-4 py-1 text-center border">{cate._id}</td>
+                  {/* <td className="px-4 py-1 text-center border">{cate._id}</td> */}
                   <td className="px-4 py-1 text-center border">
                     {cate.categoryName}
                   </td>
                   <td
-                    className="items-center justify-center px-4 py-1 mr-0 border"
+                    className="items-center justify-center px-4 py-1 border"
                     style={{ display: "flex", justifyContent: "center" }}
                   >
                     <button
-                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
+                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base  mr-5"
                       onClick={() => handleEditClick(cate)}
                     >
-                      Sửa
+                      Edit
+                    </button>
+                    <button
+                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-red-500 focus:outline-none focus:shadow-outline text-base"
+                      onClick={() => handleEditClick(cate)}
+                    >
+                      Delete
                     </button>
                   </td>
                 </tr>

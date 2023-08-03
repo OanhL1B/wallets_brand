@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import Cart from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
+import UserOrder from "./pages/UserOrder";
 function App() {
   return (
     <Routes>
@@ -14,6 +15,7 @@ function App() {
       <Route path="/product/:productId" element={<ProductDetail />}></Route>
       <Route path="/cart" element={<Cart />}></Route>
       <Route path="/checkout" element={<Checkout />}></Route>
+      <Route path="/user-order" element={<UserOrder />}></Route>
 
       {/* <Route path="/success"><Success /></Route> */}
       {/* <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route> */}

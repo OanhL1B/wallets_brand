@@ -81,11 +81,12 @@ const Checkout = () => {
         console.error("Đã có lỗi xảy ra:", error);
       });
   };
+
   return (
     <>
       <Header />
-      <div>Địa chỉ giao hàng</div>
-      <form
+      <div className="mx-auto">Thông tin giao hàng</div>
+      {/* <form
         onSubmit={handleSubmitForm}
         className="flex flex-col items-center justify-center w-full space-y-6 duration-1000 bg-white"
       >
@@ -143,15 +144,95 @@ const Checkout = () => {
             />
           </div>
         </div>
+        <div className="mb-6">Tống tiền đơn hàng: {totalAmount}</div>
+
         <button
           type="submit"
           className="flex items-center justify-center p-4 text-base font-semibold rounded-xl min-h-[56px] bg-secondary text-white w-full"
         >
-          Địa chỉ giao hàng
+          Đặt hàng
         </button>
-      </form>
+      </form> */}
+      <div className="items-center justify-center w-full m-10 mx-auto">
+        <form
+          onSubmit={handleSubmitForm}
+          className="w-full max-w-md p-6 mx-auto space-y-6 bg-white rounded-lg shadow-md"
+        >
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                htmlFor="firstName"
+                className="block text-sm font-medium text-text2 dark:text-text3"
+              >
+                Họ *
+              </label>
+              <input
+                onChange={(e) =>
+                  setShippingInfo({
+                    ...shippingInfo,
+                    firstName: e.target.value,
+                  })
+                }
+                value={shippingInfo.firstName}
+                name="firstName"
+                type="text"
+                required
+                className="w-full px-4 py-2 text-sm font-medium bg-transparent border border-[#157572] focus:border-[#157572] focus:ring-secondary focus:outline-none focus:ring focus:ring-opacity-40 rounded-xl placeholder-text-text4 dark:placeholder-text-text2 dark:text-white"
+                placeholder="Vũ Thị Hồng"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium text-text2 dark:text-text3"
+              >
+                Tên *
+              </label>
+              <input
+                onChange={(e) =>
+                  setShippingInfo({ ...shippingInfo, lastName: e.target.value })
+                }
+                value={shippingInfo.lastName}
+                name="lastName"
+                type="text"
+                required
+                className="w-full px-4 py-2 text-sm font-medium bg-transparent border border-[#157572] focus:border-[#157572] focus:ring-secondary focus:outline-none focus:ring focus:ring-opacity-40 rounded-xl placeholder-text-text4 dark:placeholder-text-text2 dark:text-white"
+                placeholder="Oanh"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-text2 dark:text-text3"
+            >
+              Địa chỉ giao hàng *
+            </label>
+            <input
+              onChange={(e) =>
+                setShippingInfo({ ...shippingInfo, address: e.target.value })
+              }
+              value={shippingInfo.address}
+              name="address"
+              type="text"
+              required
+              className="w-full px-4 py-2 text-sm font-medium bg-transparent border border-[#157572] focus:border-[#157572] focus:ring-secondary focus:outline-none focus:ring focus:ring-opacity-40 rounded-xl placeholder-text-text4 dark:placeholder-text-text2 dark:text-white"
+              placeholder="97 Man Thiện"
+            />
+          </div>
+          <div className="text-text1 dark:text-darkStroke">
+            Tổng tiền đơn hàng: {totalAmount}
+          </div>
+          <button
+            type="submit"
+            className="flex items-center justify-center w-full px-4 py-3 text-base font-semibold text-white rounded-xl bg-secondary min-h-[56px]"
+          >
+            Đặt hàng
+          </button>
+        </form>
+      </div>
 
-      <div className="w-full my-8 mt-6 item-center bg-bg_product">
+      {/* <div className="w-full my-8 mt-6 item-center bg-bg_product">
         {userCarts.length !== 0 && (
           <table className="w-[80%] items-center table-auto  border border-[#c7c2c2] px-8 mx-auto bg-bg_product">
             <thead className="items-center h-20 px-8">
@@ -196,8 +277,7 @@ const Checkout = () => {
             </tbody>
           </table>
         )}
-      </div>
-      <div>Tống tiền đơn hàng: {totalAmount}</div>
+      </div> */}
       <Footer />
     </>
   );

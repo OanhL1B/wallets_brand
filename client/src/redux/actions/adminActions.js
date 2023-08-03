@@ -142,10 +142,10 @@ export const updateCategory = (formData) => async (dispatch) => {
     const { data } = await api.updateCategory(formData);
     console.log("data", data);
     if (data.success === true) {
-      toast.success("Chỉnh sửa Khoa thành công!");
+      toast.success("updated category successfully!");
       dispatch({ type: UPDATE_CATEGORY, payload: true });
     } else {
-      toast.error("Chỉnh sửa khoa không thành công!");
+      toast.error("updated error!");
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {

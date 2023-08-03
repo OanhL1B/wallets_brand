@@ -5,3 +5,5 @@ export const LOGOUT = "LOGOUT";
 export const ADD_CART = "ADD_CART";
 export const ADD_ORDER = "ADD_ORDER";
 export const GET_CART_USER = "GET_CART_USER";
+export const UPDATE_CART = "UPDATE_CART";
+export const GET_ORDER_USER = "GET_ORDER_USER";

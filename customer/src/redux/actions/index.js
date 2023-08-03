@@ -4,8 +4,10 @@ import {
   ADD_ORDER,
   ADD_USER,
   GET_CART_USER,
+  GET_ORDER_USER,
   LOGIN,
   SET_ERRORS,
+  UPDATE_CART,
 } from "../actionTypes";
 import * as api from "../api/customerapi";
 
@@ -93,6 +95,26 @@ export const getCartUser = (userId) => async (dispatch) => {
   try {
     const { data } = await api.getCartUser(userId);
     dispatch({ type: GET_CART_USER, payload: data.retObj });
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const updateCartQuantity = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updateCartQuantity(formData);
+    if (data.success === true) {
+      dispatch({ type: UPDATE_CART, payload: true });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getOrderUser = (userId) => async (dispatch) => {
+  try {
+    const { data } = await api.getOrderUser(userId);
+    dispatch({ type: GET_ORDER_USER, payload: data.retObj });
   } catch (error) {
     console.log("Redux Error", error);
   }

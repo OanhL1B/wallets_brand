@@ -8,6 +8,8 @@ import { APIPUBLIC } from "../redux/config/config";
 import { useDispatch } from "react-redux";
 import { addCart } from "../redux/actions";
 const ProductDetail = () => {
+  //
+
   const { productId } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
@@ -45,6 +47,7 @@ const ProductDetail = () => {
       })
     );
   };
+
   return (
     <div className="bg-gray-100">
       <Header />

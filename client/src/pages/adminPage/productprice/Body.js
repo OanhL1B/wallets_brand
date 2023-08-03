@@ -138,7 +138,7 @@ const Body = () => {
                 <th className="px-4 py-1">Id ProductPrice</th>
                 <th className="px-4 py-1">Id Product</th>
                 <th className="px-4 py-1">Id PriceList</th>
-                <th className="px-4 py-1">Product Name</th>
+                <th className="px-4 py-1">Price</th>
                 <th className="px-4 py-1">Actions</th>
               </tr>
             </thead>

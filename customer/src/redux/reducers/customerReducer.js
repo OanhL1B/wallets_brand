@@ -3,16 +3,20 @@ import {
   ADD_ORDER,
   ADD_USER,
   GET_CART_USER,
+  GET_ORDER_USER,
   LOGIN,
   LOGOUT,
+  UPDATE_CART,
 } from "../actionTypes";
 
 const initialState = {
   authData: JSON.parse(localStorage.getItem("user")) || null,
   userAdded: false,
   orderAdded: false,
+  updatedCart: false,
   cartItems: [],
   userCarts: [],
+  userOrders: [],
 };
 
 const customerReducer = (state = initialState, action) => {
@@ -39,6 +43,16 @@ const customerReducer = (state = initialState, action) => {
       return {
         ...state,
         userCarts: action.payload,
+      };
+    case GET_ORDER_USER:
+      return {
+        ...state,
+        userOrders: action.payload,
+      };
+    case UPDATE_CART:
+      return {
+        ...state,
+        updatedCart: action.payload,
       };
     case LOGOUT:
       localStorage.removeItem("user");

@@ -60,26 +60,56 @@ const getCategories = asyncHandler(async (req, res) => {
 });
 
 // update danh mục
+// const updateCategory = asyncHandler(async (req, res) => {
+//   try {
+//     const errors = { categoryError: String };
+//     const { categoryName } = req.body;
+//     const existingCategory = await Category.findOne({ categoryName });
+//     if (existingCategory) {
+//       errors.categoryError = "Danh mục này đã tồn tại";
+//       return res.status(400).json(errors);
+//     }
+
+//     // Tìm và cập nhật danh mục
+//     const category = await Category.findById(req.params.id);
+//     if (!category) {
+//       return res.status(400).json({ categoryError: "Danh mục không tồn tại" });
+//     }
+
+//     if (categoryName) {
+//       category.categoryName = categoryName;
+//     }
+
+//     await category.save();
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Cập nhật danh mục thành công",
+//       data: category,
+//     });
+//   } catch (error) {
+//     const errors = { backendError: String };
+//     errors.backendError = error;
+//     res.status(500).json(errors);
+//   }
+// });
 const updateCategory = asyncHandler(async (req, res) => {
   try {
     const errors = { categoryError: String };
-    const { categoryName } = req.body;
-    const existingCategory = await Category.findOne({ categoryName });
-    if (existingCategory) {
-      errors.categoryError = "Danh mục này đã tồn tại";
+    const { categoryId, categoryName } = req.body; // Lấy categoryId từ req.body
+
+    // Kiểm tra nếu categoryId không tồn tại trong body thì trả về lỗi
+    if (!categoryId) {
+      errors.categoryError = "Thiếu thông tin categoryId";
       return res.status(400).json(errors);
     }
 
-    // Tìm và cập nhật danh mục
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findById(categoryId); // Tìm danh mục bằng categoryId
     if (!category) {
       return res.status(400).json({ categoryError: "Danh mục không tồn tại" });
     }
 
-    if (categoryName) {
-      category.categoryName = categoryName;
-    }
-
+    category.categoryName = categoryName;
     await category.save();
 
     res.status(200).json({

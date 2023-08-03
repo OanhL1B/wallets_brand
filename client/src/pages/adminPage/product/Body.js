@@ -23,9 +23,10 @@ const modalStyles = {
 const Body = () => {
   const store = useSelector((state) => state);
   const products = useSelector((state) => state.admin.allProduct);
-  products.sort(
-    (a, b) => a.productName.charCodeAt(0) - b.productName.charCodeAt(0)
-  );
+  console.log("product", products);
+  // products.sort(
+  //   (a, b) => a.productName.charCodeAt(0) - b.productName.charCodeAt(0)
+  // );
   const [selectedProduct, setSelectedProduct] = useState("");
   const [error, setError] = useState({});
 

@@ -173,7 +173,7 @@ const Header = () => {
                   </Link>
 
                   <Link
-                    to="/signin"
+                    to="/sign-up"
                     className="hidden text-sm cursor-pointer md:block"
                   >
                     Đăng ký
@@ -192,6 +192,12 @@ const Header = () => {
                     </div>
                   )}
                 </div>
+              </Link>
+              <Link
+                to="/user-order"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Đơn hàng
               </Link>
             </div>
           </div>

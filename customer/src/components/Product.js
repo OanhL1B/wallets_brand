@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 const Product = ({ item }) => {
-  console.log("item", item);
   return (
     <div className="relative flex flex-col items-center justify-center w-full h-full m-5">
       <Link to={`/product/${item._id}`}>
