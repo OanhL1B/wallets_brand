@@ -8,7 +8,7 @@ router.get("/:userId", [verifyAccessToken], ctrls.getCartItems);
 
 router.put("/", [verifyAccessToken], ctrls.updateCartItemQuantity);
 
-router.delete("/:id", [verifyAccessToken], ctrls.removeFromCart);
+router.delete("/:cartItemId", [verifyAccessToken], ctrls.removeFromCart);
 
 router.delete("/clear/:userId", [verifyAccessToken], ctrls.clearCart);
 

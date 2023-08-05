@@ -40,3 +40,12 @@ export const getCurrentUser = () => APIV1.get("/api/user/current");
 export const getUsers = () => APIV1.get("/api/user");
 export const updateUserbyAdmin = (updateUser) =>
   APIV1.put("/api/user", updateUser);
+
+//orders
+export const getOrders = () => APIV1.get("/api/order");
+export const updateOrderStatus = (updateOrder) =>
+  APIV1.put("/api/order", updateOrder);
+//inventory
+export const getWarehousing = () => APIV1.get("/api/warehousing");
+export const updateWarehousing = (updateWarehousing) =>
+  APIV1.put("/api/warehousing", updateWarehousing);

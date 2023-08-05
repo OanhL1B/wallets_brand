@@ -263,7 +263,7 @@ const Body = () => {
             className="items-center gap-[9px]  w-[88px] h-[40px] hover:bg-[#04605E] block py-2 font-bold text-white rounded-lg px-4 
            bg-[#157572] focus:outline-none focus:shadow-outline "
           >
-            Thêm
+            ADD
           </button>
         </Link>
         {/* {departments && checkedValue?.length > 0 ? (

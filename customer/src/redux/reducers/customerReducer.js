@@ -2,6 +2,8 @@ import {
   ADD_CART,
   ADD_ORDER,
   ADD_USER,
+  CANCELED,
+  DELETE_CART,
   GET_CART_USER,
   GET_ORDER_USER,
   LOGIN,
@@ -14,6 +16,9 @@ const initialState = {
   userAdded: false,
   orderAdded: false,
   updatedCart: false,
+  deleteOrder: false,
+  deletedCart: false,
+
   cartItems: [],
   userCarts: [],
   userOrders: [],
@@ -53,6 +58,16 @@ const customerReducer = (state = initialState, action) => {
       return {
         ...state,
         updatedCart: action.payload,
+      };
+    case CANCELED:
+      return {
+        ...state,
+        deleteOrder: action.payload,
+      };
+    case DELETE_CART:
+      return {
+        ...state,
+        deletedCart: action.payload,
       };
     case LOGOUT:
       localStorage.removeItem("user");

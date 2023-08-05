@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { getCartUser, updateCartQuantity } from "../redux/actions";
+import { deleteCart, getCartUser, updateCartQuantity } from "../redux/actions";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
@@ -34,12 +34,12 @@ const Cart = () => {
     }
   }, [updateCart]);
 
-  //   const deleteACartProduct = (id) => {
-  //     dispatch(deleteCartProduct(id));
-  //     setTimeout(() => {
-  //       dispatch(getUserCart());
-  //     }, 200);
-  //   };
+  const handleDelete = (id) => {
+    dispatch(deleteCart(id));
+    setTimeout(() => {
+      dispatch(getCartUser(user?.userData?._id));
+    }, 200);
+  };
 
   useEffect(() => {
     let sum = 0;
@@ -67,67 +67,29 @@ const Cart = () => {
             </thead>
             <tbody className="">
               {userCarts.map((item, idx) => (
-                // <tr className="justify-center item-center" key={idx}>
-                //   <td className="px-4 py-1 text-center border border-[#c7c2c2]">
-                //     <div className="flex items-center justify-center mx-auto gap-x-6 ">
-                //       <div className="mr-4 w-30 h-30">
-                //         <img
-                //           src={item?.productId?.images?.thumb}
-                //           alt="Product"
-                //           className="w-30"
-                //           style={{ width: "300px" }}
-                //         />
-                //       </div>
-                //       <div className="justify-center ml-10 text-center items-centers">
-                //         <p className="font-bold">
-                //           {item?.productId?.productName}
-                //         </p>
-                //       </div>
-                //     </div>
-                //   </td>
-                //   <td className="px-4 py-1 text-center border border-[#c7c2c2]">
-                //     {item.price}
-                //   </td>
-                //   <div className="flex items-center gap-3 cart-col-3">
-                //     <div>
-                //       <input
-                //         className="form-control"
-                //         type="number"
-                //         name=""
-                //         min={1}
-                //         max={10}
-                //         id=""
-                //         value={
-                //           updateCart?.quantity
-                //             ? updateCart?.quantity
-                //             : item?.quantity
-                //         }
-                //         onChange={(e) => {
-                //           setUpdateCart({
-                //             cartItemId: item?._id,
-                //             quantity: e.target.value,
-                //           });
-                //         }}
-                //       />
-                //     </div>
-                //   </div>
-                // </tr>
                 <tr className="justify-center item-center" key={idx}>
                   <td className="px-4 py-1 text-center border border-[#c7c2c2]">
                     <div className="flex items-center justify-center mx-auto gap-x-6">
                       <div className="mr-4 w-30 h-30">
                         <img
-                          src={item?.productId?.images?.thumb}
+                          src={item?.productId?.thumb}
                           alt="Product"
                           className="w-30"
                           style={{ width: "300px" }}
                         />
                       </div>
+
                       <div className="justify-center ml-10 text-center items-centers">
                         <p className="font-bold">
                           {item?.productId?.productName}
                         </p>
                       </div>
+                      <button
+                        className="text-red-500"
+                        onClick={() => handleDelete(item._id)}
+                      >
+                        Xóa
+                      </button>
                     </div>
                   </td>
                   <td className="px-4 py-1 text-center border border-[#c7c2c2]">

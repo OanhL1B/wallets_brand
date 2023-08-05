@@ -9,7 +9,9 @@ export const addUser = (user) => APIPUBLIC.post("/api/user/register", user);
 export const addCart = (cart) => APIV1.post("/api/cart", cart);
 export const getCartUser = (userId) => APIV1.get(`/api/cart/${userId}`);
 export const updateCartQuantity = (data) => APIV1.put("/api/cart", data);
+export const deleteCart = (CartId) => APIV1.delete(`/api/cart/${CartId}`);
 
 // order
 export const addOrder = (order) => APIV1.post("/api/order", order);
 export const getOrderUser = (userId) => APIV1.get(`/api/order/user/${userId}`);
+export const Canceled = (orderId) => APIV1.delete(`/api/order/${orderId}`);

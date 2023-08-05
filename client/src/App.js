@@ -12,6 +12,9 @@ import Product from "./pages/adminPage/product/Product";
 import AddProductPrice from "./pages/adminPage/addproductprice/AddProductPrice";
 import ProductPrice from "./pages/adminPage/productprice/ProductPrice";
 import User from "./pages/adminPage/user/User";
+import Order from "./pages/adminPage/order/Order";
+import OrderView from "./pages/adminPage/orderview/OrderView";
+import Inventory from "./pages/adminPage/inventory/Inventory";
 function App() {
   return (
     <Routes>
@@ -27,6 +30,9 @@ function App() {
       <Route path="/add-product" element={<AddProduct />} />
       <Route path="/add-productprice" element={<AddProductPrice />} />
       <Route path="/users" element={<User />} />
+      <Route path="/manage-orders" element={<Order />} />
+      <Route path="/inventory" element={<Inventory />} />
+      <Route path="/order/:id" element={<OrderView />} />
     </Routes>
   );
 }

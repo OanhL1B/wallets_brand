@@ -10,14 +10,13 @@ import { sliderItems } from "../data";
 const Sidebar = () => {
   return (
     <Swiper
-      // install Swiper modules
       modules={[Pagination]}
       grabCursor={true}
       spaceBetween={3}
       slidesPerView={"auto"}
       autoplay={{ delay: 3000, disableOnInteraction: false }}
       loop={true}
-      pagination={{ clickable: true }} // Sử dụng pagination có thể bấm
+      pagination={{ clickable: true }}
     >
       {sliderItems.length > 0 &&
         sliderItems.map((item) => (

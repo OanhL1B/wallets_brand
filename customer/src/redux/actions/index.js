@@ -3,6 +3,8 @@ import {
   ADD_CART,
   ADD_ORDER,
   ADD_USER,
+  CANCELED,
+  DELETE_CART,
   GET_CART_USER,
   GET_ORDER_USER,
   LOGIN,
@@ -73,6 +75,7 @@ export const addCart = (formData) => async (dispatch) => {
 export const addOrder = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addOrder(formData);
+    console.log("data", data);
     if (data.success === true) {
       toast.success("Đặt hàng thành công hàng thành công!");
       dispatch({ type: ADD_ORDER, payload: true });
@@ -117,5 +120,51 @@ export const getOrderUser = (userId) => async (dispatch) => {
     dispatch({ type: GET_ORDER_USER, payload: data.retObj });
   } catch (error) {
     console.log("Redux Error", error);
+  }
+};
+
+export const Canceled = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.Canceled(formData);
+    console.log("data", data);
+    if (data.success === true) {
+      toast.success("Hủy đơn hàng công hàng thành công!");
+      dispatch({ type: CANCELED, payload: true });
+    } else {
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    if (
+      error.response &&
+      error.response.data &&
+      error.response.data.status === "error"
+    ) {
+      dispatch({ type: SET_ERRORS, payload: error.response });
+    } else {
+      console.log("Unknown error occurred");
+    }
+  }
+};
+
+export const deleteCart = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.deleteCart(formData);
+    console.log("data", data);
+    if (data.success === true) {
+      toast.success("xóa giỏ hàng thành công!");
+      dispatch({ type: DELETE_CART, payload: true });
+    } else {
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    if (
+      error.response &&
+      error.response.data &&
+      error.response.data.status === "error"
+    ) {
+      dispatch({ type: SET_ERRORS, payload: error.response });
+    } else {
+      console.log("Unknown error occurred");
+    }
   }
 };

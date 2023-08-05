@@ -10,7 +10,7 @@ const {
 router.get("/", ctrls.getWarehousings);
 
 router.put(
-  "/:id",
+  "/",
   [verifyAccessToken, isAdminOrEmployee],
   ctrls.updateWarehousing
 );

@@ -7,3 +7,5 @@ export const ADD_ORDER = "ADD_ORDER";
 export const GET_CART_USER = "GET_CART_USER";
 export const UPDATE_CART = "UPDATE_CART";
 export const GET_ORDER_USER = "GET_ORDER_USER";
+export const CANCELED = "CANCELED";
+export const DELETE_CART = "DELETE_CART";

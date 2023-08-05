@@ -34,16 +34,16 @@ const Body = () => {
               <span className="font-sans">email</span>
               <span className="font-sans">phoneNumber</span>
               <span className="font-sans">Address</span>
-              <span className="font-sans">Email</span>
             </div>
             <div
               className="flex flex-col gap-y-5"
               style={{ width: "250px", textAlign: "left" }}
             >
               <span>
-                {user?.firstName} {user?.lastName}
+                {user?.lastName} {user?.firstName}
               </span>
               <span>{user?.email}</span>
+              <span>{user?.phoneNumber}</span>
               <span>{user?.phoneNumber}</span>
             </div>
           </div>

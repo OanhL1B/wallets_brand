@@ -8,9 +8,13 @@ import {
   GET_ALL_PRODUCT,
   GET_ALL_PRODUCT_PRICE,
   GET_CURRENT_USER,
+  GET_INVENTORY,
+  GET_ORDERS,
   GET_USERS,
   LOGIN,
   UPDATE_CATEGORY,
+  UPDATE_INVENTORY,
+  UPDATE_ORDER_STATUS,
   UPDATE_PRICELIST,
   UPDATE_PRODUCT,
   UPDATE_PRODUCT_PRICE,
@@ -28,12 +32,16 @@ const initialState = {
   updatedProduct: false,
   updatedPriceList: false,
   updatedProductPrice: false,
+  updatedOrder: false,
+  updatedInventory: false,
   allCategory: [],
   allPricelist: [],
   allProduct: [],
   allProductPrice: [],
   usercurrent: [],
   allUsers: [],
+  allOrder: [],
+  allInventory: [],
 };
 
 const adminReducer = (state = initialState, action) => {
@@ -87,6 +95,11 @@ const adminReducer = (state = initialState, action) => {
         ...state,
         updatedCategory: action.payload,
       };
+    case UPDATE_ORDER_STATUS:
+      return {
+        ...state,
+        updatedOrder: action.payload,
+      };
     case UPDATE_USER_BY_ADMIN:
       return {
         ...state,
@@ -116,6 +129,21 @@ const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         allUsers: action.payload,
+      };
+    case GET_ORDERS:
+      return {
+        ...state,
+        allOrder: action.payload,
+      };
+    case GET_INVENTORY:
+      return {
+        ...state,
+        allInventory: action.payload,
+      };
+    case UPDATE_INVENTORY:
+      return {
+        ...state,
+        updatedInventory: action.payload,
       };
     default:
       return state;

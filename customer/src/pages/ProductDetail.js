@@ -6,7 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { APIPUBLIC } from "../redux/config/config";
 import { useDispatch } from "react-redux";
-import { addCart } from "../redux/actions";
+import { addCart, getCartUser } from "../redux/actions";
 const ProductDetail = () => {
   //
 
@@ -18,16 +18,16 @@ const ProductDetail = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    const getProduct = async () => {
-      try {
-        const res = await APIPUBLIC.get("api/product/" + productId);
-        console.log("res", res);
-        setProduct(res.data?.data);
-      } catch {}
-    };
     getProduct();
   }, [productId]);
 
+  const getProduct = async () => {
+    try {
+      const res = await APIPUBLIC.get("api/product/" + productId);
+      console.log("res", res);
+      setProduct(res.data?.data);
+    } catch {}
+  };
   const handleQuantity = (type) => {
     if (type === "dec") {
       quantity > 1 && setQuantity(quantity - 1);
@@ -36,8 +36,8 @@ const ProductDetail = () => {
     }
   };
 
-  const handleClick = () => {
-    dispatch(
+  const handleClick = async () => {
+    await dispatch(
       addCart({
         productId: product._id,
         userId: user?.userData?._id,
@@ -46,6 +46,7 @@ const ProductDetail = () => {
         price: quantity * product?.price,
       })
     );
+    dispatch(getCartUser(user?.userData?._id)); // gọi lại api để hiên số lượng ở giỏ hàng
   };
 
   return (
@@ -54,7 +55,7 @@ const ProductDetail = () => {
       <div className="p-10 md:flex md:justify-center">
         <div className="w-full md:w-1/2 md:p-5">
           <img
-            src={product?.images?.thumb}
+            src={product?.thumb}
             alt={product.productName}
             className="object-cover w-full h-90vh md:h-40vh"
           />
@@ -64,7 +65,7 @@ const ProductDetail = () => {
             {product.productName}
           </h1>
           <p className="p-4 mb-4  text-3xl text-[#d61c1f] font-bold">
-            {product.price}
+            {product.price}đ
           </p>
 
           <p className="mb-4 font-base text-[#666666] font-normal">

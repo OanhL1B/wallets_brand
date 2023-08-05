@@ -90,6 +90,16 @@ const Sidebar = () => {
             <h1 className="font-normal">Productprices</h1>
           </NavLink>
           <NavLink
+            to="/inventory"
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            <AttachMoneyIcon className="" />
+
+            <h1 className="font-normal">Inventory</h1>
+          </NavLink>
+          <NavLink
             to="/users"
             className={({ isActive }) =>
               isActive ? isActiveStyle : isNotActiveStyle

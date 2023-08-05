@@ -62,6 +62,26 @@ const updateCartItemQuantity = asyncHandler(async (req, res) => {
   }
 });
 
+// const removeFromCart = asyncHandler(async (req, res) => {
+//   try {
+//     const { cartItemId } = req.params;
+//     const cartItem = await Cart.findById(cartItemId);
+//     if (!cartItem) {
+//       return res.status(404).json({ error: "Cart item not found" });
+//     }
+//     await cartItem.deleteOne(cartItemId);
+//     res.status(200).json({
+//       success: true,
+//       message: "Product removed from the cart successfully",
+//     });
+//   } catch (error) {
+//     console.log("error", error);
+//     const errors = { backendError: String };
+//     errors.backendError = error;
+//     res.status(500).json(errors);
+//   }
+// });
+
 const removeFromCart = asyncHandler(async (req, res) => {
   try {
     const { cartItemId } = req.params;
@@ -69,16 +89,14 @@ const removeFromCart = asyncHandler(async (req, res) => {
     if (!cartItem) {
       return res.status(404).json({ error: "Cart item not found" });
     }
-    await cartItem.remove();
-
+    await cartItem.deleteOne(); // Xóa bản ghi trong database
     res.status(200).json({
       success: true,
       message: "Product removed from the cart successfully",
     });
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
+    console.log("error", error);
+    res.status(500).json({ backendError: "An error occurred on the backend" });
   }
 });
 

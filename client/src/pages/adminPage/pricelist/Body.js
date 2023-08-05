@@ -213,7 +213,7 @@ const Body = () => {
                       className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
                       onClick={() => handleEditClick(pricelist)}
                     >
-                      Sửa
+                      Edit
                     </button>
                   </td>
                 </tr>

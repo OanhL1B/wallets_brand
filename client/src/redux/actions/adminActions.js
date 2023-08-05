@@ -9,9 +9,13 @@ import {
   GET_ALL_PRODUCT,
   GET_ALL_PRODUCT_PRICE,
   GET_CURRENT_USER,
+  GET_INVENTORY,
+  GET_ORDERS,
   GET_USERS,
   SET_ERRORS,
   UPDATE_CATEGORY,
+  UPDATE_INVENTORY,
+  UPDATE_ORDER_STATUS,
   UPDATE_PRICELIST,
   UPDATE_PRODUCT,
   UPDATE_PRODUCT_PRICE,
@@ -233,6 +237,61 @@ export const updateUserbyAdmin = (formData) => async (dispatch) => {
     if (data.success === true) {
       toast.success("updated user price successfully!");
       dispatch({ type: UPDATE_USER_BY_ADMIN, payload: true });
+    } else {
+      toast.error("updated error!");
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getOrders = () => async (dispatch) => {
+  try {
+    const { data } = await api.getOrders();
+    if (data.success === true) {
+      dispatch({ type: GET_ORDERS, payload: data.retObj });
+    } else {
+      dispatch(dispatch({ type: SET_ERRORS, payload: data }));
+    }
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const getWarehousing = () => async (dispatch) => {
+  try {
+    const { data } = await api.getWarehousing();
+    if (data.success === true) {
+      dispatch({ type: GET_INVENTORY, payload: data.retObj });
+    } else {
+      dispatch(dispatch({ type: SET_ERRORS, payload: data }));
+    }
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const updateOrderStatus = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updateOrderStatus(formData);
+    if (data.success === true) {
+      toast.success("updated order successfully!");
+      dispatch({ type: UPDATE_ORDER_STATUS, payload: true });
+    } else {
+      toast.error("updated error!");
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+export const updateWarehousing = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updateWarehousing(formData);
+    if (data.success === true) {
+      toast.success("updated order successfully!");
+      dispatch({ type: UPDATE_INVENTORY, payload: true });
     } else {
       toast.error("updated error!");
       dispatch({ type: SET_ERRORS, payload: data });

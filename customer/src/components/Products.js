@@ -9,7 +9,7 @@ const Products = () => {
     const getProducts = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/product");
-        setProducts(res.data.data);
+        setProducts(res.data.retObj);
       } catch (err) {}
     };
     getProducts();
@@ -17,7 +17,7 @@ const Products = () => {
 
   console.log("products", products);
   return (
-    <div className="grid grid-cols-4 gap-4 px-40 mt-10 bg-bg_product">
+    <div className="grid grid-cols-4 gap-4 px-40 mt-10 ">
       {products?.map((item) => (
         <Product item={item} key={item._id} />
       ))}

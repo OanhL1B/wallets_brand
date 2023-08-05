@@ -150,7 +150,7 @@ const Body = () => {
 
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
-      <Link to="/add-product" className="btn btn-primary">
+      <Link to="/add-productprice" className="btn btn-primary">
         <button
           className="items-center gap-[9px]  w-[88px] h-[40px] hover:bg-[#04605E] block py-2 font-bold text-white rounded-lg px-4 
            bg-[#157572] focus:outline-none focus:shadow-outline "
@@ -266,7 +266,7 @@ const Body = () => {
 
               <div className="flex items-center justify-center mt-10 space-x-6">
                 <button className={classes.adminFormSubmitButton} type="submit">
-                  Lưu
+                  Save
                 </button>
 
                 <button
@@ -274,7 +274,7 @@ const Body = () => {
                   type="button"
                   onClick={() => handleModalError()}
                 >
-                  Thoát
+                  Cancel
                 </button>
               </div>
               <div className="mt-5">
