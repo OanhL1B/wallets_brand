@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUser } from "../../../redux/actions/adminActions";
 
 const Body = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
+  const user = useSelector((state) => state.admin.usercurrent);
+  console.log("user", user);
+
   return (
     <div className="mx-2 mt-10 item-center ">
       <div className="items-center justify-center space-y-5">
@@ -20,30 +30,22 @@ const Body = () => {
               className="flex flex-col font-sans gap-y-5"
               style={{ width: "130px", textAlign: "left" }}
             >
-              <span className="font-sans">firstName</span>
-              <span className="font-sans">lastName</span>
+              <span className="font-sans">Full Name</span>
               <span className="font-sans">email</span>
-              <span className="font-sans">SEX</span>
               <span className="font-sans">phoneNumber</span>
               <span className="font-sans">Address</span>
               <span className="font-sans">Email</span>
             </div>
-            {/* <div
+            <div
               className="flex flex-col gap-y-5"
               style={{ width: "250px", textAlign: "left" }}
             >
-              <span>{students?.maSv}</span>
               <span>
-                {students?.ho} {students?.ten}
+                {user?.firstName} {user?.lastName}
               </span>
-              <span>{students?.phai}</span>
-              <span>{ngaySinh}</span>
-              <span>{students?.noiSinh}</span>
-              <span>{students?.diaChi}</span>
-              <span>{students?.sdt}</span>
-              <span>{students?.email}</span>
-              <span>{nameUnit}</span>
-            </div> */}
+              <span>{user?.email}</span>
+              <span>{user?.phoneNumber}</span>
+            </div>
           </div>
         </div>
       </div>

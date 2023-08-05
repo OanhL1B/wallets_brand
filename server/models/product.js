@@ -16,9 +16,11 @@ var productSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Category",
     },
+    thumb: {
+      type: String,
+    },
     images: {
-      thumb: String,
-      ortherimg: Array,
+      type: Array,
     },
     material: {
       type: String,

@@ -52,12 +52,7 @@ const LoginPage = () => {
         <h1 className="mb-1 text-lg font-semibold text-center lg:mb-3 lg:text-xl lg: text-text1 dark:text-white">
           Welcome Back
         </h1>
-        <p className="mb-6 text-xs font-normal text-center lg:text-sm text-text3 lg:mb-8">
-          Don't have an account?{" "}
-          <Link to="/sign-up" className="font-medium underline text-primary">
-            Sign up
-          </Link>
-        </p>
+
         <form
           onSubmit={login}
           className="flex flex-col items-center justify-center w-full space-y-6 duration-1000 bg-white"
@@ -111,13 +106,13 @@ const LoginPage = () => {
                 )}
               </div>
             </div>
-            <div className="flex flex-col mt-2 gap-y-2 lg:gap-x-3">
+            {/* <div className="flex flex-col mt-2 gap-y-2 lg:gap-x-3">
               <div className="text-right">
                 <span className="inline-block text-sm font-medium text-primary">
                   Forgot password
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <button

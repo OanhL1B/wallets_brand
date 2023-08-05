@@ -4,6 +4,7 @@ import * as classes from "../../../utils/styles";
 import React, { useEffect, useState } from "react";
 import Spinner from "../../../utils/Spinner";
 import { addCategory } from "../../../redux/actions/adminActions";
+import { Link } from "react-router-dom";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -50,9 +51,16 @@ const Body = () => {
   return (
     <div className="mx-5 mt-3 item-center">
       <div className="space-y-3">
-        <h1 className="p-2 px-14 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
-          Create a Category
-        </h1>
+        <div className="flex flex-col">
+          <h1 className="mt-5 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
+            Create a Category
+          </h1>
+          <Link to="/manage-category" className="btn btn-primary">
+            <button className="mt-2 px-4 py-2  font-bold text-white rounded bg-[#157572] mr-14 hover:bg-[#04605E] focus:outline-none focus:shadow-outline">
+              Quay lại
+            </button>
+          </Link>
+        </div>
         <div className="flex flex-col bg-white rounded-xl">
           <form
             className="w-full min-h-[300px] py-9 px-7 text-center bg-white border rounded-md  shadow-2xl mx-auto"

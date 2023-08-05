@@ -1,35 +1,48 @@
-import { ADD_PRODUCT, SET_ERRORS } from "../../../redux/actionTypes";
-import { addProduct } from "../../../redux/actions/adminActions";
-import ImageIcon from "@mui/icons-material/Image";
-import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import * as classes from "../../../utils/styles";
-import MenuItem from "@mui/material/MenuItem";
-import React, { useEffect, useMemo, useState } from "react";
-import Select from "@mui/material/Select";
 import Spinner from "../../../utils/Spinner";
-import ImageUpload from "../../../components/ImageUpload";
+import Select from "@mui/material/Select";
+import ReactSelect from "react-select";
 import ReactQuill from "react-quill";
+import React, { useEffect, useMemo, useState } from "react";
+import MenuItem from "@mui/material/MenuItem";
+import ImageUpload from "../../../components/ImageUpload";
+import * as classes from "../../../utils/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { addProduct } from "../../../redux/actions/adminActions";
+import { ADD_PRODUCT, SET_ERRORS } from "../../../redux/actionTypes";
 import "react-quill/dist/quill.snow.css";
+
 const Body = () => {
+  const Colors = [
+    { colorName: "Black", colorCode: "#FF5733" },
+    { colorName: "White", colorCode: "#33FF57" },
+    { colorName: "green", colorCode: "#5733FF" },
+  ];
+
+  const mhtqOptions = Colors?.map((sub) => ({
+    value: sub.colorCode,
+    label: sub.colorName,
+  }));
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const categories = useSelector((state) => state.admin.allCategory);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const [description, setDescription] = useState("");
-  console.log("description", description);
+
   const [value, setValue] = useState({
     productName: "",
     category: "",
     material: "",
     size: "",
     design: "",
-    color: "",
-    images: {
-      thumb: "",
-      ortherimg: [],
-    },
+    color: [],
+    images: [],
+    thumb: "",
   });
 
   useEffect(() => {
@@ -42,12 +55,12 @@ const Body = () => {
   const handleUploadSuccess = (url) => {
     setValue(() => ({
       ...value,
-      images: url,
+      thumb: url,
     }));
   };
 
   const handleUploadError = () => {
-    toast.error("Thêm ảnh không thành công!");
+    toast.error("Error Upload!");
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -68,11 +81,11 @@ const Body = () => {
           size: "",
           design: "",
           color: "",
-          images: {
-            thumb: "",
-            ortherimg: [],
-          },
+          images: [],
+          thumb: "",
         });
+        setSelectedOptions([]);
+        setDescription("");
         dispatch({ type: SET_ERRORS, payload: {} });
         dispatch({ type: ADD_PRODUCT, payload: false });
       }
@@ -90,16 +103,34 @@ const Body = () => {
       toolbar: [
         ["bold", "italic", "underline", "strike"],
         ["blockquote"],
-        [{ header: 1 }, { header: 2 }], // custom button values
+        [{ header: 1 }, { header: 2 }],
         [{ list: "ordered" }, { list: "bullet" }],
         [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ],
     }),
     []
   );
+
+  const handleUploadImagesSuccess = (url) => {
+    setValue((prevValue) => ({
+      ...prevValue,
+      images: [...prevValue.images, url],
+    }));
+  };
+
   return (
-    <div className="mx-5 mt-1 item-center">
-      <div className="space-y-5">
+    <div className="mx-5 mt-1 item-center bg-lite">
+      <div className="space-y-5 ">
+        <div className="flex flex-col bg-lite">
+          <h1 className="mt-5  bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
+            Create a Product
+          </h1>
+          <Link to="/manage-products" className="btn btn-primary">
+            <button className="mt-2 px-4 py-2  font-bold text-white rounded bg-[#157572] mr-14 hover:bg-[#04605E] focus:outline-none focus:shadow-outline">
+              Back
+            </button>
+          </Link>
+        </div>
         <div className={classes.Form1}>
           <form
             className="w-full min-h-[300px] py-8 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto"
@@ -141,49 +172,8 @@ const Body = () => {
                   ))}
                 </Select>
               </div>
-              <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Status *:</h1>
 
-                <input
-                  placeholder="Status"
-                  required
-                  className={classes.InputStyle}
-                  type="Status"
-                  value={value.material}
-                  onChange={(e) =>
-                    setValue({ ...value, material: e.target.value })
-                  }
-                />
-              </div>
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Price *:</h1>
-
-                <input
-                  placeholder="Price"
-                  required
-                  className={classes.InputStyle}
-                  type="number"
-                  value={value.material}
-                  onChange={(e) =>
-                    setValue({ ...value, material: e.target.value })
-                  }
-                />
-              </div>
-              <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Quantity *:</h1>
-
-                <input
-                  placeholder="Quantity"
-                  required
-                  className={classes.InputStyle}
-                  type="number"
-                  value={value.material}
-                  onChange={(e) =>
-                    setValue({ ...value, material: e.target.value })
-                  }
-                />
-              </div>
-              {/* <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Material *:</h1>
 
                 <input
@@ -196,8 +186,8 @@ const Body = () => {
                     setValue({ ...value, material: e.target.value })
                   }
                 />
-              </div> */}
-              {/* <div className={classes.WrapInputLabel}>
+              </div>
+              <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Size *:</h1>
 
                 <input
@@ -208,9 +198,9 @@ const Body = () => {
                   value={value.size}
                   onChange={(e) => setValue({ ...value, size: e.target.value })}
                 />
-              </div> */}
+              </div>
 
-              {/* <div className={classes.WrapInputLabel}>
+              <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Design *:</h1>
 
                 <input
@@ -223,40 +213,30 @@ const Body = () => {
                     setValue({ ...value, design: e.target.value })
                   }
                 />
-              </div> */}
-              {/* <div className={classes.WrapInputLabel}>
+              </div>
+              <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Color *:</h1>
-                <Select
-                  required
+                <ReactSelect
+                  isMulti
                   displayEmpty
-                  sx={{ height: 36 }}
-                  inputProps={{ "aria-label": "Without label" }}
-                  value={value.color}
-                  onChange={(e) =>
-                    setValue({ ...value, color: e.target.value })
-                  }
-                  className={`${classes.InputStyle} hover:focus:border-none `}
-                >
-                  <MenuItem value="">None</MenuItem>
-
-                  <MenuItem value="Black">Black</MenuItem>
-                </Select>
-              </div> */}
+                  name="values"
+                  options={mhtqOptions}
+                  value={selectedOptions}
+                  onChange={(selectedOptions) => {
+                    setSelectedOptions(selectedOptions);
+                    const selectedValues = selectedOptions.map(
+                      (option) => option.value
+                    );
+                    setValue((prevValue) => ({
+                      ...prevValue,
+                      color: [...selectedValues],
+                    }));
+                  }}
+                  classNamePrefix="select"
+                />
+              </div>
             </div>
-            {/* <div className={classes.WrapInputLabel}>
-              <h1 className={classes.LabelStyle}>Description *:</h1>
 
-              <input
-                placeholder="Description"
-                required
-                className={classes.InputStyle}
-                type="text"
-                value={value.description}
-                onChange={(e) =>
-                  setValue({ ...value, description: e.target.value })
-                }
-              />
-            </div> */}
             <div>
               <h1 className={classes.LabelStyle}>Description *:</h1>
               <ReactQuill
@@ -267,24 +247,50 @@ const Body = () => {
                 onChange={setDescription}
               />
             </div>
-            <div className="flex items-center gap-x-6">
-              <div className="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 ">
-                <ImageIcon
-                  src={value.images.thumb}
-                  style={{ width: 180, height: 180 }}
+
+            <div class="flex items-center mt-10 gap-x-6">
+              <div class="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 aspect-w-1 aspect-h-1">
+                <img
+                  src={value?.thumb}
+                  alt=""
+                  class="object-cover w-full h-full"
                 />
               </div>
-              <div className="flex flex-col gap-y-5">
-                <h1 className="pb-2 text-sm font-medium text-left">
-                  product Image:
-                </h1>
+              <div class="flex flex-col gap-y-5">
+                <h1 class="pb-2 text-sm font-medium text-left">thumbnail:</h1>
+
                 <ImageUpload
                   onUploadSuccess={handleUploadSuccess}
                   onUploadError={handleUploadError}
                 />
               </div>
             </div>
-            {/* button */}
+
+            <div class="flex items-center mt-10 gap-x-6">
+              <div class="flex  gap-x-3">
+                {value.images.map((imageUrl, index) => (
+                  <div
+                    key={index}
+                    class="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 aspect-w-1 aspect-h-1"
+                  >
+                    <img
+                      src={imageUrl}
+                      alt=""
+                      class="object-cover w-full h-full"
+                    />
+                  </div>
+                ))}
+              </div>
+              <div class="flex flex-col gap-y-5">
+                <h1 class="pb-2 text-sm font-medium text-left">Images:</h1>
+
+                <ImageUpload
+                  onUploadSuccess={handleUploadImagesSuccess}
+                  onUploadError={handleUploadError}
+                />
+              </div>
+            </div>
+
             <div className="flex gap-x-10">
               <div className={classes.WrapButton}>
                 <button className={classes.adminFormSubmitButton} type="submit">
@@ -300,11 +306,12 @@ const Body = () => {
                       design: "",
                       color: "",
                       description: "",
-                      images: {
-                        thumb: "",
-                        ortherimg: [],
-                      },
+                      images: [],
+
+                      thumb: "",
                     });
+                    setSelectedOptions([]);
+                    setDescription("");
                     setError({});
                   }}
                   className={classes.adminFormClearButton}

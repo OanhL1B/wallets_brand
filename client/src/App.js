@@ -11,6 +11,7 @@ import AddProduct from "./pages/adminPage/addproduct/AddProduct";
 import Product from "./pages/adminPage/product/Product";
 import AddProductPrice from "./pages/adminPage/addproductprice/AddProductPrice";
 import ProductPrice from "./pages/adminPage/productprice/ProductPrice";
+import User from "./pages/adminPage/user/User";
 function App() {
   return (
     <Routes>
@@ -25,9 +26,9 @@ function App() {
       <Route path="/add-pricelist" element={<AddPriceList />} />
       <Route path="/add-product" element={<AddProduct />} />
       <Route path="/add-productprice" element={<AddProductPrice />} />
+      <Route path="/users" element={<User />} />
     </Routes>
   );
 }
 
 export default App;
-// primary: "#1DC071",

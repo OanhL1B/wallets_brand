@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import { useSelector, useDispatch } from "react-redux";
-import { getProductPrices } from "../../../redux/actions/adminActions";
+import {
+  getProductPrices,
+  updateProductPrice,
+} from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
 import Swal from "sweetalert2";
-import { SET_ERRORS } from "../../../redux/actionTypes";
+import { SET_ERRORS, UPDATE_PRODUCT_PRICE } from "../../../redux/actionTypes";
 
 const modalStyles = {
   content: {
@@ -23,6 +26,7 @@ const modalStyles = {
 const Body = () => {
   const store = useSelector((state) => state);
   const productprices = useSelector((state) => state.admin.allProductPrice);
+  console.log("productprices", productprices);
 
   const [selectedProductPrice, setSelectedProductPrice] = useState("");
   const [error, setError] = useState({});
@@ -43,50 +47,68 @@ const Body = () => {
   }, [store.errors]);
 
   // Begin-edit
-  //   const [isModalOpen, setIsModalOpen] = useState(false);
-  //   const [value, setValue] = useState({
-  //     categoryName: "",
-  //     id: "",
-  //   });
-  //   const handleEditClick = (cate) => {
-  //     setSelectedCategory(cate);
-  //     setIsModalOpen(true);
-  //     setValue({
-  //       categoryName: "",
-  //       id: cate.id,
-  //     });
-  //   };
-  //   const openModal = () => {
-  //     setIsModalOpen(true);
-  //   };
-  //   const closeModal = () => {
-  //     setIsModalOpen(false);
-  //   };
-  //   const handleFormSubmit = (e) => {
-  //     e.preventDefault();
-  //     const updatedValue = {};
-  //     if (value.categoryName !== "") {
-  //       updatedValue.categoryName = value.categoryName;
-  //     } else {
-  //       updatedValue.categoryName = selectedCategory.categoryName;
-  //     }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [value, setValue] = useState({
+    productId: "",
+    pricelistId: "",
+    price: "",
+    productpriceId: "",
+  });
+  const handleEditClick = (productprice) => {
+    setSelectedProductPrice(productprice);
+    setIsModalOpen(true);
+    setValue({
+      productId: productprice?.productId?._id,
+      pricelistId: productprice?.pricelistId?._id,
+      price: "",
+      productpriceId: productprice._id,
+    });
+  };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const updatedValue = {};
+    if (value.price !== "") {
+      updatedValue.price = value.price;
+    } else {
+      updatedValue.price = selectedProductPrice.price;
+    }
+    if (value.productId !== "") {
+      updatedValue.productId = value.productId;
+    } else {
+      updatedValue.productId = selectedProductPrice.productId;
+    }
+    if (value.pricelistId !== "") {
+      updatedValue.pricelistId = value.pricelistId;
+    } else {
+      updatedValue.pricelistId = selectedProductPrice.pricelistId;
+    }
+    if (value.productpriceId !== "") {
+      updatedValue.productpriceId = value.productpriceId;
+    } else {
+      updatedValue.productpriceId = selectedProductPrice.productpriceId;
+    }
+    dispatch(updateProductPrice({ ...selectedProductPrice, ...updatedValue }));
+    dispatch({ type: UPDATE_PRODUCT_PRICE, payload: false });
+  };
 
-  // dispatch(updateDepartment({ ...selectedDepartment, ...updatedValue }));
-  // dispatch({ type: UPDATE_DEPARTMENT, payload: false });
-  //   };
+  useEffect(() => {
+    if (store.admin.updatedProductPrice) {
+      setError({});
+      closeModal();
+      dispatch(getProductPrices());
+    }
+  }, [dispatch, store.errors, store.admin.updatedProductPrice]);
 
-  // useEffect(() => {
-  //   if (store.admin.updatedDepartment) {
-  //     setError({});
-  //     closeModal();
-  //     dispatch(getAllDepartment());
-  //   }
-  // }, [dispatch, store.errors, store.admin.updatedDepartment]);
-
-  //   const handleModalError = () => {
-  //     setError({});
-  //     closeModal();
-  //   };
+  const handleModalError = () => {
+    setError({});
+    closeModal();
+  };
   // End edit
 
   // Begin delete
@@ -128,16 +150,22 @@ const Body = () => {
 
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
+      <Link to="/add-product" className="btn btn-primary">
+        <button
+          className="items-center gap-[9px]  w-[88px] h-[40px] hover:bg-[#04605E] block py-2 font-bold text-white rounded-lg px-4 
+           bg-[#157572] focus:outline-none focus:shadow-outline "
+        >
+          Thêm
+        </button>
+      </Link>
       <div className="w-full my-8 mt-6">
         {productprices?.length !== 0 && (
           <table className="w-full table-auto ">
             <thead className="bg-[#E1EEEE] items-center">
               <tr>
-                <th className="px-4 py-1">Chọn</th>
                 <th className="px-4 py-1">STT</th>
-                <th className="px-4 py-1">Id ProductPrice</th>
-                <th className="px-4 py-1">Id Product</th>
-                <th className="px-4 py-1">Id PriceList</th>
+                <th className="px-4 py-1">Product</th>
+                <th className="px-4 py-1">ProductPrice</th>
                 <th className="px-4 py-1">Price</th>
                 <th className="px-4 py-1">Actions</th>
               </tr>
@@ -148,24 +176,22 @@ const Body = () => {
                   className="justify-center item-center hover:bg-[#EEF5F5]"
                   key={idx}
                 >
-                  <td className="px-4 py-1 border">
-                    {/* <input
+                  {/* <td className="px-4 py-1 border">
+                    <input
                       onChange={handleInputChange}
                       checked={checkedValue.includes(dep.id)}
                       value={dep.id}
                       type="checkbox"
                       className="accent-[#157572]"
-                    /> */}
-                  </td>
+                    />
+                  </td> */}
                   <td className="px-4 py-1 text-center border ">{idx + 1}</td>
+
                   <td className="px-4 py-1 text-center border">
-                    {productprice._id}
+                    {productprice?.productId?.productName}
                   </td>
                   <td className="px-4 py-1 text-center border">
-                    {productprice.productId}
-                  </td>
-                  <td className="px-4 py-1 text-center border">
-                    {productprice.pricelistId}
+                    {productprice?.pricelistId?.pricelistName}
                   </td>
                   <td className="px-4 py-1 text-center border">
                     {productprice.price}
@@ -176,7 +202,7 @@ const Body = () => {
                   >
                     <button
                       className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
-                      //   onClick={() => handleEditClick(cate)}
+                      onClick={() => handleEditClick(productprice)}
                     >
                       Sửa
                     </button>
@@ -188,7 +214,7 @@ const Body = () => {
         )}
       </div>
       {/* modal edit */}
-      {/* {selectedDepartment ? (
+      {selectedProductPrice ? (
         <ReactModal
           isOpen={isModalOpen}
           onRequestClose={openModal}
@@ -202,45 +228,54 @@ const Body = () => {
             >
               <div className={classes.FormItem}>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Mã chuyên ngành :</h1>
+                  <h1 className={classes.LabelStyle}>Product :</h1>
                   <input
-                    placeholder={selectedDepartment?.maKhoa}
+                    placeholder={selectedProductPrice?.productId?.productName}
                     disabled
                     className={classes.InputStyle}
                     type="text"
                   />
                 </div>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Tên chuyên ngành :</h1>
+                  <h1 className={classes.LabelStyle}>Price List :</h1>
                   <input
-                    placeholder={selectedDepartment?.tenKhoa}
+                    placeholder={
+                      selectedProductPrice?.pricelistId?.pricelistName
+                    }
+                    disabled
                     className={classes.InputStyle}
                     type="text"
-                    value={value.tenKhoa}
+                  />
+                </div>
+                <div className={classes.WrapInputLabel}>
+                  <h1 className={classes.LabelStyle}>Price :</h1>
+                  <input
+                    placeholder={selectedProductPrice?.price}
+                    className={classes.InputStyle}
+                    type="text"
+                    value={value.price}
                     onChange={(e) =>
                       setValue({
                         ...value,
-                        tenKhoa: e.target.value,
+                        price: e.target.value,
                       })
                     }
                   />
                 </div>
-                
               </div>
 
               <div className="flex items-center justify-center mt-10 space-x-6">
                 <button className={classes.adminFormSubmitButton} type="submit">
                   Lưu
                 </button>
-                <Link to="/admin/getdepartmentall" className="btn btn-primary">
-                  <button
-                    className={classes.adminFormClearButton}
-                    type="button"
-                    onClick={() => handleModalError()}
-                  >
-                    Thoát
-                  </button>
-                </Link>
+
+                <button
+                  className={classes.adminFormClearButton}
+                  type="button"
+                  onClick={() => handleModalError()}
+                >
+                  Thoát
+                </button>
               </div>
               <div className="mt-5">
                 {error?.message ? (
@@ -250,7 +285,7 @@ const Body = () => {
             </form>
           </div>
         </ReactModal>
-      ) : null} */}
+      ) : null}
     </div>
   );
 };

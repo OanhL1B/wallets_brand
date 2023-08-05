@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  getpricelists,
-  updatePriceList,
+  getCategories,
+  updateCategory,
 } from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
 import Swal from "sweetalert2";
-import { SET_ERRORS, UPDATE_PRICELIST } from "../../../redux/actionTypes";
-import { MenuItem, Select } from "@mui/material";
+import { SET_ERRORS, UPDATE_CATEGORY } from "../../../redux/actionTypes";
 
 const modalStyles = {
   content: {
@@ -26,16 +25,17 @@ const modalStyles = {
 
 const Body = () => {
   const store = useSelector((state) => state);
-  const pricelists = useSelector((state) => state.admin.allPricelist);
-  pricelists.sort(
-    (a, b) => a.pricelistName.charCodeAt(0) - b.pricelistName.charCodeAt(0)
+  const categories = useSelector((state) => state.admin.allCategory);
+  categories.sort(
+    (a, b) => a.categoryName.charCodeAt(0) - b.categoryName.charCodeAt(0)
   );
-  const [selectedPricelist, setSelectedPricelist] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(getpricelists());
+    dispatch(getCategories());
   }, [dispatch]);
 
   useEffect(() => {
@@ -51,62 +51,50 @@ const Body = () => {
   // Begin-edit
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [value, setValue] = useState({
-    pricelistName: "",
-    priceListId: "",
-    applyDate: "",
-    isActive: "",
+    categoryName: "",
+    categoryId: "",
   });
-  const handleEditClick = (pricelist) => {
-    setSelectedPricelist(pricelist);
+  const handleEditClick = (cate) => {
+    setSelectedCategory(cate);
     setIsModalOpen(true);
     setValue({
-      pricelistName: "",
-      isActive: "",
-      applyDate: "",
-      priceListId: pricelist._id,
+      categoryName: "",
+      categoryId: cate._id,
     });
   };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const updatedValue = {};
-    if (value.pricelistName !== "") {
-      updatedValue.pricelistName = value.pricelistName;
+    if (value.categoryName !== "") {
+      updatedValue.categoryName = value.categoryName;
     } else {
-      updatedValue.pricelistName = selectedPricelist.pricelistName;
+      updatedValue.categoryName = selectedCategory.categoryName;
     }
-    if (value.priceListId !== "") {
-      updatedValue.priceListId = value.priceListId;
+    if (value.categoryId !== "") {
+      updatedValue.categoryId = value.categoryId;
     } else {
-      updatedValue.priceListId = selectedPricelist.priceListId;
-    }
-    if (value.isActive !== "") {
-      updatedValue.isActive = value.isActive;
-    } else {
-      updatedValue.isActive = selectedPricelist.isActive;
-    }
-    if (value.applyDate !== "") {
-      updatedValue.applyDate = value.applyDate;
-    } else {
-      updatedValue.applyDate = selectedPricelist.applyDate;
+      updatedValue.categoryId = selectedCategory.categoryId;
     }
 
-    dispatch(updatePriceList({ ...selectedPricelist, ...updatedValue }));
-    dispatch({ type: UPDATE_PRICELIST, payload: false });
+    dispatch(updateCategory({ ...selectedCategory, ...updatedValue }));
+    dispatch({ type: UPDATE_CATEGORY, payload: false });
   };
 
   useEffect(() => {
-    if (store.admin.updatedPriceList) {
+    if (store.admin.updatedCategory) {
       setError({});
       closeModal();
-      dispatch(getpricelists());
+      dispatch(getCategories());
     }
-  }, [dispatch, store.errors, store.admin.updatedPriceList]);
+  }, [dispatch, store.errors, store.admin.updatedCategory]);
 
   const handleModalError = () => {
     setError({});
@@ -153,67 +141,53 @@ const Body = () => {
 
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
-      <Link to="/add-pricelist" className="btn btn-primary">
-        <button
-          className="items-center gap-[9px]  w-[88px] h-[40px] hover:bg-[#04605E] block py-2 font-bold text-white rounded-lg px-4 
-             bg-[#157572] focus:outline-none focus:shadow-outline "
-        >
-          ADD
-        </button>
-      </Link>
       <div className="w-full my-8 mt-6">
-        {pricelists?.length !== 0 && (
+        {categories?.length !== 0 && (
           <table className="w-full table-auto ">
             <thead className="bg-[#E1EEEE] items-center">
               <tr>
+                {/* <th className="px-4 py-1">Chọn</th> */}
                 <th className="px-4 py-1">STT</th>
-                <th className="px-4 py-1">PriceList Name</th>
-                <th className="px-4 py-1">ApplyDate</th>
-                <th className="px-4 py-1">Status</th>
+                {/* <th className="px-4 py-1">Id Category</th> */}
+                <th className="px-4 py-1">Category Name</th>
                 <th className="px-4 py-1">Actions</th>
               </tr>
             </thead>
             <tbody className="">
-              {pricelists?.map((pricelist, idx) => (
+              {categories?.map((cate, idx) => (
                 <tr
                   className="justify-center item-center hover:bg-[#EEF5F5]"
                   key={idx}
                 >
                   {/* <td className="px-4 py-1 border">
-                      <input
-                        onChange={handleInputChange}
-                        checked={checkedValue.includes(dep.id)}
-                        value={dep.id}
-                        type="checkbox"
-                        className="accent-[#157572]"
-                      />
-                    </td> */}
+                    <input
+                      onChange={handleInputChange}
+                      checked={checkedValue.includes(dep.id)}
+                      value={dep.id}
+                      type="checkbox"
+                      className="accent-[#157572]"
+                    />
+                  </td> */}
                   <td className="px-4 py-1 text-center border ">{idx + 1}</td>
-
+                  {/* <td className="px-4 py-1 text-center border">{cate._id}</td> */}
                   <td className="px-4 py-1 text-center border">
-                    {pricelist.pricelistName}
+                    {cate.categoryName}
                   </td>
-                  <td className="px-4 py-2 text-center border">
-                    {new Date(pricelist.applyDate).toLocaleDateString("en-GB")}
-                  </td>
-                  {pricelist.isActive === true && (
-                    <td className="px-4 py-2 text-center border">Available</td>
-                  )}
-                  {pricelist.isActive === false && (
-                    <td className="px-4 py-2 text-center border">
-                      Discontinued
-                    </td>
-                  )}
-
                   <td
-                    className="items-center justify-center px-4 py-1 mr-0 border"
+                    className="items-center justify-center px-4 py-1 border"
                     style={{ display: "flex", justifyContent: "center" }}
                   >
                     <button
-                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
-                      onClick={() => handleEditClick(pricelist)}
+                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base  mr-5"
+                      onClick={() => handleEditClick(cate)}
                     >
-                      Sửa
+                      Edit
+                    </button>
+                    <button
+                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-red-500 focus:outline-none focus:shadow-outline text-base"
+                      onClick={() => handleEditClick(cate)}
+                    >
+                      Delete
                     </button>
                   </td>
                 </tr>
@@ -223,7 +197,7 @@ const Body = () => {
         )}
       </div>
       {/* modal edit */}
-      {selectedPricelist ? (
+      {selectedCategory ? (
         <ReactModal
           isOpen={isModalOpen}
           onRequestClose={openModal}
@@ -237,61 +211,27 @@ const Body = () => {
             >
               <div className={classes.FormItem}>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>PriceList Name :</h1>
+                  <h1 className={classes.LabelStyle}>Category Name :</h1>
                   <input
-                    placeholder={selectedPricelist?.pricelistName}
+                    placeholder={selectedCategory?.categoryName}
                     className={classes.InputStyle}
                     type="text"
-                    value={value.pricelistName}
+                    value={value.categoryName}
                     onChange={(e) =>
                       setValue({
                         ...value,
-                        pricelistName: e.target.value,
+                        categoryName: e.target.value,
                       })
                     }
                   />
                 </div>
-                <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Status :</h1>
-                  <Select
-                    required
-                    displayEmpty
-                    sx={{ height: 36 }}
-                    inputProps={{ "aria-label": "Without label" }}
-                    value={value.isActive || selectedPricelist.isActive}
-                    onChange={(e) =>
-                      setValue({ ...value, isActive: e.target.value })
-                    }
-                    className={classes.InputStyle}
-                  >
-                    <MenuItem value="true">Available</MenuItem>
-                    <MenuItem value="false">Discontinued</MenuItem>
-                  </Select>
-                </div>
-                {/* <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Apply Date :</h1>
-
-                  <input
-                    placeholder={format(
-                      new Date(selectedStudent.ngaySinh),
-                      "MM/dd/yyyy"
-                    )}
-                    className={classes.InputStyle}
-                    type={inputType}
-                    value={value.ngaySinh}
-                    onChange={(e) =>
-                      setValue({ ...value, ngaySinh: e.target.value })
-                    }
-                    onFocus={() => setInputType("date")}
-                    onBlur={() => setInputType("text")}
-                  />
-                </div> */}
               </div>
 
               <div className="flex items-center justify-center mt-10 space-x-6">
                 <button className={classes.adminFormSubmitButton} type="submit">
                   Lưu
                 </button>
+
                 <button
                   className={classes.adminFormClearButton}
                   type="button"
@@ -312,5 +252,4 @@ const Body = () => {
     </div>
   );
 };
-
 export default Body;

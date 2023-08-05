@@ -36,3 +36,7 @@ export const deleteProductPrice = (data) =>
   APIV1.delete("api/productprice", { data });
 
 // users
+export const getCurrentUser = () => APIV1.get("/api/user/current");
+export const getUsers = () => APIV1.get("/api/user");
+export const updateUserbyAdmin = (updateUser) =>
+  APIV1.put("/api/user", updateUser);

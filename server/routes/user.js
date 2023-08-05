@@ -10,8 +10,8 @@ router.get("/logout", ctrls.logout);
 router.get("/forgotpassword", ctrls.forgotPassword);
 router.put("/resetpassword", ctrls.resetPassword);
 // cứ liên quan tới user thì nhân viên k có quyền vậy đi
-router.get("/", [verifyAccessToken, isAdmin], ctrls.getUsers);
+router.get("/", [verifyAccessToken, isAdmin], ctrls.getUsers); // getall
 router.delete("/", [verifyAccessToken, isAdmin], ctrls.deleteUser);
 router.put("/current", [verifyAccessToken], ctrls.updateUser);
-router.put("/:uid", [verifyAccessToken, isAdmin], ctrls.updateUserByAdmin);
+router.put("/", [verifyAccessToken, isAdmin], ctrls.updateUserByAdmin);
 module.exports = router;

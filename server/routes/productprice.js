@@ -13,7 +13,7 @@ router.post(
 router.get("/", ctrls.getProductprices);
 
 router.put(
-  "/:ppid",
+  "/",
   [verifyAccessToken, isAdminOrEmployee],
   ctrls.updateProductprice
 );

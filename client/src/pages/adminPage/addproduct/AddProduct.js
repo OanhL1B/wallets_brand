@@ -12,10 +12,10 @@ const AddProduct = () => {
   }, [dispatch]);
   return (
     <div className="flex">
-      <div className="h-screen overflow-y-hidden bg-white shadow-2xl">
+      <div className="h-screen overflow-y-hidden bg-[#f4f6fa] shadow-2xl">
         <Sidebar></Sidebar>
       </div>
-      <div className="flex flex-col flex-auto bg-lite">
+      <div className="flex flex-col flex-auto ">
         <Header />
         <Body />
       </div>

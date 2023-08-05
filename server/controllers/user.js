@@ -112,7 +112,7 @@ const getCurrent = asyncHandler(async (req, res) => {
   const user = await User.findById(_id).select("-refreshToken -password -role");
   return res.status(200).json({
     success: user ? true : false,
-    rs: user ? user : "User not found",
+    retObj: user ? user : "User not found",
   });
 });
 
@@ -211,10 +211,10 @@ const resetPassword = asyncHandler(async (req, res) => {
   });
 });
 const getUsers = asyncHandler(async (req, res) => {
-  const response = await User.find().select("-refreshToken -password -role");
+  const response = await User.find().select("-refreshToken -password");
   return res.status(200).json({
     success: response ? true : false,
-    users: response,
+    retObj: response,
   });
 });
 const deleteUser = asyncHandler(async (req, res) => {
@@ -231,6 +231,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async (req, res) => {
   //
   const { _id } = req.user;
+  // const { Id,  } = req.body
   if (!_id || Object.keys(req.body).length === 0)
     throw new Error("Missing inputs");
   const response = await User.findByIdAndUpdate(_id, req.body, {
@@ -241,17 +242,42 @@ const updateUser = asyncHandler(async (req, res) => {
     updatedUser: response ? response : "Some thing went wrong",
   });
 });
+// const updateUserByAdmin = asyncHandler(async (req, res) => {
+//   //
+//   const { uid } = req.params;
+//   if (Object.keys(req.body).length === 0) throw new Error("Missing inputs");
+//   const response = await User.findByIdAndUpdate(uid, req.body, {
+//     new: true,
+//   }).select("-password  -refreshToken");
+//   return res.status(200).json({
+//     success: response ? true : false,
+//     updatedUser: response ? response : "Some thing went wrong",
+//   });
+// });
+
 const updateUserByAdmin = asyncHandler(async (req, res) => {
-  //
-  const { uid } = req.params;
-  if (Object.keys(req.body).length === 0) throw new Error("Missing inputs");
-  const response = await User.findByIdAndUpdate(uid, req.body, {
-    new: true,
-  }).select("-password -role -refreshToken");
-  return res.status(200).json({
-    success: response ? true : false,
-    updatedUser: response ? response : "Some thing went wrong",
-  });
+  try {
+    const { userId } = req.body; // Lấy userId từ req.body
+    if (!userId) {
+      throw new Error("Missing userId");
+    }
+
+    if (Object.keys(req.body).length === 1) {
+      // Kiểm tra xem chỉ có userId mà không có các trường thông tin khác
+      throw new Error("Missing inputs");
+    }
+
+    const response = await User.findByIdAndUpdate(userId, req.body, {
+      new: true,
+    }).select("-password -refreshToken");
+
+    return res.status(200).json({
+      success: response ? true : false,
+      updatedUser: response ? response : "Something went wrong",
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = {

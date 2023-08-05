@@ -10,11 +10,7 @@ const {
 router.post("/", [verifyAccessToken, isAdminOrEmployee], ctrls.createProduct);
 router.get("/", ctrls.getProducts);
 
-router.put(
-  "/:pid",
-  [verifyAccessToken, isAdminOrEmployee],
-  ctrls.updateProduct
-);
+router.put("/", [verifyAccessToken, isAdminOrEmployee], ctrls.updateProduct);
 router.delete(
   "/:pid",
   [verifyAccessToken, isAdminOrEmployee],

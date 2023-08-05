@@ -6,6 +6,7 @@ import {
   updateCategory,
 } from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
+// import { deleteDepartment } from "../../../redux/actions/adminActions";
 import * as classes from "../../../utils/styles";
 import Swal from "sweetalert2";
 import { SET_ERRORS, UPDATE_CATEGORY } from "../../../redux/actionTypes";
@@ -26,8 +27,6 @@ const modalStyles = {
 const Body = () => {
   const store = useSelector((state) => state);
   const categories = useSelector((state) => state.admin.allCategory);
-  console.log("qjwhdewjhf", categories);
-  // mảng chứa  categories
   categories.sort(
     (a, b) => a.categoryName.charCodeAt(0) - b.categoryName.charCodeAt(0)
   );
@@ -119,13 +118,13 @@ const Body = () => {
 
   // const dltSubject = (e) => {
   //   Swal.fire({
-  //     title: "Bạn có chắc chắn muốn xóa?",
-  //     text: "Hành động này sẽ không thể hoàn tác!",
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
   //     icon: "warning",
   //     showCancelButton: true,
   //     confirmButtonColor: "#3085d6",
   //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Đồng ý, Xóa!",
+  //     confirmButtonText: "Yes, delete it!",
   //   }).then(async (result) => {
   //     if (result.isConfirmed) {
   //       dispatch(deleteDepartment(checkedValue));
@@ -143,6 +142,32 @@ const Body = () => {
 
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
+      <div className="flex mt-4">
+        <Link to="/add-category" className="btn btn-primary">
+          <button
+            className="items-center gap-[9px]  w-[88px] h-[40px] hover:bg-[#04605E] block py-2 font-bold text-white rounded-lg px-4 
+           bg-[#157572] focus:outline-none focus:shadow-outline "
+          >
+            Thêm
+          </button>
+        </Link>
+        {/* {departments && checkedValue?.length > 0 ? (
+          <button
+            onClick={dltSubject}
+            className="items-center  gap-[9px] mr-4 w-[88px] h-[53px] block py-2 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded-lg px-4  hover:bg-[#FD9999] focus:#FD9999 focus:shadow-outline"
+          >
+            Xóa
+          </button>
+        ) : (
+          <button
+            onClick={dltSubject}
+            className="items-center  gap-[9px] mr-4 w-[88px] h-[53px] block py-2 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded-lg px-4"
+            disabled
+          >
+            Xóa
+          </button>
+        )} */}
+      </div>
       <div className="w-full my-8 mt-6">
         {categories?.length !== 0 && (
           <table className="w-full table-auto ">
@@ -150,7 +175,6 @@ const Body = () => {
               <tr>
                 {/* <th className="px-4 py-1">Chọn</th> */}
                 <th className="px-4 py-1">STT</th>
-                {/* <th className="px-4 py-1">Id Category</th> */}
                 <th className="px-4 py-1">Category Name</th>
                 <th className="px-4 py-1">Actions</th>
               </tr>
@@ -170,13 +194,11 @@ const Body = () => {
                       className="accent-[#157572]"
                     />
                   </td> */}
-                  <td className="px-4 py-1 text-center border ">{idx + 1}</td>
-                  {/* <td className="px-4 py-1 text-center border">{cate._id}</td> */}
-                  <td className="px-4 py-1 text-center border">
-                    {cate.categoryName}
-                  </td>
+                  <td className="px-4 py-1 border">{idx + 1}</td>
+                  <td className="px-4 py-1 border">{cate.categoryName}</td>
+
                   <td
-                    className="items-center justify-center px-4 py-1 border"
+                    className="items-center justify-center px-4 py-1 mr-0 border"
                     style={{ display: "flex", justifyContent: "center" }}
                   >
                     <button
@@ -185,12 +207,6 @@ const Body = () => {
                     >
                       Edit
                     </button>
-                    <button
-                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-red-500 focus:outline-none focus:shadow-outline text-base"
-                      onClick={() => handleEditClick(cate)}
-                    >
-                      Delete
-                    </button>
                   </td>
                 </tr>
               ))}
@@ -198,7 +214,6 @@ const Body = () => {
           </table>
         )}
       </div>
-      {/* modal edit */}
       {selectedCategory ? (
         <ReactModal
           isOpen={isModalOpen}
@@ -208,10 +223,10 @@ const Body = () => {
         >
           <div className="flex flex-col bg-white rounded-xl ">
             <form
-              className="w-full min-h-[300px] py-10 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto"
+              className="w-[500px] min-h-[300px] py-10 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto"
               onSubmit={handleFormSubmit}
             >
-              <div className={classes.FormItem}>
+              <div className="grid grid-cols-1">
                 <div className={classes.WrapInputLabel}>
                   <h1 className={classes.LabelStyle}>Category Name :</h1>
                   <input
@@ -233,7 +248,6 @@ const Body = () => {
                 <button className={classes.adminFormSubmitButton} type="submit">
                   Lưu
                 </button>
-
                 <button
                   className={classes.adminFormClearButton}
                   type="button"

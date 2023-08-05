@@ -8,11 +8,7 @@ const {
 router.post("/", [verifyAccessToken, isAdminOrEmployee], ctrls.createPricelist);
 router.get("/", ctrls.getPricelists);
 
-router.put(
-  "/:id",
-  [verifyAccessToken, isAdminOrEmployee],
-  ctrls.updatePricelist
-);
+router.put("/", [verifyAccessToken, isAdminOrEmployee], ctrls.updatePricelist);
 router.delete(
   "/:plid",
   [verifyAccessToken, isAdminOrEmployee],

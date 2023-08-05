@@ -98,7 +98,6 @@ const updateCategory = asyncHandler(async (req, res) => {
     const errors = { categoryError: String };
     const { categoryId, categoryName } = req.body; // Lấy categoryId từ req.body
 
-    // Kiểm tra nếu categoryId không tồn tại trong body thì trả về lỗi
     if (!categoryId) {
       errors.categoryError = "Thiếu thông tin categoryId";
       return res.status(400).json(errors);

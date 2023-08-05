@@ -5,13 +5,13 @@ import Body from "./Body";
 
 const AddCategory = () => {
   return (
-    <div className="flex">
-      <div className="h-screen overflow-y-hidden bg-white shadow-2xl">
-        <Sidebar></Sidebar>
-      </div>
-      <div className="flex flex-col flex-auto bg-lite">
-        <Header />
-        <Body />
+    <div className="bg-[#d6d9e0] h-screen flex items-center ">
+      <div className="flex bg-[#f4f6fa] w-full h-full overflow-y-hidden">
+        <Sidebar />
+        <div className="flex flex-col flex-1">
+          <Header />
+          <Body />
+        </div>
       </div>
     </div>
   );

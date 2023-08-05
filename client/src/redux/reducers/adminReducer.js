@@ -7,8 +7,14 @@ import {
   GET_ALL_PRICELIST,
   GET_ALL_PRODUCT,
   GET_ALL_PRODUCT_PRICE,
+  GET_CURRENT_USER,
+  GET_USERS,
   LOGIN,
   UPDATE_CATEGORY,
+  UPDATE_PRICELIST,
+  UPDATE_PRODUCT,
+  UPDATE_PRODUCT_PRICE,
+  UPDATE_USER_BY_ADMIN,
 } from "../actionTypes";
 
 const initialState = {
@@ -17,11 +23,17 @@ const initialState = {
   productAdded: false,
   pricelistAdded: false,
   updatedCategory: false,
+  updatedUser: false,
   productpriceAdded: false,
+  updatedProduct: false,
+  updatedPriceList: false,
+  updatedProductPrice: false,
   allCategory: [],
   allPricelist: [],
   allProduct: [],
   allProductPrice: [],
+  usercurrent: [],
+  allUsers: [],
 };
 
 const adminReducer = (state = initialState, action) => {
@@ -74,6 +86,36 @@ const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         updatedCategory: action.payload,
+      };
+    case UPDATE_USER_BY_ADMIN:
+      return {
+        ...state,
+        updatedUser: action.payload,
+      };
+    case UPDATE_PRODUCT_PRICE:
+      return {
+        ...state,
+        updatedProductPrice: action.payload,
+      };
+    case UPDATE_PRODUCT:
+      return {
+        ...state,
+        updatedProduct: action.payload,
+      };
+    case UPDATE_PRICELIST:
+      return {
+        ...state,
+        updatedPriceList: action.payload,
+      };
+    case GET_CURRENT_USER:
+      return {
+        ...state,
+        usercurrent: action.payload,
+      };
+    case GET_USERS:
+      return {
+        ...state,
+        allUsers: action.payload,
       };
     default:
       return state;

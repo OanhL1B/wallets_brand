@@ -8,8 +8,14 @@ import {
   GET_ALL_PRICELIST,
   GET_ALL_PRODUCT,
   GET_ALL_PRODUCT_PRICE,
+  GET_CURRENT_USER,
+  GET_USERS,
   SET_ERRORS,
   UPDATE_CATEGORY,
+  UPDATE_PRICELIST,
+  UPDATE_PRODUCT,
+  UPDATE_PRODUCT_PRICE,
+  UPDATE_USER_BY_ADMIN,
 } from "../actionTypes";
 import * as api from "../api/adminapi";
 
@@ -78,6 +84,7 @@ export const getpricelists = () => async (dispatch) => {
 export const addProduct = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addProduct(formData);
+    console.log("data", data);
     if (data.success === true) {
       toast.success("Thêm  mới thành công!");
       dispatch({ type: ADD_PRODUCT, payload: true });
@@ -100,7 +107,7 @@ export const addProduct = (formData) => async (dispatch) => {
 export const getProducts = () => async (dispatch) => {
   try {
     const { data } = await api.getProducts();
-    dispatch({ type: GET_ALL_PRODUCT, payload: data.products });
+    dispatch({ type: GET_ALL_PRODUCT, payload: data.retObj });
   } catch (error) {
     console.log("Redux Error", error);
   }
@@ -144,6 +151,88 @@ export const updateCategory = (formData) => async (dispatch) => {
     if (data.success === true) {
       toast.success("updated category successfully!");
       dispatch({ type: UPDATE_CATEGORY, payload: true });
+    } else {
+      toast.error("updated error!");
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getCurrentUser = () => async (dispatch) => {
+  try {
+    const { data } = await api.getCurrentUser();
+    dispatch({ type: GET_CURRENT_USER, payload: data.retObj });
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const updateProduct = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updateProduct(formData);
+    if (data.success === true) {
+      toast.success("updated product successfully!");
+      dispatch({ type: UPDATE_PRODUCT, payload: true });
+    } else {
+      toast.error("updated error!");
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const updatePriceList = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updatePriceList(formData);
+    if (data.success === true) {
+      toast.success("updated pricelist successfully!");
+      dispatch({ type: UPDATE_PRICELIST, payload: true });
+    } else {
+      toast.error("updated error!");
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const updateProductPrice = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updateProductPrice(formData);
+    if (data.success === true) {
+      toast.success("updated product price successfully!");
+      dispatch({ type: UPDATE_PRODUCT_PRICE, payload: true });
+    } else {
+      toast.error("updated error!");
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getUsers = () => async (dispatch) => {
+  try {
+    const { data } = await api.getUsers();
+    if (data.success === true) {
+      dispatch({ type: GET_USERS, payload: data.retObj });
+    } else {
+      dispatch(dispatch({ type: SET_ERRORS, payload: data.mes }));
+    }
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const updateUserbyAdmin = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updateUserbyAdmin(formData);
+    if (data.success === true) {
+      toast.success("updated user price successfully!");
+      dispatch({ type: UPDATE_USER_BY_ADMIN, payload: true });
     } else {
       toast.error("updated error!");
       dispatch({ type: SET_ERRORS, payload: data });
