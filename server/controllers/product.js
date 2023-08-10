@@ -47,7 +47,6 @@ const getProduct = asyncHandler(async (req, res) => {
   try {
     const { pid } = req.params;
 
-    // Retrieve the product
     const product = await Product.findById(pid);
 
     if (!product) {
@@ -56,10 +55,8 @@ const getProduct = asyncHandler(async (req, res) => {
         .json({ success: false, error: "Product not found" });
     }
 
-    // Retrieve the quantity from the warehouse
     const warehouseEntry = await Warehousing.findOne({ productId: pid });
 
-    // Retrieve the price from the productprice collection
     const priceEntry = await ProductPrice.findOne({ productId: pid });
 
     const productWithDetails = {
@@ -79,20 +76,18 @@ const getProduct = asyncHandler(async (req, res) => {
 
 const getProducts = asyncHandler(async (req, res) => {
   try {
-    // Find the active Pricelist
     const activePricelist = await Pricelist.findOne({ isActive: true });
-    console.log("activePricelist", activePricelist);
     if (!activePricelist) {
       throw new Error("Active Pricelist not found");
     }
 
-    // Get the list of products
-    const products = await Product.find();
+    const products = await Product.find().populate({
+      path: "category",
+      select: "categoryName",
+    });
 
-    // Get productIds from the list of products
     const productIds = products.map((product) => product._id);
 
-    // Get quantities from Warehousing based on productIds
     const quantities = await Warehousing.aggregate([
       {
         $match: { productId: { $in: productIds } },
@@ -105,7 +100,6 @@ const getProducts = asyncHandler(async (req, res) => {
       },
     ]);
 
-    // Get prices from Productprice based on activePricelistId and productIds
     const prices = await ProductPrice.aggregate([
       {
         $match: {
@@ -121,9 +115,6 @@ const getProducts = asyncHandler(async (req, res) => {
       },
     ]);
 
-    console.log("prices", prices);
-
-    // Combine quantities and prices into the list of products
     const productsWithDetails = products.map((product) => {
       const quantityObj = quantities.find((q) => q._id.equals(product._id));
       const priceObj = prices.find((p) => p._id.equals(product._id));
@@ -137,7 +128,6 @@ const getProducts = asyncHandler(async (req, res) => {
       };
     });
 
-    // Send the result as JSON response
     res.json({ success: true, retObj: productsWithDetails });
   } catch (error) {
     console.error("Error retrieving products with details:", error.message);

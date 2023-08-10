@@ -14,19 +14,6 @@ import { ADD_PRODUCT, SET_ERRORS } from "../../../redux/actionTypes";
 import "react-quill/dist/quill.snow.css";
 
 const Body = () => {
-  const Colors = [
-    { colorName: "Black", colorCode: "#FF5733" },
-    { colorName: "White", colorCode: "#33FF57" },
-    { colorName: "green", colorCode: "#5733FF" },
-  ];
-
-  const mhtqOptions = Colors?.map((sub) => ({
-    value: sub.colorCode,
-    label: sub.colorName,
-  }));
-
-  const [selectedOptions, setSelectedOptions] = useState([]);
-
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const categories = useSelector((state) => state.admin.allCategory);
@@ -40,7 +27,6 @@ const Body = () => {
     material: "",
     size: "",
     design: "",
-    color: [],
     images: [],
     thumb: "",
   });
@@ -80,11 +66,9 @@ const Body = () => {
           material: "",
           size: "",
           design: "",
-          color: "",
           images: [],
           thumb: "",
         });
-        setSelectedOptions([]);
         setDescription("");
         dispatch({ type: SET_ERRORS, payload: {} });
         dispatch({ type: ADD_PRODUCT, payload: false });
@@ -214,27 +198,6 @@ const Body = () => {
                   }
                 />
               </div>
-              <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Color *:</h1>
-                <ReactSelect
-                  isMulti
-                  displayEmpty
-                  name="values"
-                  options={mhtqOptions}
-                  value={selectedOptions}
-                  onChange={(selectedOptions) => {
-                    setSelectedOptions(selectedOptions);
-                    const selectedValues = selectedOptions.map(
-                      (option) => option.value
-                    );
-                    setValue((prevValue) => ({
-                      ...prevValue,
-                      color: [...selectedValues],
-                    }));
-                  }}
-                  classNamePrefix="select"
-                />
-              </div>
             </div>
 
             <div>
@@ -304,13 +267,11 @@ const Body = () => {
                       material: "",
                       size: "",
                       design: "",
-                      color: "",
                       description: "",
                       images: [],
 
                       thumb: "",
                     });
-                    setSelectedOptions([]);
                     setDescription("");
                     setError({});
                   }}
@@ -331,8 +292,8 @@ const Body = () => {
                     messageColor="157572"
                   />
                 )}
-                {error.message ? (
-                  <p className="text-red-500">{error.message}</p>
+                {error.productError ? (
+                  <p className="text-red-500">{error.productError}</p>
                 ) : null}
               </div>
             </div>

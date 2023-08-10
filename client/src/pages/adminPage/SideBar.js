@@ -9,6 +9,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useSelector } from "react-redux";
 
 const isNotActiveStyle =
   "flex items-center px-5 gap-3 text-white hover:text-black transition-all duration-200 ease-in-out capitalize hover:bg-gray-200 py-2 my-1";
@@ -16,6 +17,7 @@ const isActiveStyle =
   "svg: flex items-center px-5 gap-3 text-red font-bold hover:text-black  transition-all duration-200 ease-in-out capitalize hover:bg-gray-200  py-2 my-1";
 
 const Sidebar = () => {
+  const user = useSelector((state) => state.admin.usercurrent);
   return (
     <div className="w-[268px]  overflow-auto  bg-primary self-start sticky top-0 ">
       <div
@@ -99,16 +101,19 @@ const Sidebar = () => {
 
             <h1 className="font-normal">Inventory</h1>
           </NavLink>
-          <NavLink
-            to="/users"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <GroupIcon className="" />
 
-            <h1 className="font-normal">Users</h1>
-          </NavLink>
+          {user?.role === "admin" && (
+            <NavLink
+              to="/users"
+              className={({ isActive }) =>
+                isActive ? isActiveStyle : isNotActiveStyle
+              }
+            >
+              <GroupIcon className="" />
+
+              <h1 className="font-normal">Users</h1>
+            </NavLink>
+          )}
         </div>
         <div className="" style={{ marginTop: 0 }}>
           <NavLink

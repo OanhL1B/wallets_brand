@@ -106,7 +106,6 @@ const Body = () => {
                 <th className="px-4 py-2 border border-[#c7c2c2]">
                   Product Name
                 </th>
-                <th className="px-4 py-2 border border-[#c7c2c2]">Color</th>
                 <th className="px-4 py-2 border border-[#c7c2c2]">Quantity</th>
                 <th className="px-4 py-2 border border-[#c7c2c2]">Price</th>
                 <th className="px-4 py-2 border border-[#c7c2c2]">
@@ -129,9 +128,7 @@ const Body = () => {
                       </p>
                     </div>
                   </td>
-                  <td className="px-4 py-2 border border-[#c7c2c2]">
-                    {product.color}
-                  </td>
+
                   <td className="px-4 py-2 border border-[#c7c2c2]">
                     {product.quantity}
                   </td>
@@ -151,11 +148,6 @@ const Body = () => {
             <p className="font-bold">Total Bill:</p>
             <p>{total_price}</p>
           </div>
-          {/* {status === "pending" && (
-            <button className="px-4 py-2 text-white bg-blue-500 rounded">
-              Hủy đơn hàng
-            </button>
-          )} */}
         </div>
       </div>
     </div>

@@ -33,15 +33,7 @@ export const addCategory = (formData) => async (dispatch) => {
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
-    if (
-      error.response &&
-      error.response.data &&
-      error.response.data.status === "error"
-    ) {
-      dispatch({ type: SET_ERRORS, payload: error.response.data });
-    } else {
-      console.log("Unknown error occurred");
-    }
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
 
@@ -64,15 +56,7 @@ export const addPriceList = (formData) => async (dispatch) => {
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
-    if (
-      error.response &&
-      error.response.data &&
-      error.response.data.status === "error"
-    ) {
-      dispatch({ type: SET_ERRORS, payload: error.response.data });
-    } else {
-      console.log("Unknown error occurred");
-    }
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
 
@@ -96,15 +80,7 @@ export const addProduct = (formData) => async (dispatch) => {
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
-    if (
-      error.response &&
-      error.response.data &&
-      error.response.data.status === "error"
-    ) {
-      dispatch({ type: SET_ERRORS, payload: error.response.data });
-    } else {
-      console.log("Unknown error occurred");
-    }
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
 
@@ -127,15 +103,7 @@ export const addProductPrice = (formData) => async (dispatch) => {
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
-    if (
-      error.response &&
-      error.response.data &&
-      error.response.data.status === "error"
-    ) {
-      dispatch({ type: SET_ERRORS, payload: error.response.data });
-    } else {
-      console.log("Unknown error occurred");
-    }
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
 

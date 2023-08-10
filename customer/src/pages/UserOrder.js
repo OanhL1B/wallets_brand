@@ -97,13 +97,7 @@ const UserOrder = () => {
                     )}
                   </td>
                   <td className="px-4 py-1 text-center border border-[#c7c2c2]">
-                    {order.status === "pending" ? (
-                      <select value={order.status}>
-                        <option value="pending">Đang Xác Nhận</option>
-                      </select>
-                    ) : (
-                      order.status
-                    )}
+                    {order.status}
                   </td>
                   <td className="px-4 py-1 text-center border border-[#c7c2c2]">
                     {order.status === "pending" && (

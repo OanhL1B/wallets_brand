@@ -19,9 +19,6 @@ var cartSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    color: {
-      type: String,
-    },
   },
   {
     timestamps: true,

@@ -111,13 +111,15 @@ const LoginPage = () => {
                 )}
               </div>
             </div>
-            <div className="flex flex-col mt-2 gap-y-2 lg:gap-x-3">
-              <div className="text-right">
-                <span className="inline-block text-sm font-medium text-secondary">
-                  Forgot password
-                </span>
+            <Link to="/forgot-password">
+              <div className="flex flex-col mt-2 gap-y-2 lg:gap-x-3">
+                <div className="text-right">
+                  <span className="inline-block text-sm font-medium text-secondary">
+                    Forgot password
+                  </span>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
 
           <button

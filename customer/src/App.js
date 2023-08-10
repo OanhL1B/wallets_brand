@@ -8,6 +8,8 @@ import Cart from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
 import UserOrder from "./pages/UserOrder";
 import SuccessPage from "./pages/SuccessPage";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 function App() {
   return (
     <Routes>
@@ -22,6 +24,11 @@ function App() {
       {/* <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route> */}
       <Route path="/login" element={<LoginPage />}></Route>
       <Route path="/sign-up" element={<SignUpPage />}></Route>
+      <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+      <Route
+        path="/forgot-password/api/user/reset-password/:token"
+        element={<ResetPassword />}
+      ></Route>
 
       {/* <Route path="/register">
         {user ? <Redirect to="/" /> : <Register />}

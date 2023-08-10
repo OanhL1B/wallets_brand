@@ -109,7 +109,7 @@ const login = asyncHandler(async (req, res) => {
 
 const getCurrent = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const user = await User.findById(_id).select("-refreshToken -password -role");
+  const user = await User.findById(_id).select("-refreshToken -password");
   return res.status(200).json({
     success: user ? true : false,
     retObj: user ? user : "User not found",
@@ -174,7 +174,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
   const resetToken = user.createPasswordChangedToken();
   await user.save();
 
-  const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. <a href=${process.env.URL_SERVER}/api/user/reset-password/${resetToken}>Click here</a>`;
+  const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. <a href='http://localhost:3000/forgot-password/api/user/reset-password/${resetToken}'>Click here</a>`;
 
   const data = {
     email,

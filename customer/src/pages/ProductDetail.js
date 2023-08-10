@@ -8,12 +8,9 @@ import { APIPUBLIC } from "../redux/config/config";
 import { useDispatch } from "react-redux";
 import { addCart, getCartUser } from "../redux/actions";
 const ProductDetail = () => {
-  //
-
   const { productId } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
-  // const [color, setColor] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
 
   const dispatch = useDispatch();
@@ -24,10 +21,10 @@ const ProductDetail = () => {
   const getProduct = async () => {
     try {
       const res = await APIPUBLIC.get("api/product/" + productId);
-      console.log("res", res);
       setProduct(res.data?.data);
     } catch {}
   };
+
   const handleQuantity = (type) => {
     if (type === "dec") {
       quantity > 1 && setQuantity(quantity - 1);
@@ -42,11 +39,10 @@ const ProductDetail = () => {
         productId: product._id,
         userId: user?.userData?._id,
         quantity,
-        color: "Black",
         price: quantity * product?.price,
       })
     );
-    dispatch(getCartUser(user?.userData?._id)); // gọi lại api để hiên số lượng ở giỏ hàng
+    dispatch(getCartUser(user?.userData?._id));
   };
 
   return (

@@ -6,48 +6,70 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { deleteCart, getCartUser, updateCartQuantity } from "../redux/actions";
 import { Link } from "react-router-dom";
+import { DELETE_CART } from "../redux/actionTypes";
 
 const Cart = () => {
-  const dispatch = useDispatch();
-  const [updateCart, setUpdateCart] = useState(null);
-  const [totalAmount, setTotalAmount] = useState(null);
+  const store = useSelector((state) => state);
 
+  const dispatch = useDispatch();
+  const [totalAmount, setTotalAmount] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
   const userCarts = useSelector((state) => state.customer?.userCarts);
-  console.log("userCarts", userCarts);
+  const [updatedQuantities, setUpdatedQuantities] = useState({});
 
   useEffect(() => {
     dispatch(getCartUser(user?.userData?._id));
   }, []);
 
-  useEffect(() => {
-    if (updateCart !== null) {
-      dispatch(
-        updateCartQuantity({
-          cartItemId: updateCart?.cartItemId,
-          quantity: updateCart?.quantity,
-        })
-      );
-      setTimeout(() => {
-        dispatch(getCartUser(user?.userData?._id));
-      }, 200);
-    }
-  }, [updateCart]);
-
-  const handleDelete = (id) => {
-    dispatch(deleteCart(id));
-    setTimeout(() => {
-      dispatch(getCartUser(user?.userData?._id));
-    }, 200);
-  };
-
+  console.log("userCarts", userCarts);
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < userCarts?.length; index++) {
-      sum = sum + Number(userCarts[index].quantity) * userCarts[index].price;
-      setTotalAmount(sum);
+      sum =
+        sum +
+        Number(
+          updatedQuantities[userCarts[index]._id] || userCarts[index].quantity
+        ) *
+          userCarts[index].price;
     }
-  }, [userCarts]);
+    setTotalAmount(sum);
+  }, [userCarts, updatedQuantities]);
+
+  const handleDelete = (id) => {
+    dispatch(deleteCart(id));
+  };
+
+  useEffect(() => {
+    if (store.errors || store.customer.deletedCart) {
+      if (store.customer.deletedCart) {
+        dispatch(getCartUser(user?.userData?._id));
+        dispatch({ type: DELETE_CART, payload: false });
+      }
+    } else {
+    }
+  }, [store.errors, store.customer.deletedCart]);
+
+  const handleUpdateQuantity = (cartItemId, quantity) => {
+    setUpdatedQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [cartItemId]: quantity,
+    }));
+  };
+
+  useEffect(() => {
+    for (const cartItemId in updatedQuantities) {
+      const quantity = updatedQuantities[cartItemId];
+      dispatch(
+        updateCartQuantity({
+          cartItemId,
+          quantity,
+        })
+      );
+    }
+    setTimeout(() => {
+      dispatch(getCartUser(user?.userData?._id));
+    }, 200);
+  }, [updatedQuantities]);
 
   return (
     <div className="bg-gray-100">
@@ -72,7 +94,7 @@ const Cart = () => {
                     <div className="flex items-center justify-center mx-auto gap-x-6">
                       <div className="mr-4 w-30 h-30">
                         <img
-                          src={item?.productId?.thumb}
+                          src={item?.thumb}
                           alt="Product"
                           className="w-30"
                           style={{ width: "300px" }}
@@ -80,9 +102,7 @@ const Cart = () => {
                       </div>
 
                       <div className="justify-center ml-10 text-center items-centers">
-                        <p className="font-bold">
-                          {item?.productId?.productName}
-                        </p>
+                        <p className="font-bold">{item?.productName}</p>
                       </div>
                       <button
                         className="text-red-500"
@@ -106,15 +126,12 @@ const Cart = () => {
                           max={10}
                           id=""
                           value={
-                            updateCart?.quantity
-                              ? updateCart?.quantity
-                              : item?.quantity
+                            updatedQuantities[item._id] !== undefined
+                              ? updatedQuantities[item._id]
+                              : item.quantity
                           }
                           onChange={(e) => {
-                            setUpdateCart({
-                              cartItemId: item?._id,
-                              quantity: e.target.value,
-                            });
+                            handleUpdateQuantity(item._id, e.target.value);
                           }}
                         />
                       </div>
@@ -127,20 +144,22 @@ const Cart = () => {
           </table>
         )}
       </div>
-      <div className="py-2 mt-4 col-12 ">
-        <div className="d-flex justify-content-between align-items-baseline">
-          {totalAmount !== null && totalAmount !== 0 && (
-            <div className="flex flex-col items-end mr-36">
-              <h4 className="text-4xl">Tổng tiền: {totalAmount}đ</h4>
-              <Link to="/checkout" className="button">
-                <button className="px-5 py-3 mt-2 text-white bg-red-600 rounded-lg">
-                  Thanh toán
-                </button>
-              </Link>
-            </div>
-          )}
+      {userCarts.length > 0 && (
+        <div className="py-2 mt-4 col-12 ">
+          <div className="d-flex justify-content-between align-items-baseline">
+            {totalAmount !== null && totalAmount !== 0 && (
+              <div className="flex flex-col items-end mr-36">
+                <h4 className="text-4xl">Tổng tiền: {totalAmount}đ</h4>
+                <Link to="/checkout" className="button">
+                  <button className="px-5 py-3 mt-2 text-white bg-red-600 rounded-lg">
+                    Thanh toán
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <Footer />
     </div>
   );

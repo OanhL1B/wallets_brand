@@ -7,7 +7,6 @@ import {
 } from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
-import Swal from "sweetalert2";
 import { SET_ERRORS, UPDATE_PRODUCT } from "../../../redux/actionTypes";
 import { MenuItem, Select } from "@mui/material";
 import ReactSelect from "react-select";
@@ -37,7 +36,6 @@ const Body = () => {
     (a, b) => a.productName.charCodeAt(0) - b.productName.charCodeAt(0)
   );
   const [selectedProduct, setSelectedProduct] = useState("");
-  console.log("selectedProduct", selectedProduct);
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();
@@ -69,16 +67,6 @@ const Body = () => {
     }),
     []
   );
-  const Colors = [
-    { colorName: "green", colorCode: "#FF5733" },
-    { colorName: "black", colorCode: "#33FF57" },
-    { colorName: "green", colorCode: "#5733FF" },
-  ];
-
-  const mhtqOptions = Colors?.map((sub) => ({
-    value: sub.colorCode,
-    label: sub.colorCode,
-  }));
 
   const handleUploadSuccess = (url) => {
     setValue(() => ({
@@ -96,7 +84,6 @@ const Body = () => {
   const handleUploadError = () => {
     toast.error("Error Upload!");
   };
-  const [selectedOptions, setSelectedOptions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState(null);
   const [description, setDescription] = useState("");
@@ -107,10 +94,10 @@ const Body = () => {
     material: "",
     size: "",
     design: "",
-    color: [],
     images: [],
     thumb: "",
     productId: "",
+    isActive: "",
   });
 
   const handleEditClick = (pod) => {
@@ -123,17 +110,11 @@ const Body = () => {
       material: "",
       size: "",
       design: "",
-      color: [],
       images: [],
       thumb: "",
       productId: pod._id,
+      isActive: "",
     });
-    setSelectedOptions(
-      (pod.color || []).map((value, index) => ({
-        value: value,
-        label: pod[index],
-      }))
-    );
   };
   const openModal = () => {
     setIsModalOpen(true);
@@ -174,11 +155,7 @@ const Body = () => {
     } else {
       updatedValue.design = selectedProduct.design;
     }
-    if (value.color !== "") {
-      updatedValue.color = value.color;
-    } else {
-      updatedValue.color = selectedProduct.color;
-    }
+
     if (value.images !== "") {
       updatedValue.images = value.images;
     } else {
@@ -188,6 +165,11 @@ const Body = () => {
       updatedValue.thumb = value.thumb;
     } else {
       updatedValue.thumb = selectedProduct.thumb;
+    }
+    if (value.isActive !== "") {
+      updatedValue.isActive = value.isActive;
+    } else {
+      updatedValue.isActive = selectedProduct.isActive;
     }
 
     dispatch(updateProduct({ ...selectedProduct, ...updatedValue }));
@@ -211,7 +193,6 @@ const Body = () => {
   // begin view
   // const [modalMode, setModalMode] = useState(null);
   const handleOpenViewModal = (product) => {
-    console.log("vô đây nè");
     setSelectedProduct(product);
     setModalMode("view");
     setIsModalOpen(true);
@@ -453,41 +434,24 @@ const Body = () => {
                   />
                 </div>
 
-                <div>
-                  <div className={classes.WrapInputLabel}>
-                    <h1 className={classes.LabelStyle}>Color *:</h1>
-                    <ReactSelect
-                      isMulti
-                      displayEmpty
-                      name="values"
-                      options={mhtqOptions}
-                      value={selectedOptions}
-                      onChange={(selectedOptions) => {
-                        setSelectedOptions(selectedOptions);
-                        const selectedValues = selectedOptions.map(
-                          (option) => option.value
-                        );
-                        setValue((prevValue) => ({
-                          ...prevValue,
-                          color: [...selectedValues],
-                        }));
-                      }}
-                      classNamePrefix="select"
-                      components={{
-                        Option: ColorOption,
-                      }}
-                      formatOptionLabel={(option) => (
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <ColorOption label={option.value} />
-                        </div>
-                      )}
-                    />
-                  </div>
+                <div className={classes.WrapInputLabel}>
+                  <h1 className={classes.LabelStyle}>Trạng thái *:</h1>
+                  <Select
+                    required
+                    displayEmpty
+                    placeholder={value.isActive || selectedProduct?.isActive}
+                    sx={{ height: 36 }}
+                    inputProps={{ "aria-label": "Without label" }}
+                    value={value.isActive || selectedProduct?.isActive}
+                    onChange={(e) =>
+                      setValue({ ...value, isActive: e.target.value })
+                    }
+                    className={`${classes.InputStyle} hover:focus:border-none `}
+                  >
+                    <MenuItem value="">None</MenuItem>
+                    <MenuItem value="true">Còn Kinh Doanh</MenuItem>
+                    <MenuItem value="false">Ngừng kinh Doanh</MenuItem>
+                  </Select>
                 </div>
               </div>
               <div>
@@ -576,15 +540,3 @@ const Body = () => {
   );
 };
 export default Body;
-
-const ColorOption = ({ innerProps, label }) => (
-  <div
-    {...innerProps}
-    style={{
-      backgroundColor: label,
-      width: "20px",
-      height: "20px",
-      marginRight: "5px",
-    }}
-  />
-);

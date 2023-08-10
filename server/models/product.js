@@ -31,9 +31,6 @@ var productSchema = new mongoose.Schema(
     design: {
       type: String,
     },
-    color: {
-      type: Array,
-    },
     slug: {
       type: String,
       required: true,

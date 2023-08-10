@@ -19,7 +19,6 @@ const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const store = useSelector((state) => state);
   const [error, setError] = useState({});
 

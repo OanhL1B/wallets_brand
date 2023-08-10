@@ -6,9 +6,7 @@ import {
   updateCategory,
 } from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
-// import { deleteDepartment } from "../../../redux/actions/adminActions";
 import * as classes from "../../../utils/styles";
-import Swal from "sweetalert2";
 import { SET_ERRORS, UPDATE_CATEGORY } from "../../../redux/actionTypes";
 
 const modalStyles = {

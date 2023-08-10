@@ -117,8 +117,8 @@ const Body = () => {
                   messageColor="#157572"
                 />
               )}
-              {error.mes ? (
-                <p className="text-red-500">{error.message}</p>
+              {error.pricelistError ? (
+                <p className="text-red-500">{error.pricelistError}</p>
               ) : null}
             </div>
           </form>

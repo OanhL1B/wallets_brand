@@ -7,9 +7,13 @@ import {
   DELETE_CART,
   GET_CART_USER,
   GET_ORDER_USER,
+  INCREASE_CART_ITEM_QUANTITY,
   LOGIN,
+  QUEN_MAT_KHAU,
+  RESET_PASSWORD,
   SET_ERRORS,
   UPDATE_CART,
+  UPDATE_CART_ITEM_QUANTITY,
 } from "../actionTypes";
 import * as api from "../api/customerapi";
 
@@ -50,12 +54,34 @@ export const addUser = (formData) => async (dispatch) => {
   }
 };
 
+// export const addCart = (formData) => async (dispatch) => {
+//   try {
+//     const { data } = await api.addCart(formData);
+//     if (data.success === true) {
+//       toast.success("Thêm vào giỏ hàng thành công!");
+//       dispatch({ type: ADD_CART, payload: true });
+//     } else {
+//       dispatch({ type: SET_ERRORS, payload: data });
+//     }
+//   } catch (error) {
+//     if (
+//       error.response &&
+//       error.response.data &&
+//       error.response.data.status === "error"
+//     ) {
+//       dispatch({ type: SET_ERRORS, payload: error.response });
+//     } else {
+//       console.log("Unknown error occurred");
+//     }
+//   }
+// };
+
 export const addCart = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addCart(formData);
     if (data.success === true) {
       toast.success("Thêm vào giỏ hàng thành công!");
-      dispatch({ type: ADD_CART, payload: true });
+      dispatch({ type: ADD_CART, payload: data.retObj });
     } else {
       dispatch({ type: SET_ERRORS, payload: data });
     }
@@ -166,5 +192,28 @@ export const deleteCart = (formData) => async (dispatch) => {
     } else {
       console.log("Unknown error occurred");
     }
+  }
+};
+
+export const quenMatKhau = (email) => async (dispatch) => {
+  try {
+    const { data } = await api.quenMatKhau(email);
+    if (data.success === true) {
+      dispatch({ type: QUEN_MAT_KHAU, payload: true });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const Resetpassword = (dataBody, pass) => async (dispatch) => {
+  try {
+    const { data } = await api.Resetpassword(dataBody, pass);
+    if (data.success === true) {
+      dispatch({ type: RESET_PASSWORD, payload: true });
+      toast.success("Đặt lại mật khẩu thành công!");
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };

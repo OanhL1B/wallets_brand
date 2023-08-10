@@ -3,13 +3,12 @@ const asyncHandler = require("express-async-handler");
 
 const addToCart = asyncHandler(async (req, res) => {
   try {
-    const { userId, productId, quantity, price, color } = req.body;
+    const { userId, productId, quantity, price } = req.body;
     const newCartItem = await new Cart({
       userId,
       productId,
       quantity,
       price,
-      color,
     });
     await newCartItem.save();
 
@@ -26,16 +25,36 @@ const addToCart = asyncHandler(async (req, res) => {
 });
 
 // get theo user
+
 const getCartItems = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const cartItems = await Cart.find({ userId }).populate("productId"); // populate chia sẻ dữ liệu giữa các object
+    const cartItems = await Cart.find({ userId }).populate("productId");
 
-    res.status(200).json({ success: true, retObj: cartItems });
+    const groupedProducts = {};
+
+    cartItems.forEach((cartItem) => {
+      const { productId, quantity, price } = cartItem;
+      const productDetails = productId;
+
+      if (groupedProducts[productId._id]) {
+        groupedProducts[productId._id].quantity += quantity;
+        groupedProducts[productId._id].totalPrice += price * quantity;
+      } else {
+        groupedProducts[productId._id] = {
+          ...productDetails.toObject(),
+          quantity: quantity,
+          price: price,
+        };
+      }
+    });
+
+    const groupedProductArray = Object.values(groupedProducts);
+
+    res.status(200).json({ success: true, retObj: groupedProductArray });
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
+    const errors = { backendError: error.toString() };
     res.status(500).json(errors);
   }
 });

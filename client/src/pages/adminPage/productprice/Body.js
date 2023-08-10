@@ -26,10 +26,10 @@ const modalStyles = {
 const Body = () => {
   const store = useSelector((state) => state);
   const productprices = useSelector((state) => state.admin.allProductPrice);
-  console.log("productprices", productprices);
 
   const [selectedProductPrice, setSelectedProductPrice] = useState("");
   const [error, setError] = useState({});
+  console.log("error", error);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -278,8 +278,8 @@ const Body = () => {
                 </button>
               </div>
               <div className="mt-5">
-                {error?.message ? (
-                  <p className="text-red-500">{error?.message}</p>
+                {error?.productpriceError ? (
+                  <p className="text-red-500">{error?.productpriceError}</p>
                 ) : null}
               </div>
             </form>

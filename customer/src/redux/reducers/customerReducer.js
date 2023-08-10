@@ -8,6 +8,8 @@ import {
   GET_ORDER_USER,
   LOGIN,
   LOGOUT,
+  QUEN_MAT_KHAU,
+  RESET_PASSWORD,
   UPDATE_CART,
 } from "../actionTypes";
 
@@ -18,6 +20,8 @@ const initialState = {
   updatedCart: false,
   deleteOrder: false,
   deletedCart: false,
+  quenmatkhau: false,
+  resetpassword: false,
 
   cartItems: [],
   userCarts: [],
@@ -39,11 +43,44 @@ const customerReducer = (state = initialState, action) => {
         ...state,
         orderAdded: action.payload,
       };
+
+    // case ADD_CART:
+    //   const updatedUserCarts = state.userCarts.map((item) => {
+    //     if (item.productId._id === action.payload.productId._id) {
+    //       return {
+    //         ...item,
+    //         quantity: item.quantity + 1,
+    //       };
+    //     }
+    //     return item;
+    //   });
+
     case ADD_CART:
-      return {
-        ...state,
-        cartItems: [...state.cartItems, action.payload],
-      };
+      console.log("action.payload.productId._id", action.payload);
+      const existingProduct = state.userCarts?.find(
+        (item) => item.productId._id === action.payload.productId
+      );
+      console.log("existingProduct", existingProduct);
+
+      if (existingProduct) {
+        state.userCarts = state.userCarts.map((item) =>
+          item.productId._id === action.payload.productId
+            ? {
+                ...item,
+                productId: {
+                  ...item.productId,
+                  quantity: item.productId.quantity + 1,
+                },
+              }
+            : item
+        );
+        console.log("state.userCarts", state.userCarts);
+        return { ...state.userCarts };
+      } else {
+        state.userCarts = [...state.userCarts, { ...action.payload }];
+        return { ...state };
+      }
+
     case GET_CART_USER:
       return {
         ...state,
@@ -69,6 +106,17 @@ const customerReducer = (state = initialState, action) => {
         ...state,
         deletedCart: action.payload,
       };
+    case QUEN_MAT_KHAU:
+      return {
+        ...state,
+        quenmatkhau: action.payload,
+      };
+    case RESET_PASSWORD:
+      return {
+        ...state,
+        resetpassword: action.payload,
+      };
+
     case LOGOUT:
       localStorage.removeItem("user");
       return { ...state, authData: action?.data };

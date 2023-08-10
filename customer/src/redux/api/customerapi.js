@@ -15,3 +15,9 @@ export const deleteCart = (CartId) => APIV1.delete(`/api/cart/${CartId}`);
 export const addOrder = (order) => APIV1.post("/api/order", order);
 export const getOrderUser = (userId) => APIV1.get(`/api/order/user/${userId}`);
 export const Canceled = (orderId) => APIV1.delete(`/api/order/${orderId}`);
+// quên mật khẩu
+export const quenMatKhau = (email) =>
+  APIPUBLIC.get(`/api/user/forgotpassword?email=${email}`);
+
+export const Resetpassword = (pass, dataBody) =>
+  APIPUBLIC.put(`api/user/resetpassword?password=${pass}`, dataBody);

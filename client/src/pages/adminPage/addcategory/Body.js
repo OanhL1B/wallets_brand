@@ -11,6 +11,7 @@ const Body = () => {
   const store = useSelector((state) => state);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
+  console.log("error", error);
   const [value, setValue] = useState({
     categoryName: "",
   });
@@ -106,8 +107,8 @@ const Body = () => {
                   messageColor="#157572"
                 />
               )}
-              {error.message ? (
-                <p className="text-red-500">{error.message}</p>
+              {error.categoryError ? (
+                <p className="text-red-500">{error.categoryError}</p>
               ) : null}
             </div>
           </form>

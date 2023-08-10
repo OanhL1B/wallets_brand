@@ -1,6 +1,5 @@
 import React from "react";
 import ReactModal from "react-modal";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 const modalStyles = {
@@ -16,88 +15,140 @@ const modalStyles = {
 };
 
 const ProductDetail = ({ product, isOpen, onClose }) => {
+  console.log("product", product);
   return (
     <ReactModal
-      isOpen={isOpen}
-      onRequestClose={onClose}
       style={modalStyles}
       ariaHideApp={false}
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      overlayClassName="overlay"
+      shouldCloseOnOverlayClick={true}
     >
-      <div className="items-center justify-center">
-        <div className="w-[1400px] min-h-[100px] py-7 px-7 text-center bg-primary bg-opacity-10 rounded-md  shadow-md mx-auto">
-          <div className="flex mt-10 mb-10 gap-x-16">
-            <div className="flex flex-col">
-              <h1>thumbnail</h1>
-              <div className="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 object-cover mx-auto mb-2">
-                <img
-                  src={product?.thumb}
-                  alt="Thumbnail"
-                  className="object-cover w-full h-full"
-                />
-              </div>
-              <h1>Images</h1>
-              <div className="flex items-center ml-5 gap-x-6">
-                <div className="flex gap-x-3">
-                  {product?.images.map((imageUrl, index) => (
-                    <div
-                      key={index}
-                      className="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 mb-2"
-                    >
-                      <img
-                        src={imageUrl}
-                        alt={`Image ${index + 1}`}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
+      <div className="w-[1000px] min-h-[100px] py-7 px-7 text-center bg-primary bg-opacity-10 rounded-md shadow-md mx-auto">
+        <div className="flex items-center justify-end gap-5 mb-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6 cursor-pointer"
+            onClick={onClose}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
+          <div className="flex flex-col">
+            <h1>Thumbnail</h1>
+            <div className="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 object-cover mx-auto mb-2">
+              <img
+                src={product?.thumb}
+                alt="Thumbnail"
+                className="object-cover w-full h-full"
+              />
             </div>
-
-            <div
-              className="flex flex-row font-sans gap-x-3 "
-              style={{ alignItems: "baseline" }}
-            >
-              <div
-                className="flex flex-col font-sans gap-y-5"
-                style={{ width: "130px", textAlign: "left" }}
-              >
-                <span className="font-sans">Product</span>
-                <span className="font-sans">Category</span>
-                <span className="font-sans">Meterial</span>
-                <span className="font-sans">Size</span>
-                <span className="font-sans">Design</span>
-                <span className="font-sans">Description</span>
-                <span className="font-sans">Price</span>
-                <span className="font-sans">Quantity</span>
-                <span className="font-sans">Status</span>
-              </div>
-              <div
-                className="flex flex-col gap-y-5"
-                style={{ width: "250px", textAlign: "left" }}
-              >
-                <span>{product.productName}</span>
-                <span>{product.category}</span>
-                <span>{product.material}</span>
-                <span>{product.size}</span>
-                <span>{product.design}</span>
-                <span>{product.description}</span>
-                <span>{product.price}</span>
-                <span>{product.quantity}</span>
-                <span>
-                  {product.isActive === true ? "Available" : "Discontinued"}
-                </span>
+            <h1>Images</h1>
+            <div className="flex items-center ml-5 gap-x-6">
+              <div className="flex gap-x-3">
+                {product?.images.map((imageUrl, index) => (
+                  <div
+                    key={index}
+                    className="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 mb-2"
+                  >
+                    <img
+                      src={imageUrl}
+                      alt={`Image ${index + 1}`}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-center gap-5">
-            <button
-              // className={classes.adminFormClearButton}
-              type="button"
-              onClick={onClose}
-            >
-              Thoát
-            </button>
+
+          <div className="table w-full">
+            <table className="border-primary">
+              <tbody>
+                <tr>
+                  <td className="pr-10 text-left border border-primary">
+                    Product
+                  </td>
+                  <td className="pr-4 text-left border border-primary">
+                    {product.productName}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="pr-10 text-left border border-primary">
+                    Category
+                  </td>
+                  <td className="pr-4 text-left border border-primary">
+                    {product?.category?.categoryName}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="pr-10 text-left border border-primary">
+                    Material
+                  </td>
+                  <td className="pr-4 text-left border border-primary">
+                    {product.material}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="pr-10 text-left border border-primary">
+                    Size
+                  </td>
+                  <td className="pr-4 text-left border border-primary">
+                    {product.size}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="pr-10 text-left border border-primary">
+                    Design
+                  </td>
+                  <td className="pr-4 text-left border border-primary">
+                    {product.design}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="pr-10 text-left border border-primary">
+                    Description
+                  </td>
+                  <td className="pr-4 text-left border border-primary">
+                    {product.description}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="pr-10 text-left border border-primary">
+                    Price
+                  </td>
+                  <td className="pr-4 text-left border border-primary">
+                    {product.price}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="pr-10 text-left border border-primary">
+                    Quantity
+                  </td>
+                  <td className="pr-4 text-left border border-primary">
+                    {product.quantity}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="pr-10 text-left border border-primary">
+                    Status
+                  </td>
+                  <td className="pr-4 text-left border border-primary">
+                    {product.isActive === true ? "Available" : "Discontinued"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

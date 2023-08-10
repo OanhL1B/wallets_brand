@@ -14,6 +14,7 @@ const Body = () => {
   const pricelists = useSelector((state) => state.admin.allPricelist);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
+  console.log("productpriceError");
 
   const [value, setValue] = useState({
     productId: "",
@@ -162,8 +163,8 @@ const Body = () => {
                 />
               )}
 
-              {error.message ? (
-                <p className="text-red-500">{error.message}</p>
+              {error.productpriceError ? (
+                <p className="text-red-500">{error.productpriceError}</p>
               ) : null}
             </div>
           </form>

@@ -36,7 +36,6 @@ const Checkout = () => {
       items.push({
         productId: userCarts[index].productId._id,
         quantity: userCarts[index].quantity,
-        color: userCarts[index].color,
         price: userCarts[index].price,
       });
     }
