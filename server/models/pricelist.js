@@ -6,7 +6,6 @@ var pricelistSchema = new mongoose.Schema(
     pricelistName: {
       type: String,
       required: true,
-      unique: true,
       index: true,
     },
     applyDate: {

@@ -40,6 +40,7 @@ const UserOrder = () => {
   return (
     <>
       <Header />
+      <h1 className="text-2xl font-bold text-center">Đơn hàng của bạn</h1>
       <div className="w-full my-8 mt-6 bg-bg_product">
         {userOrders.length !== 0 && (
           <table className="w-[80%] items-center table-auto border border-[#c7c2c2] px-8 mx-auto bg-bg_product">
@@ -56,6 +57,7 @@ const UserOrder = () => {
                 <th className="px-4 py-1 border border-[#c7c2c2]">
                   Trạng Thái
                 </th>
+                <th className="px-4 py-1 border border-[#c7c2c2]">Mục khác</th>
               </tr>
             </thead>
             <tbody className="">
@@ -96,9 +98,26 @@ const UserOrder = () => {
                       0
                     )}
                   </td>
-                  <td className="px-4 py-1 text-center border border-[#c7c2c2]">
-                    {order.status}
-                  </td>
+                  {order.status === "pending" && (
+                    <td className="px-4 py-1 text-center border border-[#c7c2c2]">
+                      Chờ xác nhận
+                    </td>
+                  )}
+                  {order.status === "delivered" && (
+                    <td className="px-4 py-1 text-center border border-[#c7c2c2]">
+                      Đã giao hàng
+                    </td>
+                  )}
+                  {order.status === "shipped" && (
+                    <td className="px-4 py-1 text-center border border-[#c7c2c2]">
+                      Đang giao hàng
+                    </td>
+                  )}
+                  {order.status === "canceled" && (
+                    <td className="px-4 py-1 text-center border border-[#c7c2c2]">
+                      Đã hủy đơn
+                    </td>
+                  )}
                   <td className="px-4 py-1 text-center border border-[#c7c2c2]">
                     {order.status === "pending" && (
                       <button

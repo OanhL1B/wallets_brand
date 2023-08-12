@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import Select from "@mui/material/Select";
 import Spinner from "../../../utils/Spinner";
 import { addProductPrice } from "../../../redux/actions/adminActions";
+import { Link } from "react-router-dom";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -60,9 +61,17 @@ const Body = () => {
   return (
     <div className="mx-5 mt-1 item-center">
       <div className="space-y-5">
-        <h1 className="p-2 px-14 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
-          Create a ProductPrice
-        </h1>
+        <div className="flex flex-col">
+          <h1 className="mt-5 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
+            Thêm giá sản phẩm
+          </h1>
+          <Link to="/manage-productprices" className="btn btn-primary">
+            <button className="mt-2 px-4 py-2  font-bold text-white rounded bg-[#157572] mr-14 hover:bg-[#04605E] focus:outline-none focus:shadow-outline">
+              Quay lại
+            </button>
+          </Link>
+        </div>
+
         <div className={classes.Form1}>
           <form
             className="w-full min-h-[300px] py-8 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto"
@@ -70,7 +79,7 @@ const Body = () => {
           >
             <div className={classes.FormItem}>
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Select product *:</h1>
+                <h1 className={classes.LabelStyle}>Chọn sản phẩm *:</h1>
                 <Select
                   required
                   displayEmpty
@@ -81,6 +90,13 @@ const Body = () => {
                     setValue({ ...value, productId: e.target.value })
                   }
                   className={`${classes.InputStyle} hover:focus:border-none `}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 300,
+                      },
+                    },
+                  }}
                 >
                   <MenuItem value="">None</MenuItem>
                   {products?.map((product, idx) => (
@@ -91,7 +107,7 @@ const Body = () => {
                 </Select>
               </div>
               <div className={`${classes.WrapInputLabel} `}>
-                <h1 className={classes.LabelStyle}>Select pricelist *:</h1>
+                <h1 className={classes.LabelStyle}>Chọn bảng giá *:</h1>
                 <Select
                   required
                   displayEmpty
@@ -119,7 +135,7 @@ const Body = () => {
                 </Select>
               </div>
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Price*:</h1>
+                <h1 className={classes.LabelStyle}>Giá*:</h1>
                 <input
                   placeholder="Price.."
                   required

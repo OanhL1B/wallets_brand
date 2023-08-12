@@ -23,13 +23,13 @@ const Body = () => {
         <div className="grid grid-cols-4 gap-x-4 gap-y-6">
           <div className="p-3 bg-white rounded-lg">
             <div className="">
-              <h1>Product</h1>
+              <h1>Sản phẩm</h1>
             </div>
             <div className="mt-10 mb-6 border-b-2"></div>
             <div className="flex justify-between w-full h-full">
               <div>
                 <h2 className="text-4xl font-bold">{products?.length}</h2>
-                <span>Total Product</span>
+                <span>Tổng số sản phẩm</span>
               </div>
 
               <div className="relative">
@@ -42,13 +42,13 @@ const Body = () => {
           </div>
           <div className="p-3 bg-white rounded-lg">
             <div className="">
-              <h1>Category</h1>
+              <h1>Danh mục</h1>
             </div>
             <div className="mt-10 mb-6 border-b-2"></div>
             <div className="flex justify-between w-full h-full">
               <div>
                 <h2 className="text-4xl font-bold">{categories?.length}</h2>
-                <span>Total Category</span>
+                <span>Tổng số danh mục</span>
               </div>
 
               <div className="relative">
@@ -58,14 +58,14 @@ const Body = () => {
           </div>
           <div className="p-3 bg-white rounded-lg">
             <div className="">
-              <h1>Orders</h1>
+              <h1>Đơn hàng</h1>
             </div>
             <div className="mt-10 mb-6 border-b-2"></div>
 
             <div className="flex justify-between w-full h-full">
               <div>
                 <h2 className="text-4xl font-bold">{orders?.length}</h2>
-                <span>Total Order</span>
+                <span>Tống số đơn hàng</span>
               </div>
 
               <div className="relative">
@@ -78,14 +78,14 @@ const Body = () => {
           </div>
           <div className="p-3 bg-white rounded-lg">
             <div className="">
-              <h1>Users</h1>
+              <h1>Người dùng</h1>
             </div>
             <div className="mt-10 mb-6 border-b-2"></div>
 
             <div className="flex justify-between w-full h-full">
               <div>
                 <h2 className="text-4xl font-bold">{users?.length}</h2>
-                <span>Total User</span>
+                <span>Tổng số người dùng</span>
               </div>
 
               <div className="relative">

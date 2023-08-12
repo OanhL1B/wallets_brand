@@ -1,25 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  getProducts,
   getUsers,
-  updateProduct,
   updateUserbyAdmin,
 } from "../../../redux/actions/adminActions";
-import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
 import Swal from "sweetalert2";
-import {
-  SET_ERRORS,
-  UPDATE_PRODUCT,
-  UPDATE_USER_BY_ADMIN,
-} from "../../../redux/actionTypes";
+import { SET_ERRORS, UPDATE_USER_BY_ADMIN } from "../../../redux/actionTypes";
 import { MenuItem, Select } from "@mui/material";
-import ReactSelect from "react-select";
-import ReactQuill from "react-quill";
-import ImageUpload from "../../../components/ImageUpload";
-import { toast } from "react-toastify";
+
 const modalStyles = {
   content: {
     top: "45%",
@@ -39,6 +29,7 @@ const Body = () => {
   const users = useSelector((state) => state.admin.allUsers);
 
   const [selectedUser, setSelectedUser] = useState("");
+  console.log("selectedUser", selectedUser);
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();
@@ -67,7 +58,7 @@ const Body = () => {
     email: "",
     phoneNumber: "",
     role: "",
-    isBlocked: [],
+    isBlocked: "",
   });
 
   const handleEditClick = (user) => {
@@ -80,7 +71,7 @@ const Body = () => {
       email: "",
       phoneNumber: "",
       role: "",
-      isBlocked: [],
+      isBlocked: "",
       userId: user._id,
     });
   };
@@ -201,28 +192,30 @@ const Body = () => {
           <table className="w-full table-auto ">
             <thead className="bg-[#E1EEEE] items-center">
               <tr>
-                <th className="px-4 py-1">STT</th>
-                <th className="px-4 py-1">firstName</th>
-                <th className="px-4 py-1">lastName</th>
-                <th className="px-4 py-1">email</th>
-                <th className="px-4 py-1">phoneNumber</th>
-                <th className="px-4 py-1">role</th>
-                <th className="px-4 py-1">isBlocked</th>
-                <th className="px-4 py-1">Actions</th>
+                <th className="px-4 py-1 text-left">STT</th>
+                <th className="px-4 py-1 text-left">Họ và tên</th>
+                <th className="px-4 py-1 text-left">email</th>
+                <th className="px-4 py-1 text-left">Số điện thoại</th>
+                <th className="px-4 py-1 text-left">Nhóm người dùng</th>
+                <th className="px-4 py-1 text-left">Trạng thái</th>
+                <th className="px-4 py-1">hàng động</th>
               </tr>
             </thead>
             <tbody className="">
               {users?.map((user, idx) => (
                 <tr className="justify-center  hover:bg-[#EEF5F5]" key={idx}>
-                  <td className="px-4 py-1 border ">{idx + 1}</td>
+                  <td className="px-4 py-1 text-left border ">{idx + 1}</td>
 
-                  <td className="px-4 py-1 border">{user.firstName}</td>
-                  <td className="px-4 py-1 border">{user.lastName}</td>
-                  <td className="px-4 py-1 border">{user.email}</td>
-                  <td className="px-4 py-1 border">{user.phoneNumber}</td>
-                  <td className="px-4 py-1 border">{user.role}</td>
-                  <td className="px-4 py-1 border">
-                    {user.isBlocked === false ? "Enabled" : "Disabled"}
+                  <td className="px-4 py-1 text-left border">
+                    {user.lastName} {user.firstName}
+                  </td>
+                  <td className="px-4 py-1 text-left border">{user.email}</td>
+                  <td className="px-4 py-1 text-left border">
+                    {user.phoneNumber}
+                  </td>
+                  <td className="px-4 py-1 text-left border">{user.role}</td>
+                  <td className="px-4 py-1 text-left border">
+                    {user.isBlocked === false ? "Hoạt động" : "Đã chặn"}
                   </td>
                   <td
                     className="items-center justify-center px-4 py-1 mr-0 border"
@@ -245,7 +238,7 @@ const Body = () => {
                       className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
                       onClick={() => handleEditClick(user)}
                     >
-                      Edit
+                      Sửa
                     </button>
                   </td>
                 </tr>
@@ -269,7 +262,7 @@ const Body = () => {
             >
               <div className="grid grid-cols-2 gap-x-10">
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>FirstName :</h1>
+                  <h1 className={classes.LabelStyle}>Họ :</h1>
                   <input
                     placeholder={selectedUser?.firstName}
                     disabled
@@ -278,7 +271,7 @@ const Body = () => {
                   />
                 </div>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>LastName :</h1>
+                  <h1 className={classes.LabelStyle}>Tên :</h1>
                   <input
                     placeholder={selectedUser?.lastName}
                     disabled
@@ -297,7 +290,7 @@ const Body = () => {
                 </div>
 
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>PhoneNumber :</h1>
+                  <h1 className={classes.LabelStyle}>Số điện thoại :</h1>
                   <input
                     placeholder={selectedUser?.phoneNumber}
                     className={classes.InputStyle}
@@ -306,7 +299,7 @@ const Body = () => {
                   />
                 </div>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Role *:</h1>
+                  <h1 className={classes.LabelStyle}>Nhóm người dùng *:</h1>
                   <Select
                     required
                     displayEmpty
@@ -320,12 +313,12 @@ const Body = () => {
                     className={`${classes.InputStyle} hover:focus:border-none `}
                   >
                     <MenuItem value="admin">Admin</MenuItem>
-                    <MenuItem value="customer">Customer</MenuItem>
-                    <MenuItem value="employee">Employee</MenuItem>
+                    <MenuItem value="employee">Nhân viên</MenuItem>
+                    <MenuItem value="customer">Khách hàng</MenuItem>
                   </Select>
                 </div>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>isBlocked :</h1>
+                  <h1 className={classes.LabelStyle}>Trạng thái :</h1>
                   <Select
                     required
                     placeholder={value.isBlocked || selectedUser.isBlocked}
@@ -338,8 +331,8 @@ const Body = () => {
                     }
                     className={classes.InputStyle}
                   >
-                    <MenuItem value="true">Disabled</MenuItem>
-                    <MenuItem value="false">Enabled</MenuItem>
+                    <MenuItem value="true">Đã chặn</MenuItem>
+                    <MenuItem value="false">Hoạt động</MenuItem>
                   </Select>
                 </div>
               </div>

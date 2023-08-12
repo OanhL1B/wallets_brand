@@ -5,6 +5,7 @@ import * as classes from "../../../utils/styles";
 import React, { useEffect, useState } from "react";
 import Spinner from "../../../utils/Spinner";
 import CategoryIcon from "@mui/icons-material/Category";
+import { Link } from "react-router-dom";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -53,10 +54,16 @@ const Body = () => {
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
       <div className="space-y-5">
-        <h1 className="p-2 px-14 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
-          Create a PriceList
-          <CategoryIcon />
-        </h1>
+        <div className="flex flex-col">
+          <h1 className="mt-5 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
+            Thêm bảng giá
+          </h1>
+          <Link to="/manage-pricelist" className="btn btn-primary">
+            <button className="mt-3 px-4 py-2  font-bold text-white rounded bg-[#157572] mr-14 hover:bg-[#04605E] focus:outline-none focus:shadow-outline">
+              Quay lại
+            </button>
+          </Link>
+        </div>
         <div className="flex flex-col bg-white rounded-xl">
           <form
             className="w-full min-h-[300px] py-7 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto"
@@ -64,9 +71,9 @@ const Body = () => {
           >
             <div className="grid grid-cols-2 gap-x-10">
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>PriceList Name *:</h1>
+                <h1 className={classes.LabelStyle}>Tên bảng giá *:</h1>
                 <input
-                  placeholder="PriceList Name"
+                  placeholder="Tên bảng giá..."
                   required
                   className={classes.InputStyle}
                   type="text"
@@ -77,9 +84,9 @@ const Body = () => {
                 />
               </div>
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Apply Date *:</h1>
+                <h1 className={classes.LabelStyle}>Ngày áp dụng *:</h1>
                 <input
-                  placeholder="Apply Date"
+                  placeholder="Ngày áp dụng"
                   className={classes.InputStyle}
                   type="date"
                   value={value.applyDate}
@@ -91,7 +98,7 @@ const Body = () => {
             </div>
             <div className="flex items-center justify-center mt-10 space-x-6">
               <button className={classes.adminFormSubmitButton} type="submit">
-                Submit
+                Gửi
               </button>
               <button
                 onClick={() => {
@@ -104,13 +111,13 @@ const Body = () => {
                 className={classes.adminFormClearButton}
                 type="button"
               >
-                Clear
+                Xóa
               </button>
             </div>
             <div className={classes.loadingAndError}>
               {loading && (
                 <Spinner
-                  message="Đang thêm khoa..."
+                  message="Đang thêm bảng giá..."
                   height={30}
                   width={150}
                   color="#157572"

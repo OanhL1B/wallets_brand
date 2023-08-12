@@ -1,4 +1,5 @@
 const Category = require("../models/category");
+const Product = require("../models/product");
 const asyncHandler = require("express-async-handler");
 
 const createCategory = asyncHandler(async (req, res) => {
@@ -60,52 +61,32 @@ const getCategories = asyncHandler(async (req, res) => {
 });
 
 // update danh mục
-// const updateCategory = asyncHandler(async (req, res) => {
-//   try {
-//     const errors = { categoryError: String };
-//     const { categoryName } = req.body;
-//     const existingCategory = await Category.findOne({ categoryName });
-//     if (existingCategory) {
-//       errors.categoryError = "Danh mục này đã tồn tại";
-//       return res.status(400).json(errors);
-//     }
 
-//     // Tìm và cập nhật danh mục
-//     const category = await Category.findById(req.params.id);
-//     if (!category) {
-//       return res.status(400).json({ categoryError: "Danh mục không tồn tại" });
-//     }
-
-//     if (categoryName) {
-//       category.categoryName = categoryName;
-//     }
-
-//     await category.save();
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Cập nhật danh mục thành công",
-//       data: category,
-//     });
-//   } catch (error) {
-//     const errors = { backendError: String };
-//     errors.backendError = error;
-//     res.status(500).json(errors);
-//   }
-// });
 const updateCategory = asyncHandler(async (req, res) => {
   try {
     const errors = { categoryError: String };
-    const { categoryId, categoryName } = req.body; // Lấy categoryId từ req.body
+    const { categoryId, categoryName } = req.body;
 
     if (!categoryId) {
       errors.categoryError = "Thiếu thông tin categoryId";
       return res.status(400).json(errors);
     }
 
-    const category = await Category.findById(categoryId); // Tìm danh mục bằng categoryId
+    const category = await Category.findById(categoryId);
     if (!category) {
       return res.status(400).json({ categoryError: "Danh mục không tồn tại" });
+    }
+
+    const existingCategory = await Category.findOne({
+      categoryName: categoryName,
+      _id: { $ne: categoryId },
+    });
+
+    if (existingCategory) {
+      return res.status(400).json({
+        categoryError:
+          "Tên danh mục này đã tồn tại, vui lòng chọn một tên khác!",
+      });
     }
 
     category.categoryName = categoryName;
@@ -123,16 +104,26 @@ const updateCategory = asyncHandler(async (req, res) => {
   }
 });
 
-// tạm thời chưa check lỗi
 const deleteCategory = asyncHandler(async (req, res) => {
   try {
     const categories = req.body;
     const errors = { categoryError: String };
-    for (var i = 0; i < categories.length; i++) {
-      var category = categories[i];
-      await Category.findOneAndDelete({ _id: category });
+
+    for (let i = 0; i < categories.length; i++) {
+      const categoryId = categories[i];
+
+      const productsInCategory = await Product.find({ category: categoryId });
+
+      if (productsInCategory.length > 0) {
+        return res.status(400).json({
+          categoryError: "Không thể xóa danh mục có chứa sản phẩm",
+        });
+      }
+
+      await Category.findOneAndDelete({ _id: categoryId });
     }
-    res.status(200).json({ message: "Xóa danh mục thành công" });
+
+    res.status(200).json({ success: true, message: "Xóa danh mục thành công" });
   } catch (error) {
     const errors = { backendError: String };
     errors.backendError = error;

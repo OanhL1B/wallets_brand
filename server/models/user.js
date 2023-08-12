@@ -30,7 +30,7 @@ var userSchema = new mongoose.Schema(
       type: String,
       default: "customer",
     },
-   
+
     address: {
       type: String,
     },

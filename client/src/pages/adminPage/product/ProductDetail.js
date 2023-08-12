@@ -15,7 +15,6 @@ const modalStyles = {
 };
 
 const ProductDetail = ({ product, isOpen, onClose }) => {
-  console.log("product", product);
   return (
     <ReactModal
       style={modalStyles}
@@ -45,7 +44,7 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
           <div className="flex flex-col">
-            <h1>Thumbnail</h1>
+            <h1>Hình ảnh sản phẩm</h1>
             <div className="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 object-cover mx-auto mb-2">
               <img
                 src={product?.thumb}
@@ -53,7 +52,7 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
                 className="object-cover w-full h-full"
               />
             </div>
-            <h1>Images</h1>
+            <h1>Ảnh khác</h1>
             <div className="flex items-center ml-5 gap-x-6">
               <div className="flex gap-x-3">
                 {product?.images.map((imageUrl, index) => (
@@ -75,9 +74,14 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
           <div className="table w-full">
             <table className="border-primary">
               <tbody>
-                <tr>
-                  <td className="pr-10 text-left border border-primary">
-                    Product
+                <tr className="">
+                  <td
+                    className="pr-10 text-left border border-primary "
+                    style={{
+                      width: "120px",
+                    }}
+                  >
+                    Sản phẩm
                   </td>
                   <td className="pr-4 text-left border border-primary">
                     {product.productName}
@@ -85,7 +89,7 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
                 </tr>
                 <tr>
                   <td className="pr-10 text-left border border-primary">
-                    Category
+                    Danh mục
                   </td>
                   <td className="pr-4 text-left border border-primary">
                     {product?.category?.categoryName}
@@ -93,7 +97,7 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
                 </tr>
                 <tr>
                   <td className="pr-10 text-left border border-primary">
-                    Material
+                    Chất liệu
                   </td>
                   <td className="pr-4 text-left border border-primary">
                     {product.material}
@@ -101,7 +105,7 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
                 </tr>
                 <tr>
                   <td className="pr-10 text-left border border-primary">
-                    Size
+                    kích thước
                   </td>
                   <td className="pr-4 text-left border border-primary">
                     {product.size}
@@ -109,7 +113,7 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
                 </tr>
                 <tr>
                   <td className="pr-10 text-left border border-primary">
-                    Design
+                    Thiết kế
                   </td>
                   <td className="pr-4 text-left border border-primary">
                     {product.design}
@@ -117,23 +121,24 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
                 </tr>
                 <tr>
                   <td className="pr-10 text-left border border-primary">
-                    Description
+                    Mô tả
                   </td>
                   <td className="pr-4 text-left border border-primary">
-                    {product.description}
+                    {product.description.slice(
+                      3,
+                      product?.description?.length - 4
+                    )}
                   </td>
                 </tr>
                 <tr>
-                  <td className="pr-10 text-left border border-primary">
-                    Price
-                  </td>
+                  <td className="pr-10 text-left border border-primary">Giá</td>
                   <td className="pr-4 text-left border border-primary">
                     {product.price}
                   </td>
                 </tr>
                 <tr>
                   <td className="pr-10 text-left border border-primary">
-                    Quantity
+                    Số lượng
                   </td>
                   <td className="pr-4 text-left border border-primary">
                     {product.quantity}
@@ -141,10 +146,12 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
                 </tr>
                 <tr>
                   <td className="pr-10 text-left border border-primary">
-                    Status
+                    Trạng thái
                   </td>
                   <td className="pr-4 text-left border border-primary">
-                    {product.isActive === true ? "Available" : "Discontinued"}
+                    {product.isActive === true
+                      ? "Còn kinh doanh"
+                      : "Ngừng kinh doanh"}
                   </td>
                 </tr>
               </tbody>

@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  deleteCategory,
   getCategories,
   updateCategory,
 } from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
-import { SET_ERRORS, UPDATE_CATEGORY } from "../../../redux/actionTypes";
+import {
+  DELETE_CATEGORY,
+  SET_ERRORS,
+  UPDATE_CATEGORY,
+} from "../../../redux/actionTypes";
+import Swal from "sweetalert2";
 
 const modalStyles = {
   content: {
@@ -102,41 +108,34 @@ const Body = () => {
   // End edit
 
   // Begin delete
-  // const [checkedValue, setCheckedValue] = useState([]);
 
-  // const handleInputChange = (e) => {
-  //   const value = e.target.value;
-  //   const isChecked = e.target.checked;
-  //   setCheckedValue((prevState) =>
-  //     isChecked
-  //       ? [...prevState, value]
-  //       : prevState.filter((item) => item !== value)
-  //   );
-  // };
+  const dltCategory = (id) => {
+    Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa?",
+      text: "Hành động này sẽ không thể hoàn tác!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Đồng ý, Xóa!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteCategory([id]));
+      }
+    });
+  };
 
-  // const dltSubject = (e) => {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       dispatch(deleteDepartment(checkedValue));
-  //     }
-  //   });
-  // };
+  useEffect(() => {
+    console.log("EHCKDJC");
+    if (store.admin.categoryDeleted) {
+      console.log("vô nè");
 
-  // useEffect(() => {
-  //   if (store.admin.departmentDeleted) {
-  //     setCheckedValue([]);
-  //     dispatch(getAllDepartment());
-  //     dispatch({ type: DELETE_DEPARTMENT, payload: false });
-  //   }
-  // }, [store.admin.departmentDeleted]);
+      dispatch(getCategories());
+      dispatch({ type: DELETE_CATEGORY, payload: false });
+    } else {
+      setError({});
+    }
+  }, [store.admin.categoryDeleted, store.errors]);
 
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
@@ -146,52 +145,23 @@ const Body = () => {
             className="items-center gap-[9px]  w-[88px] h-[40px] hover:bg-[#04605E] block py-2 font-bold text-white rounded-lg px-4 
            bg-[#157572] focus:outline-none focus:shadow-outline "
           >
-            ADD
+            Thêm
           </button>
         </Link>
-        {/* {departments && checkedValue?.length > 0 ? (
-          <button
-            onClick={dltSubject}
-            className="items-center  gap-[9px] mr-4 w-[88px] h-[53px] block py-2 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded-lg px-4  hover:bg-[#FD9999] focus:#FD9999 focus:shadow-outline"
-          >
-            Xóa
-          </button>
-        ) : (
-          <button
-            onClick={dltSubject}
-            className="items-center  gap-[9px] mr-4 w-[88px] h-[53px] block py-2 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded-lg px-4"
-            disabled
-          >
-            Xóa
-          </button>
-        )} */}
       </div>
       <div className="w-full my-8 mt-6">
         {categories?.length !== 0 && (
           <table className="w-full table-auto ">
-            <thead className="bg-[#E1EEEE] items-center">
+            <thead className="bg-[#E1EEEE]">
               <tr>
-                {/* <th className="px-4 py-1">Chọn</th> */}
-                <th className="px-4 py-1">STT</th>
-                <th className="px-4 py-1">Category Name</th>
-                <th className="px-4 py-1">Actions</th>
+                <th className="px-4 py-1 text-left">STT</th>
+                <th className="px-4 py-1 text-left">Tên danh mục</th>
+                <th className="px-4 py-1">Hành động</th>
               </tr>
             </thead>
             <tbody className="">
               {categories?.map((cate, idx) => (
-                <tr
-                  className="justify-center item-center hover:bg-[#EEF5F5]"
-                  key={idx}
-                >
-                  {/* <td className="px-4 py-1 border">
-                    <input
-                      onChange={handleInputChange}
-                      checked={checkedValue.includes(dep.id)}
-                      value={dep.id}
-                      type="checkbox"
-                      className="accent-[#157572]"
-                    />
-                  </td> */}
+                <tr className="justify-center hover:bg-[#EEF5F5]" key={idx}>
                   <td className="px-4 py-1 border">{idx + 1}</td>
                   <td className="px-4 py-1 border">{cate.categoryName}</td>
 
@@ -203,7 +173,13 @@ const Body = () => {
                       className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base  mr-5"
                       onClick={() => handleEditClick(cate)}
                     >
-                      Edit
+                      Sửa
+                    </button>
+                    <button
+                      className="items-center gap-[9px]  block px-3.5 py-1 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded hover:bg-[#FD9999] focus:#FD9999 focus:shadow-outline"
+                      onClick={() => dltCategory(cate._id)}
+                    >
+                      Xóa
                     </button>
                   </td>
                 </tr>
@@ -226,12 +202,12 @@ const Body = () => {
             >
               <div className="grid grid-cols-1">
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Category Name :</h1>
+                  <h1 className={classes.LabelStyle}>Tên danh mục :</h1>
                   <input
                     placeholder={selectedCategory?.categoryName}
                     className={classes.InputStyle}
                     type="text"
-                    value={value.categoryName}
+                    value={value.categoryName || selectedCategory?.categoryName}
                     onChange={(e) =>
                       setValue({
                         ...value,
@@ -255,8 +231,8 @@ const Body = () => {
                 </button>
               </div>
               <div className="mt-5">
-                {error?.message ? (
-                  <p className="text-red-500">{error?.message}</p>
+                {error?.categoryError ? (
+                  <p className="text-red-500">{error?.categoryError}</p>
                 ) : null}
               </div>
             </form>

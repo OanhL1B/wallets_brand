@@ -1,6 +1,4 @@
-// xem lại chức năng kiểu cập nhật giá thì sẽ lấy giá nào ở productprice nha, cái này hơi quan trọng 1 chút, h làm qua
 const Pricelist = require("../models/pricelist");
-
 const Productprice = require("../models/productprice");
 const Product = require("../models/product");
 const asyncHandler = require("express-async-handler");
@@ -53,76 +51,10 @@ const getPricelists = asyncHandler(async (req, res) => {
   });
 });
 
-// const updatePricelist = async (req, res) => {
-//   try {
-//     const errors = { pricelistError: String };
-//     const { pricelistName, applyDate, isActive, priceListId } = req.body;
-
-//     if (!priceListId) {
-//       errors.pricelistError = "Thiếu thông tin priceListId";
-//       return res.status(400).json(errors);
-//     }
-
-//     const existingPricelist = await Pricelist.findById(priceListId);
-//     if (!existingPricelist) {
-//       errors.pricelistError = "Bảng giá không tồn tại";
-//       return res.status(404).json(errors);
-//     }
-
-//     if (pricelistName) {
-//       existingPricelist.pricelistName = pricelistName;
-//     }
-
-//     if (applyDate) {
-//       existingPricelist.applyDate = applyDate;
-//     }
-
-//     if (isActive) {
-//       existingPricelist.isActive = isActive;
-//     }
-
-//     await existingPricelist.save();
-
-//     if (isActive) {
-//       const productprices = await Productprice.find({
-//         pricelistId: existingPricelist._id,
-//       });
-//       if (productprices.length !== 0) {
-//         for (let i = 0; i < productprices.length; i++) {
-//           const product = await Product.findById(productprices[i].productId);
-//           if (product) {
-//             product.price = productprices[i].price;
-//             await product.save();
-//           }
-//         }
-//       }
-//     } else {
-//       const productprices = await Productprice.find({
-//         pricelistId: existingPricelist._id,
-//       });
-//       if (productprices.length !== 0) {
-//         const productIds = productprices.map((pp) => pp.productId);
-//         await Product.updateMany(
-//           { _id: { $in: productIds } },
-//           { $set: { price: 0 } }
-//         );
-//       }
-//     }
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "Cập nhật bảng giá thành công",
-//       response: existingPricelist,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({ error: "Lỗi server" });
-//   }
-// };
-
 const updatePricelist = async (req, res) => {
   try {
     const errors = { pricelistError: String };
-    const { pricelistName, applyDate, isActive, priceListId } = req.body;
+    const { priceListId, isActive } = req.body;
 
     if (!priceListId) {
       errors.pricelistError = "Missing priceListId information";
@@ -131,96 +63,27 @@ const updatePricelist = async (req, res) => {
 
     const existingPricelist = await Pricelist.findById(priceListId);
     if (!existingPricelist) {
-      errors.pricelistError = "Pricelist not found";
+      errors.pricelistError = "Không tìm thấy bảng giá nào";
       return res.status(404).json(errors);
     }
 
-    if (pricelistName) {
-      existingPricelist.pricelistName = pricelistName;
-    }
-
-    if (applyDate) {
-      existingPricelist.applyDate = applyDate;
-    }
-
     if (isActive !== undefined) {
+      const applyDate = existingPricelist.applyDate;
+      const currentDate = new Date();
+
+      if (applyDate <= currentDate) {
+        errors.pricelistError = "Không thể cập nhật bảng giá đã áp dụng!";
+        return res.status(400).json(errors);
+      }
+
       existingPricelist.isActive = isActive;
     }
 
     await existingPricelist.save();
 
-    // if (isActive) {
-    //   const activePricelist = await Pricelist.findOne({ isActive: true });
-
-    //   if (activePricelist) {
-    //     const activeProductprices = await Productprice.find({
-    //       pricelistId: activePricelist._id,
-    //     });
-
-    //     for (const productprice of activeProductprices) {
-    //       // Find the corresponding Productprice in the new Pricelist
-    //       const newProductprice = await Productprice.findOne({
-    //         pricelistId: existingPricelist._id,
-    //         productId: productprice.productId,
-    //       });
-
-    //       if (newProductprice) {
-    //         // If the Productprice exists, update its price to the activePricelist price
-    //         newProductprice.price = productprice.price;
-    //         // Add other fields here if you want to update them as well
-    //         await newProductprice.save();
-    //       } else {
-    //         // If the Productprice does not exist in the new Pricelist, create a new entry
-    //         const newProductprice = new Productprice({
-    //           pricelistId: existingPricelist._id,
-    //           productId: productprice.productId,
-    //           price: productprice.price,
-    //           // Add other fields here if necessary
-    //         });
-    //         await newProductprice.save();
-    //       }
-    //     }
-    //   }
-    // }
-
-    const isActivated = existingPricelist.isActive && isActive;
-    if (isActivated) {
-      const activePricelist = await Pricelist.findOne({ isActive: true });
-
-      if (activePricelist) {
-        const activeProductprices = await Productprice.find({
-          pricelistId: activePricelist._id,
-        });
-
-        for (const productprice of activeProductprices) {
-          // Find the corresponding Productprice in the new Pricelist
-          const newProductprice = await Productprice.findOne({
-            pricelistId: existingPricelist._id,
-            productId: productprice.productId,
-          });
-
-          if (newProductprice) {
-            // If the Productprice exists, update its price to the activePricelist price
-            newProductprice.price = productprice.price;
-            // Add other fields here if you want to update them as well
-            await newProductprice.save();
-          } else {
-            // If the Productprice does not exist in the new Pricelist, create a new entry
-            const newProductprice = new Productprice({
-              pricelistId: existingPricelist._id,
-              productId: productprice.productId,
-              price: productprice.price,
-              // Add other fields here if necessary
-            });
-            await newProductprice.save();
-          }
-        }
-      }
-    }
-
     return res.status(200).json({
       success: true,
-      message: "Pricelist updated successfully",
+      message: "Cập nhật bảng giá thành công",
       response: existingPricelist,
     });
   } catch (error) {

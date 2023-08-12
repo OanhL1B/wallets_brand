@@ -5,9 +5,7 @@ import {
   getWarehousing,
   updateWarehousing,
 } from "../../../redux/actions/adminActions";
-import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
-import Swal from "sweetalert2";
 import { SET_ERRORS, UPDATE_INVENTORY } from "../../../redux/actionTypes";
 
 const modalStyles = {
@@ -26,7 +24,7 @@ const modalStyles = {
 const Body = () => {
   const store = useSelector((state) => state);
   const inventorys = useSelector((state) => state.admin.allInventory);
-
+  const initialInventorys = inventorys;
   const [selectedInventory, setSelectedInventory] = useState("");
   const [error, setError] = useState({});
 
@@ -100,85 +98,116 @@ const Body = () => {
   };
   // End edit
 
-  // Begin delete
-  // const [checkedValue, setCheckedValue] = useState([]);
-
-  // const handleInputChange = (e) => {
-  //   const value = e.target.value;
-  //   const isChecked = e.target.checked;
-  //   setCheckedValue((prevState) =>
-  //     isChecked
-  //       ? [...prevState, value]
-  //       : prevState.filter((item) => item !== value)
-  //   );
-  // };
-
-  // const dltSubject = (e) => {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       dispatch(deleteDepartment(checkedValue));
-  //     }
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   if (store.admin.departmentDeleted) {
-  //     setCheckedValue([]);
-  //     dispatch(getAllDepartment());
-  //     dispatch({ type: DELETE_DEPARTMENT, payload: false });
-  //   }
-  // }, [store.admin.departmentDeleted]);
-
+  // handle search
+  const [filteredList, setFilteredList] = new useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const filterBySearch = (event) => {
+    const query = event.target.value;
+    setSearchValue(query);
+    var updatedList = [...inventorys];
+    updatedList = updatedList.filter((item) => {
+      return (
+        item?.productName?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+    });
+    setFilteredList(updatedList);
+  };
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
-      <div className="flex mt-4"></div>
+      <div className="flex rounded-lg border border-[#E1EEEE] ml-3">
+        <input
+          type="text"
+          className="w-[300px] block  px-4 py-2 bg-white  rounded-lg text-primary focus:border-[#04605E] focus:ring-[#157572] focus:outline-none focus:ring focus:ring-opacity-40"
+          placeholder="Tìm sản phẩm muốn cập nhật..."
+          onChange={filterBySearch}
+        />
+      </div>
       <div className="w-full my-8 mt-6">
-        {inventorys?.length !== 0 && (
-          <table className="w-full table-auto ">
-            <thead className="bg-[#E1EEEE] items-center">
-              <tr>
-                {/* <th className="px-4 py-1">Chọn</th> */}
-                <th className="px-4 py-1">STT</th>
-                <th className="px-4 py-1">Product Name</th>
-                <th className="px-4 py-1">Quantity</th>
-                <th className="px-4 py-1">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {inventorys?.map((inventory, idx) => (
-                <tr
-                  className="justify-center item-center hover:bg-[#EEF5F5]"
-                  key={idx}
-                >
-                  <td className="px-4 py-1 border">{idx + 1}</td>
-                  <td className="px-4 py-1 border">{inventory.productName}</td>
-                  <td className="px-4 py-1 border">{inventory.quantity}</td>
-
-                  <td
-                    className="items-center justify-center px-4 py-1 mr-0 border"
-                    style={{ display: "flex", justifyContent: "center" }}
-                  >
-                    <button
-                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base  mr-5"
-                      onClick={() => handleEditClick(inventory)}
-                    >
-                      Edit
-                    </button>
-                  </td>
+        {searchValue ? (
+          <div className="overflow-auto max-h-[530px]">
+            <table className="w-full table-auto ">
+              <thead className="bg-[#E1EEEE] items-center sticky top-0">
+                <tr>
+                  <th className="px-4 py-1 text-center">STT</th>
+                  <th className="px-4 py-1 text-left">Sản phẩm</th>
+                  <th className="px-4 py-1 text-right">Số lượng</th>
+                  <th className="px-4 py-1">Hành động</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="">
+                {filteredList?.map((inventory, idx) => (
+                  <tr
+                    className="justify-center item-center hover:bg-[#EEF5F5]"
+                    key={idx}
+                  >
+                    <td className="px-4 py-1 text-center border">{idx + 1}</td>
+                    <td className="px-4 py-1 border">
+                      {inventory.productName}
+                    </td>
+                    <td className="px-4 py-1 text-right border">
+                      {inventory.quantity}
+                    </td>
+
+                    <td
+                      className="items-center justify-center px-4 py-1 mr-0 border"
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <button
+                        className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base  mr-5"
+                        onClick={() => handleEditClick(inventory)}
+                      >
+                        Sửa
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="overflow-auto max-h-[530px]">
+            <table className="w-full table-auto ">
+              <thead className="bg-[#E1EEEE] items-center sticky top-0">
+                <tr>
+                  <th className="px-4 py-1 text-center">STT</th>
+                  <th className="px-4 py-1 text-left">Sản phẩm</th>
+                  <th className="px-4 py-1 text-right">Số lượng</th>
+                  <th className="px-4 py-1">Hành động</th>
+                </tr>
+              </thead>
+              <tbody className="">
+                {initialInventorys?.map((inventory, idx) => (
+                  <tr
+                    className="justify-center item-center hover:bg-[#EEF5F5]"
+                    key={idx}
+                  >
+                    <td className="px-4 py-1 text-center border">{idx + 1}</td>
+                    <td className="px-4 py-1 border">
+                      {inventory.productName}
+                    </td>
+                    <td className="px-4 py-1 text-right border">
+                      {inventory.quantity}
+                    </td>
+
+                    <td
+                      className="items-center justify-center px-4 py-1 mr-0 border"
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <button
+                        className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base  mr-5"
+                        onClick={() => handleEditClick(inventory)}
+                      >
+                        Sửa
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
+
       {selectedInventory ? (
         <ReactModal
           isOpen={isModalOpen}
@@ -193,7 +222,7 @@ const Body = () => {
             >
               <div className="grid grid-cols-1">
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Product Name :</h1>
+                  <h1 className={classes.LabelStyle}>Tên sản phẩm :</h1>
                   <input
                     placeholder={selectedInventory?.productName}
                     className={classes.InputStyle}
@@ -203,12 +232,12 @@ const Body = () => {
                   />
                 </div>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Quantity :</h1>
+                  <h1 className={classes.LabelStyle}>Số lượng :</h1>
                   <input
                     placeholder={selectedInventory?.quantity}
                     className={classes.InputStyle}
                     type="text"
-                    value={value.quantity}
+                    value={value.quantity || selectedInventory?.quantity}
                     onChange={(e) =>
                       setValue({
                         ...value,

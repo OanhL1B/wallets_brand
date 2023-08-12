@@ -40,6 +40,8 @@ export const getCurrentUser = () => APIV1.get("/api/user/current");
 export const getUsers = () => APIV1.get("/api/user");
 export const updateUserbyAdmin = (updateUser) =>
   APIV1.put("/api/user", updateUser);
+export const updateUser = (updateUser) =>
+  APIV1.put("/api/user/current", updateUser);
 
 //orders
 export const getOrders = () => APIV1.get("/api/order");

@@ -13,7 +13,7 @@ const register = asyncHandler(async (req, res) => {
   if (!email || !password || !lastName || !firstName)
     return res.status(400).json({
       success: false,
-      mes: "Missing inputs", // Thiếu 1 trong 4 trường thì nó sẽ báo lỗi liền
+      mes: "Missing inputs",
     });
 
   const user = await User.findOne({ email });
@@ -231,7 +231,6 @@ const deleteUser = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async (req, res) => {
   //
   const { _id } = req.user;
-  // const { Id,  } = req.body
   if (!_id || Object.keys(req.body).length === 0)
     throw new Error("Missing inputs");
   const response = await User.findByIdAndUpdate(_id, req.body, {
@@ -242,18 +241,6 @@ const updateUser = asyncHandler(async (req, res) => {
     updatedUser: response ? response : "Some thing went wrong",
   });
 });
-// const updateUserByAdmin = asyncHandler(async (req, res) => {
-//   //
-//   const { uid } = req.params;
-//   if (Object.keys(req.body).length === 0) throw new Error("Missing inputs");
-//   const response = await User.findByIdAndUpdate(uid, req.body, {
-//     new: true,
-//   }).select("-password  -refreshToken");
-//   return res.status(200).json({
-//     success: response ? true : false,
-//     updatedUser: response ? response : "Some thing went wrong",
-//   });
-// });
 
 const updateUserByAdmin = asyncHandler(async (req, res) => {
   try {
@@ -263,7 +250,6 @@ const updateUserByAdmin = asyncHandler(async (req, res) => {
     }
 
     if (Object.keys(req.body).length === 1) {
-      // Kiểm tra xem chỉ có userId mà không có các trường thông tin khác
       throw new Error("Missing inputs");
     }
 

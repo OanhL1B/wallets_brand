@@ -26,6 +26,38 @@ const addToCart = asyncHandler(async (req, res) => {
 
 // get theo user
 
+// const getCartItems = asyncHandler(async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+
+//     const cartItems = await Cart.find({ userId }).populate("productId");
+
+//     const groupedProducts = {};
+
+//     cartItems.forEach((cartItem) => {
+//       const { productId, quantity, price } = cartItem;
+//       const productDetails = productId;
+
+//       if (groupedProducts[productId._id]) {
+//         groupedProducts[productId._id].quantity += quantity;
+//         groupedProducts[productId._id].totalPrice += price * quantity;
+//       } else {
+//         groupedProducts[productId._id] = {
+//           ...productDetails.toObject(),
+//           quantity: quantity,
+//           price: price,
+//         };
+//       }
+//     });
+
+//     const groupedProductArray = Object.values(groupedProducts);
+
+//     res.status(200).json({ success: true, retObj: groupedProductArray });
+//   } catch (error) {
+//     const errors = { backendError: error.toString() };
+//     res.status(500).json(errors);
+//   }
+// });
 const getCartItems = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
@@ -35,7 +67,7 @@ const getCartItems = asyncHandler(async (req, res) => {
     const groupedProducts = {};
 
     cartItems.forEach((cartItem) => {
-      const { productId, quantity, price } = cartItem;
+      const { _id: cartId, productId, quantity, price } = cartItem;
       const productDetails = productId;
 
       if (groupedProducts[productId._id]) {
@@ -43,6 +75,7 @@ const getCartItems = asyncHandler(async (req, res) => {
         groupedProducts[productId._id].totalPrice += price * quantity;
       } else {
         groupedProducts[productId._id] = {
+          cartId,
           ...productDetails.toObject(),
           quantity: quantity,
           price: price,

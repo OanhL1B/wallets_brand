@@ -1,13 +1,8 @@
 const Productprice = require("../models/productprice");
-const asyncHandler = require("express-async-handler");
+const Product = require("../models/product");
+const Pricelist = require("../models/pricelist");
 
-// const createProductprice = asyncHandler(async (req, res) => {
-//   const response = await Productprice.create(req.body);
-//   return res.status(200).json({
-//     success: response ? true : false,
-//     retObj: response ? response : "Cannot create new productprice",
-//   });
-// });
+const asyncHandler = require("express-async-handler");
 
 const createProductprice = asyncHandler(async (req, res) => {
   try {
@@ -20,7 +15,7 @@ const createProductprice = asyncHandler(async (req, res) => {
     });
     if (existingProductprice) {
       errors.productpriceError =
-        "A record with the same productId and pricelistId already exists";
+        "Đã tồn bảng ghi với cùng sản phẩm và bảng giá này";
       return res.status(400).json(errors);
     }
 
@@ -28,10 +23,11 @@ const createProductprice = asyncHandler(async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "New Productprice created successfully!!",
+      message: "Thêm mới giá sản phẩm thành công!!",
       retObj: newProductprice,
     });
   } catch (error) {
+    console.log("error", error);
     const errors = { backendError: String };
     errors.backendError = error;
     res.status(500).json(errors);
@@ -41,6 +37,7 @@ const createProductprice = asyncHandler(async (req, res) => {
 const getProductprice = asyncHandler(async (req, res) => {
   const { ppid } = req.params;
   const productprice = await Productprice.findById(ppid);
+
   return res.status(200).json({
     success: productprice ? true : false,
     retObj: productprice ? productprice : "Cannot get productprice",
@@ -64,28 +61,10 @@ const getProductprices = asyncHandler(async (req, res) => {
   });
 });
 
-// const updateProductprice = asyncHandler(async (req, res) => {
-//   const errors = { productPriceError: String };
-//   const { ppid } = req.params;
-//   const { productpriceId, price } = req.body;
-//   const updatedProductprice = await Productprice.findByIdAndUpdate(
-//     ppid,
-//     req.body,
-//     {
-//       new: true,
-//     }
-//   );
-//   return res.status(200).json({
-//     success: updatedProductprice ? true : false,
-//     retObj: updatedProductprice
-//       ? updatedProductprice
-//       : "Cannot update Productprice",
-//   });
-// });
 const updateProductprice = asyncHandler(async (req, res) => {
   try {
     const errors = { productPriceError: String };
-    const { productpriceId, price } = req.body; // Get productpriceId and price from req.body
+    const { productpriceId, price } = req.body;
 
     if (!productpriceId) {
       errors.productPriceError = "Missing productpriceId information";

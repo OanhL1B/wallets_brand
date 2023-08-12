@@ -107,11 +107,11 @@ const Body = () => {
       <div className="space-y-5 ">
         <div className="flex flex-col bg-lite">
           <h1 className="mt-5  bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
-            Create a Product
+            Thêm sản phẩm
           </h1>
           <Link to="/manage-products" className="btn btn-primary">
             <button className="mt-2 px-4 py-2  font-bold text-white rounded bg-[#157572] mr-14 hover:bg-[#04605E] focus:outline-none focus:shadow-outline">
-              Back
+              Quay lại
             </button>
           </Link>
         </div>
@@ -122,10 +122,10 @@ const Body = () => {
           >
             <div className={classes.FormItem}>
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Product Name *:</h1>
+                <h1 className={classes.LabelStyle}>Tên sản phẩm *:</h1>
 
                 <input
-                  placeholder="Product Name.."
+                  placeholder="Tên sản phẩm.."
                   required
                   className={classes.InputStyle}
                   type="text"
@@ -136,7 +136,7 @@ const Body = () => {
                 />
               </div>
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Category *:</h1>
+                <h1 className={classes.LabelStyle}>Danh mục *:</h1>
                 <Select
                   required
                   displayEmpty
@@ -158,10 +158,10 @@ const Body = () => {
               </div>
 
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Material *:</h1>
+                <h1 className={classes.LabelStyle}>Chất liệu *:</h1>
 
                 <input
-                  placeholder="material"
+                  placeholder="Chất liệu"
                   required
                   className={classes.InputStyle}
                   type="text"
@@ -172,10 +172,10 @@ const Body = () => {
                 />
               </div>
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Size *:</h1>
+                <h1 className={classes.LabelStyle}>Kích thước *:</h1>
 
                 <input
-                  placeholder="Size"
+                  placeholder="Kích thước"
                   required
                   className={classes.InputStyle}
                   type="text"
@@ -185,10 +185,10 @@ const Body = () => {
               </div>
 
               <div className={classes.WrapInputLabel}>
-                <h1 className={classes.LabelStyle}>Design *:</h1>
+                <h1 className={classes.LabelStyle}>Thiết kế *:</h1>
 
                 <input
-                  placeholder="Design"
+                  placeholder="Thiết kế"
                   required
                   className={classes.InputStyle}
                   type="text"
@@ -201,9 +201,9 @@ const Body = () => {
             </div>
 
             <div>
-              <h1 className={classes.LabelStyle}>Description *:</h1>
+              <h1 className={classes.LabelStyle}>Mô Tả *:</h1>
               <ReactQuill
-                placeholder="Write your description......"
+                placeholder="Viết mô tả sản phẩm của bạn......"
                 modules={modules}
                 theme="snow"
                 value={description}
@@ -220,7 +220,9 @@ const Body = () => {
                 />
               </div>
               <div class="flex flex-col gap-y-5">
-                <h1 class="pb-2 text-sm font-medium text-left">thumbnail:</h1>
+                <h1 class="pb-2 text-sm font-medium text-left">
+                  Hình ảnh sản phẩm:
+                </h1>
 
                 <ImageUpload
                   onUploadSuccess={handleUploadSuccess}
@@ -245,7 +247,9 @@ const Body = () => {
                 ))}
               </div>
               <div class="flex flex-col gap-y-5">
-                <h1 class="pb-2 text-sm font-medium text-left">Images:</h1>
+                <h1 class="pb-2 text-sm font-medium text-left">
+                  Hình ảnh khác của sản phẩm:
+                </h1>
 
                 <ImageUpload
                   onUploadSuccess={handleUploadImagesSuccess}
@@ -285,7 +289,7 @@ const Body = () => {
               <div className={classes.loadingAndError}>
                 {loading && (
                   <Spinner
-                    message="Adding Product...."
+                    message="Đang thêm sản phẩm...."
                     height={30}
                     width={150}
                     color="#157572"

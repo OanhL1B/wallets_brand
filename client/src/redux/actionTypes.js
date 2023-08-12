@@ -22,3 +22,6 @@ export const GET_USERS = "GET_USERS";
 export const GET_ORDERS = "GET_ORDERS";
 export const GET_INVENTORY = "GET_INVENTORY";
 export const UPDATE_INVENTORY = "UPDATE_INVENTORY";
+export const UPDATE_USER = "UPDATE_USER";
+export const DELETE_CATEGORY = "DELETE_CATEGORY";
+export const DELETE_PRODUCT = "DELETE_PRODUCT";

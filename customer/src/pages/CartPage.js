@@ -15,6 +15,7 @@ const Cart = () => {
   const [totalAmount, setTotalAmount] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
   const userCarts = useSelector((state) => state.customer?.userCarts);
+  console.log("userCarts", userCarts);
   const [updatedQuantities, setUpdatedQuantities] = useState({});
 
   useEffect(() => {
@@ -74,6 +75,11 @@ const Cart = () => {
   return (
     <div className="bg-gray-100">
       <Header />
+      {userCarts.length === 0 && (
+        <div className="text-center">
+          Giỏ hàng đang trống, cùng thêm vào giỏ hàng nào!{" "}
+        </div>
+      )}
       <div className="w-full my-8 mt-6 item-center bg-bg_product">
         {userCarts.length !== 0 && (
           <table className="w-[80%] items-center table-auto  border border-[#c7c2c2] px-8 mx-auto bg-bg_product">
@@ -126,12 +132,12 @@ const Cart = () => {
                           max={10}
                           id=""
                           value={
-                            updatedQuantities[item._id] !== undefined
-                              ? updatedQuantities[item._id]
+                            updatedQuantities[item.cartId] !== undefined
+                              ? updatedQuantities[item.cartId]
                               : item.quantity
                           }
                           onChange={(e) => {
-                            handleUpdateQuantity(item._id, e.target.value);
+                            handleUpdateQuantity(item.cartId, e.target.value);
                           }}
                         />
                       </div>
@@ -160,6 +166,7 @@ const Cart = () => {
           </div>
         </div>
       )}
+
       <Footer />
     </div>
   );

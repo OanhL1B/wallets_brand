@@ -7,7 +7,6 @@ import {
 } from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
 import * as classes from "../../../utils/styles";
-import Swal from "sweetalert2";
 import { SET_ERRORS, UPDATE_PRODUCT_PRICE } from "../../../redux/actionTypes";
 
 const modalStyles = {
@@ -26,7 +25,7 @@ const modalStyles = {
 const Body = () => {
   const store = useSelector((state) => state);
   const productprices = useSelector((state) => state.admin.allProductPrice);
-
+  const initialProductprices = productprices;
   const [selectedProductPrice, setSelectedProductPrice] = useState("");
   const [error, setError] = useState({});
   console.log("error", error);
@@ -109,111 +108,138 @@ const Body = () => {
     setError({});
     closeModal();
   };
-  // End edit
 
-  // Begin delete
-  // const [checkedValue, setCheckedValue] = useState([]);
-
-  // const handleInputChange = (e) => {
-  //   const value = e.target.value;
-  //   const isChecked = e.target.checked;
-  //   setCheckedValue((prevState) =>
-  //     isChecked
-  //       ? [...prevState, value]
-  //       : prevState.filter((item) => item !== value)
-  //   );
-  // };
-
-  // const dltSubject = (e) => {
-  //   Swal.fire({
-  //     title: "Bạn có chắc chắn muốn xóa?",
-  //     text: "Hành động này sẽ không thể hoàn tác!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Đồng ý, Xóa!",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       dispatch(deleteDepartment(checkedValue));
-  //     }
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   if (store.admin.departmentDeleted) {
-  //     setCheckedValue([]);
-  //     dispatch(getAllDepartment());
-  //     dispatch({ type: DELETE_DEPARTMENT, payload: false });
-  //   }
-  // }, [store.admin.departmentDeleted]);
-
+  // handle search
+  const [filteredList, setFilteredList] = new useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const filterBySearch = (event) => {
+    const query = event.target.value;
+    setSearchValue(query);
+    var updatedList = [...productprices];
+    updatedList = updatedList.filter((item) => {
+      return (
+        item?.productId?.productName
+          ?.toLowerCase()
+          .indexOf(query.toLowerCase()) !== -1
+      );
+    });
+    setFilteredList(updatedList);
+  };
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
-      <Link to="/add-productprice" className="btn btn-primary">
-        <button
-          className="items-center gap-[9px]  w-[88px] h-[40px] hover:bg-[#04605E] block py-2 font-bold text-white rounded-lg px-4 
+      <div className="flex mt-2">
+        <Link to="/add-productprice" className="btn btn-primary">
+          <button
+            className="items-center gap-[9px]  w-[88px] h-[40px] hover:bg-[#04605E] block py-2 font-bold text-white rounded-lg px-4 
            bg-[#157572] focus:outline-none focus:shadow-outline "
-        >
-          Thêm
-        </button>
-      </Link>
-      <div className="w-full my-8 mt-6">
-        {productprices?.length !== 0 && (
-          <table className="w-full table-auto ">
-            <thead className="bg-[#E1EEEE] items-center">
-              <tr>
-                <th className="px-4 py-1">STT</th>
-                <th className="px-4 py-1">Product</th>
-                <th className="px-4 py-1">ProductPrice</th>
-                <th className="px-4 py-1">Price</th>
-                <th className="px-4 py-1">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {productprices?.map((productprice, idx) => (
-                <tr
-                  className="justify-center item-center hover:bg-[#EEF5F5]"
-                  key={idx}
-                >
-                  {/* <td className="px-4 py-1 border">
-                    <input
-                      onChange={handleInputChange}
-                      checked={checkedValue.includes(dep.id)}
-                      value={dep.id}
-                      type="checkbox"
-                      className="accent-[#157572]"
-                    />
-                  </td> */}
-                  <td className="px-4 py-1 text-center border ">{idx + 1}</td>
+          >
+            Thêm
+          </button>
+        </Link>
+        <div className="flex rounded-lg border border-[#E1EEEE] ml-3">
+          <input
+            type="text"
+            className="w-[300px] block  px-4 py-2 bg-white  rounded-lg text-primary focus:border-[#04605E] focus:ring-[#157572] focus:outline-none focus:ring focus:ring-opacity-40"
+            placeholder="Tìm sản phẩm muốn cập nhật..."
+            onChange={filterBySearch}
+          />
+        </div>
+      </div>
 
-                  <td className="px-4 py-1 text-center border">
-                    {productprice?.productId?.productName}
-                  </td>
-                  <td className="px-4 py-1 text-center border">
-                    {productprice?.pricelistId?.pricelistName}
-                  </td>
-                  <td className="px-4 py-1 text-center border">
-                    {productprice.price}
-                  </td>
-                  <td
-                    className="items-center justify-center px-4 py-1 mr-0 border"
-                    style={{ display: "flex", justifyContent: "center" }}
-                  >
-                    <button
-                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
-                      onClick={() => handleEditClick(productprice)}
-                    >
-                      Sửa
-                    </button>
-                  </td>
+      <div className="w-full my-8 mt-6">
+        {searchValue ? (
+          <div className="overflow-auto max-h-[530px]">
+            <table className="w-full table-auto ">
+              <thead className="bg-[#E1EEEE] items-center sticky top-0">
+                <tr>
+                  <th className="px-4 py-1">STT</th>
+                  <th className="px-4 py-1 text-left">Sản phẩm</th>
+                  <th className="px-4 py-1 text-left">Bảng giá</th>
+                  <th className="px-4 py-1 text-right">Giá(vnđ)</th>
+                  <th className="px-4 py-1">Hàng động</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="">
+                {filteredList?.map((productprice, idx) => (
+                  <tr
+                    className="justify-center item-center hover:bg-[#EEF5F5]"
+                    key={idx}
+                  >
+                    <td className="px-4 py-1 text-center border ">{idx + 1}</td>
+
+                    <td className="px-4 py-1 text-left border">
+                      {productprice?.productId?.productName}
+                    </td>
+                    <td className="px-4 py-1 border">
+                      {productprice?.pricelistId?.pricelistName}
+                    </td>
+                    <td className="px-4 py-1 text-right border">
+                      {productprice.price}
+                    </td>
+                    <td
+                      className="items-center justify-center px-4 py-1 mr-0 border"
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <button
+                        className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
+                        onClick={() => handleEditClick(productprice)}
+                      >
+                        Sửa
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="overflow-auto max-h-[530px]">
+            <table className="w-full table-auto ">
+              <thead className="bg-[#E1EEEE] items-center sticky top-0">
+                <tr>
+                  <th className="px-4 py-1">STT</th>
+                  <th className="px-4 py-1 text-left">Sản phẩm</th>
+                  <th className="px-4 py-1 text-left">Bảng giá</th>
+                  <th className="px-4 py-1 text-right">Giá(vnđ)</th>
+                  <th className="px-4 py-1">Hàng động</th>
+                </tr>
+              </thead>
+              <tbody className="">
+                {initialProductprices?.map((productprice, idx) => (
+                  <tr
+                    className="justify-center item-center hover:bg-[#EEF5F5]"
+                    key={idx}
+                  >
+                    <td className="px-4 py-1 text-center border ">{idx + 1}</td>
+
+                    <td className="px-4 py-1 text-left border">
+                      {productprice?.productId?.productName}
+                    </td>
+                    <td className="px-4 py-1 border">
+                      {productprice?.pricelistId?.pricelistName}
+                    </td>
+                    <td className="px-4 py-1 text-right border">
+                      {productprice.price}
+                    </td>
+                    <td
+                      className="items-center justify-center px-4 py-1 mr-0 border"
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <button
+                        className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
+                        onClick={() => handleEditClick(productprice)}
+                      >
+                        Sửa
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
-      {/* modal edit */}
+
       {selectedProductPrice ? (
         <ReactModal
           isOpen={isModalOpen}
@@ -228,7 +254,7 @@ const Body = () => {
             >
               <div className={classes.FormItem}>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Product :</h1>
+                  <h1 className={classes.LabelStyle}>Sản phẩm :</h1>
                   <input
                     placeholder={selectedProductPrice?.productId?.productName}
                     disabled
@@ -237,7 +263,7 @@ const Body = () => {
                   />
                 </div>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Price List :</h1>
+                  <h1 className={classes.LabelStyle}>Bảng giá :</h1>
                   <input
                     placeholder={
                       selectedProductPrice?.pricelistId?.pricelistName
@@ -248,7 +274,7 @@ const Body = () => {
                   />
                 </div>
                 <div className={classes.WrapInputLabel}>
-                  <h1 className={classes.LabelStyle}>Price :</h1>
+                  <h1 className={classes.LabelStyle}>Giá :</h1>
                   <input
                     placeholder={selectedProductPrice?.price}
                     className={classes.InputStyle}
@@ -266,7 +292,7 @@ const Body = () => {
 
               <div className="flex items-center justify-center mt-10 space-x-6">
                 <button className={classes.adminFormSubmitButton} type="submit">
-                  Save
+                  Lưu
                 </button>
 
                 <button
@@ -274,7 +300,7 @@ const Body = () => {
                   type="button"
                   onClick={() => handleModalError()}
                 >
-                  Cancel
+                  Thoát
                 </button>
               </div>
               <div className="mt-5">

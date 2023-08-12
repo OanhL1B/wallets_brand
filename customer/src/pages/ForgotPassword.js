@@ -50,7 +50,7 @@ const Body = () => {
       <div className="space-y-3">
         <div className="flex flex-col">
           <h1 className="mt-5 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
-            Create a Category
+            Quên mật khẩu
           </h1>
         </div>
         <div className="flex flex-col bg-white rounded-xl">

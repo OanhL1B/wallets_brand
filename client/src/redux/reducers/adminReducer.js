@@ -3,6 +3,8 @@ import {
   ADD_PRICELIST,
   ADD_PRODUCT,
   ADD_PRODUCT_PRICE,
+  DELETE_CATEGORY,
+  DELETE_PRODUCT,
   GET_ALL_CATEGOIES,
   GET_ALL_PRICELIST,
   GET_ALL_PRODUCT,
@@ -18,6 +20,7 @@ import {
   UPDATE_PRICELIST,
   UPDATE_PRODUCT,
   UPDATE_PRODUCT_PRICE,
+  UPDATE_USER,
   UPDATE_USER_BY_ADMIN,
 } from "../actionTypes";
 
@@ -28,6 +31,8 @@ const initialState = {
   pricelistAdded: false,
   updatedCategory: false,
   updatedUser: false,
+  updatedCurrentUser: false,
+
   productpriceAdded: false,
   updatedProduct: false,
   updatedPriceList: false,
@@ -42,6 +47,9 @@ const initialState = {
   allUsers: [],
   allOrder: [],
   allInventory: [],
+  // xóa
+  categoryDeleted: false,
+  productDeleted: false,
 };
 
 const adminReducer = (state = initialState, action) => {
@@ -95,6 +103,12 @@ const adminReducer = (state = initialState, action) => {
         ...state,
         updatedCategory: action.payload,
       };
+    case UPDATE_USER:
+      return {
+        ...state,
+        updatedCurrentUser: action.payload,
+      };
+
     case UPDATE_ORDER_STATUS:
       return {
         ...state,
@@ -144,6 +158,17 @@ const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         updatedInventory: action.payload,
+      };
+
+    case DELETE_CATEGORY:
+      return {
+        ...state,
+        categoryDeleted: action.payload,
+      };
+    case DELETE_PRODUCT:
+      return {
+        ...state,
+        productDeleted: action.payload,
       };
     default:
       return state;

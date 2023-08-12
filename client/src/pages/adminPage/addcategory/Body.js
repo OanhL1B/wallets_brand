@@ -46,6 +46,7 @@ const Body = () => {
   }, [store.errors, store.admin.categoryAdded]);
 
   useEffect(() => {
+    setError({});
     dispatch({ type: SET_ERRORS, payload: {} });
   }, []);
 
@@ -54,7 +55,7 @@ const Body = () => {
       <div className="space-y-3">
         <div className="flex flex-col">
           <h1 className="mt-5 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
-            Create a Category
+            Thêm danh mục
           </h1>
           <Link to="/manage-category" className="btn btn-primary">
             <button className="mt-2 px-4 py-2  font-bold text-white rounded bg-[#157572] mr-14 hover:bg-[#04605E] focus:outline-none focus:shadow-outline">
@@ -68,9 +69,9 @@ const Body = () => {
             onSubmit={handleSubmit}
           >
             <div className={classes.WrapInputLabel}>
-              <h1 className={classes.LabelStyle}>Category Name*:</h1>
+              <h1 className={classes.LabelStyle}>Tên danh mục*:</h1>
               <input
-                placeholder="Category Name"
+                placeholder="Tên danh mục"
                 required
                 className={classes.InputStyle}
                 type="text"
@@ -82,7 +83,7 @@ const Body = () => {
             </div>
             <div className="flex items-center justify-center mt-10 space-x-6">
               <button className={classes.adminFormSubmitButton} type="submit">
-                Submit
+                Gửi
               </button>
               <button
                 onClick={() => {
@@ -94,7 +95,7 @@ const Body = () => {
                 className={classes.adminFormClearButton}
                 type="button"
               >
-                Clear
+                Xóa
               </button>
             </div>
             <div className={classes.loadingAndError}>

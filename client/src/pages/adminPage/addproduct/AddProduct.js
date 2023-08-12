@@ -13,7 +13,7 @@ const AddProduct = () => {
   return (
     <div className="flex">
       <div className="h-screen overflow-y-hidden bg-[#f4f6fa] shadow-2xl">
-        <Sidebar></Sidebar>
+        <Sidebar />
       </div>
       <div className="flex flex-col flex-auto ">
         <Header />

@@ -50,7 +50,7 @@ const LoginPage = () => {
 
       <div className="w-full max-w-[556px] bg-white dark:bg-darkSecondary rounded-xl px-5 py-8 lg:px-16 lg:py-12 mx-auto ">
         <h1 className="mb-1 text-lg font-semibold text-center lg:mb-3 lg:text-xl lg: text-text1 dark:text-white">
-          Welcome Back
+          Chào mừng bạn quay trở lại!
         </h1>
 
         <form
@@ -79,7 +79,7 @@ const LoginPage = () => {
               htmlFor="password"
               className="self-start inline-block text-sm font-medium cursor-pointer text-text2 dark:text-text3"
             >
-              Password *
+              Mật khẩu *
             </label>
 
             <div className="flex items-center w-full bg-white rounded-lg">
@@ -90,7 +90,7 @@ const LoginPage = () => {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 className="relative w-full px-6 py-4 text-sm font-medium bg-transparent border focus:border-[#157572] focus:ring-primary focus:outline-none focus:ring focus:ring-opacity-40  rounded-xl placeholder:text-text4 dark:placeholder:text-text2 dark:text-white border-strock text-text1 dark:border-darkStroke"
-                placeholder="Enter your password"
+                placeholder="Nhập mật khẩu của bạn..."
               />
               <div className="absolute ml-[384px] mt-2">
                 {showPassword ? (
@@ -106,20 +106,13 @@ const LoginPage = () => {
                 )}
               </div>
             </div>
-            {/* <div className="flex flex-col mt-2 gap-y-2 lg:gap-x-3">
-              <div className="text-right">
-                <span className="inline-block text-sm font-medium text-primary">
-                  Forgot password
-                </span>
-              </div>
-            </div> */}
           </div>
 
           <button
             type="submit"
             className="flex items-center justify-center p-4 text-base font-semibold rounded-xl min-h-[56px] bg-primary text-white  w-full"
           >
-            Sign in
+            Đăng nhập
           </button>
 
           {loading && (

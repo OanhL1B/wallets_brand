@@ -13,6 +13,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const store = useSelector((state) => state);
   const userCarts = useSelector((state) => state.customer?.userCarts);
+  console.log("userCarts", userCarts);
   const user = JSON.parse(localStorage.getItem("user"));
   const [totalAmount, setTotalAmount] = useState(null);
   const [shippingInfo, setShippingInfo] = useState({
@@ -34,7 +35,7 @@ const Checkout = () => {
     let items = [];
     for (let index = 0; index < userCarts?.length; index++) {
       items.push({
-        productId: userCarts[index].productId._id,
+        productId: userCarts[index]._id,
         quantity: userCarts[index].quantity,
         price: userCarts[index].price,
       });

@@ -49,7 +49,7 @@ const Sidebar = () => {
             }
           >
             <AccountCircleIcon className="" />
-            <h1 className="font-normal">Profile</h1>
+            <h1 className="font-normal">Thông tin cá nhân</h1>
           </NavLink>
           <NavLink
             to="/manage-category"
@@ -58,7 +58,7 @@ const Sidebar = () => {
             }
           >
             <CategoryIcon className="" />
-            <h1 className="font-normal">Categories</h1>
+            <h1 className="font-normal">Danh mục</h1>
           </NavLink>
           <NavLink
             to="/manage-products"
@@ -68,7 +68,7 @@ const Sidebar = () => {
           >
             <Inventory2Icon className="" />
 
-            <h1 className="font-normal">Products</h1>
+            <h1 className="font-normal">Sản phẩm</h1>
           </NavLink>
 
           <NavLink
@@ -78,7 +78,7 @@ const Sidebar = () => {
             }
           >
             <PriceChangeIcon className="" />
-            <h1 className="font-normal">Pricelists</h1>
+            <h1 className="font-normal">Bảng giá</h1>
           </NavLink>
 
           <NavLink
@@ -89,7 +89,7 @@ const Sidebar = () => {
           >
             <AttachMoneyIcon className="" />
 
-            <h1 className="font-normal">Productprices</h1>
+            <h1 className="font-normal">Giá sản phẩm</h1>
           </NavLink>
           <NavLink
             to="/inventory"
@@ -99,7 +99,7 @@ const Sidebar = () => {
           >
             <AttachMoneyIcon className="" />
 
-            <h1 className="font-normal">Inventory</h1>
+            <h1 className="font-normal">Cập nhật kho</h1>
           </NavLink>
 
           {user?.role === "admin" && (
@@ -111,7 +111,7 @@ const Sidebar = () => {
             >
               <GroupIcon className="" />
 
-              <h1 className="font-normal">Users</h1>
+              <h1 className="font-normal">Người dùng</h1>
             </NavLink>
           )}
         </div>
@@ -123,7 +123,7 @@ const Sidebar = () => {
             }
           >
             <AddShoppingCartIcon className="" />
-            <h1 className="font-normal">Manage Orders</h1>
+            <h1 className="font-normal">Đơn hàng</h1>
           </NavLink>
         </div>
         <div className="" style={{ marginTop: 0 }}>
@@ -154,7 +154,7 @@ const Sidebar = () => {
                 />
               </svg>
             </div>
-            <h1 className="font-normal">Update passWord</h1>
+            <h1 className="font-normal">Đổi mật khẩu</h1>
           </NavLink>
         </div>
       </div>

@@ -45,6 +45,7 @@ const ProductDetail = () => {
     dispatch(getCartUser(user?.userData?._id));
   };
 
+  console.log("product", product);
   return (
     <div className="bg-gray-100">
       <Header />
@@ -56,6 +57,7 @@ const ProductDetail = () => {
             className="object-cover w-full h-90vh md:h-40vh"
           />
         </div>
+
         <div className="w-full md:w-1/2 md:p-5">
           <h1 className="mb-2 text-4xl  text-[#333333] font-medium">
             {product.productName}
@@ -65,7 +67,7 @@ const ProductDetail = () => {
           </p>
 
           <p className="mb-4 font-base text-[#666666] font-normal">
-            {product.description}
+            {product?.description?.slice(3, product?.description?.length - 4)}
           </p>
           <h1 className="font-normal text-[#666666] text-base">
             THÔNG TIN SẢN PHẨM:
@@ -77,7 +79,7 @@ const ProductDetail = () => {
             Kích thước: {product?.size}
           </div>
           <div className="font-base text-[#666666] font-normal">
-            {product?.feature}
+            {product?.design}
           </div>
           <div className="flex items-center mt-10 mb-4 font-bold">
             <span className="font-base text-[#666666] font-normal mr-4">
