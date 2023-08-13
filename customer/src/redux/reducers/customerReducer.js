@@ -5,12 +5,14 @@ import {
   CANCELED,
   DELETE_CART,
   GET_CART_USER,
+  GET_CURRENT_USER,
   GET_ORDER_USER,
   LOGIN,
   LOGOUT,
   QUEN_MAT_KHAU,
   RESET_PASSWORD,
   UPDATE_CART,
+  UPDATE_USER,
 } from "../actionTypes";
 
 const initialState = {
@@ -22,7 +24,8 @@ const initialState = {
   deletedCart: false,
   quenmatkhau: false,
   resetpassword: false,
-
+  updatedCurrentUser: false,
+  usercurrent: [],
   cartItems: [],
   userCarts: [],
   userOrders: [],
@@ -56,11 +59,9 @@ const customerReducer = (state = initialState, action) => {
     //   });
 
     case ADD_CART:
-      console.log("action.payload.productId._id", action.payload);
       const existingProduct = state.userCarts?.find(
         (item) => item.productId._id === action.payload.productId
       );
-      console.log("existingProduct", existingProduct);
 
       if (existingProduct) {
         state.userCarts = state.userCarts.map((item) =>
@@ -74,7 +75,6 @@ const customerReducer = (state = initialState, action) => {
               }
             : item
         );
-        console.log("state.userCarts", state.userCarts);
         return { ...state.userCarts };
       } else {
         state.userCarts = [...state.userCarts, { ...action.payload }];
@@ -96,6 +96,11 @@ const customerReducer = (state = initialState, action) => {
         ...state,
         updatedCart: action.payload,
       };
+    case UPDATE_USER:
+      return {
+        ...state,
+        updatedCurrentUser: action.payload,
+      };
     case CANCELED:
       return {
         ...state,
@@ -116,7 +121,11 @@ const customerReducer = (state = initialState, action) => {
         ...state,
         resetpassword: action.payload,
       };
-
+    case GET_CURRENT_USER:
+      return {
+        ...state,
+        usercurrent: action.payload,
+      };
     case LOGOUT:
       localStorage.removeItem("user");
       return { ...state, authData: action?.data };

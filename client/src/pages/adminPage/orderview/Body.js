@@ -99,18 +99,24 @@ const Body = () => {
           <table className="w-full table-auto">
             <thead>
               <tr>
-                <th className="px-4 py-2 border border-[#c7c2c2]">
+                <th className="px-4 py-2 border border-[#c7c2c2] ">
                   Product Name
                 </th>
-                <th className="px-4 py-2 border border-[#c7c2c2]">Số lượng</th>
-                <th className="px-4 py-2 border border-[#c7c2c2]">Giá</th>
-                <th className="px-4 py-2 border border-[#c7c2c2]">Tổng giá</th>
+                <th className="px-4 py-2 border border-[#c7c2c2] text-right">
+                  Số lượng
+                </th>
+                <th className="px-4 py-2 border border-[#c7c2c2] text-right">
+                  Giá
+                </th>
+                <th className="px-4 py-2 border border-[#c7c2c2] text-right">
+                  Tổng giá
+                </th>
               </tr>
             </thead>
             <tbody>
               {productItems?.map((product, idx) => (
                 <tr key={idx}>
-                  <td className="px-4 py-2 border border-[#c7c2c2]">
+                  <td className="px-4 py-2 border border-[#c7c2c2] text-center">
                     <div className="flex items-center gap-4">
                       <img
                         src={product?.productId?.thumb}
@@ -123,13 +129,13 @@ const Body = () => {
                     </div>
                   </td>
 
-                  <td className="px-4 py-2 border border-[#c7c2c2]">
+                  <td className="px-4 py-2 border border-[#c7c2c2] text-right">
                     {product.quantity}
                   </td>
-                  <td className="px-4 py-2 border border-[#c7c2c2]">
+                  <td className="px-4 py-2 border border-[#c7c2c2] text-right">
                     {product.price}
                   </td>
-                  <td className="px-4 py-2 border border-[#c7c2c2]">
+                  <td className="px-4 py-2 border border-[#c7c2c2] text-right">
                     {product.quantity * product.price}
                   </td>
                 </tr>

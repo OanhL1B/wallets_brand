@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import AddIcon from "@mui/icons-material/Add";
@@ -11,8 +11,10 @@ const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [error, setError] = useState(null);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
     getProduct();
@@ -26,14 +28,28 @@ const ProductDetail = () => {
   };
 
   const handleQuantity = (type) => {
+    if (error) {
+      setError(null);
+    }
+
     if (type === "dec") {
-      quantity > 1 && setQuantity(quantity - 1);
+      if (quantity > 0) {
+        setQuantity(quantity - 1);
+      }
     } else {
-      setQuantity(quantity + 1);
+      if (quantity + 1 <= product.quantity) {
+        setQuantity(quantity + 1);
+      } else {
+        setError("Số lượng đã vượt quá số lượng sản phẩm đang có");
+      }
     }
   };
 
   const handleClick = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     await dispatch(
       addCart({
         productId: product._id,
@@ -45,7 +61,6 @@ const ProductDetail = () => {
     dispatch(getCartUser(user?.userData?._id));
   };
 
-  console.log("product", product);
   return (
     <div className="bg-gray-100">
       <Header />
@@ -92,11 +107,14 @@ const ProductDetail = () => {
             <span className="flex items-center justify-center w-8 h-8 mx-2 border border-secondary">
               {quantity}
             </span>
+
             <AddIcon
               onClick={() => handleQuantity("inc")}
               className="cursor-pointer"
             />
           </div>
+          {error && <p className="text-red-500">{error}</p>}
+
           <button
             onClick={handleClick}
             className="px-6 py-3 font-medium text-red-500 bg-white border-2 border-red-500 hover:bg-gray-100"

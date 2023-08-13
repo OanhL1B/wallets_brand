@@ -4,54 +4,10 @@ const Warehousing = require("../models/warehousing");
 
 const asyncHandler = require("express-async-handler");
 
-// const createOrder = asyncHandler(async (req, res) => {
-//   try {
-//     const { userId, productItems, shippingAddress, total_price } = req.body;
-
-//     const newOrder = await new Order({
-//       userId,
-//       productItems,
-//       shippingAddress,
-//       total_price,
-//     });
-//     await newOrder.save();
-
-//     for (const item of productItems) {
-//       const { productId, quantity } = item;
-//       const warehousingProduct = await Warehousing.findOne({ productId });
-
-//       if (warehousingProduct) {
-//         const updatedQuantity = warehousingProduct.quantity - quantity;
-
-//         warehousingProduct.quantity = updatedQuantity;
-//         await warehousingProduct.save();
-//       } else {
-//         console.log(`Product with ID ${productId} not found in the warehouse.`);
-//       }
-//     }
-
-//     await Cart.deleteMany({ userId });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Order placed successfully!",
-//       retObj: newOrder,
-//     });
-//   } catch (error) {
-//     console.error("Error during order creation:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "An error occurred during order creation.",
-//       backendError: error.message,
-//     });
-//   }
-// });
-
 const createOrder = asyncHandler(async (req, res) => {
   try {
     const { userId, productItems, shippingAddress, total_price } = req.body;
 
-    // Step 1: Create the new order
     const newOrder = await new Order({
       userId,
       productItems,
@@ -91,10 +47,13 @@ const createOrder = asyncHandler(async (req, res) => {
 const getOrdersByUser = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
-    const userOrders = await Order.find({ userId: userId }).populate({
-      path: "productItems.productId",
-      select: "productName thumb",
-    });
+    const userOrders = await Order.find({ userId: userId })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "productItems.productId",
+        select: "productName thumb",
+      });
+
     res.status(200).json({ success: true, retObj: userOrders });
   } catch (error) {
     const errors = { backendError: String };
@@ -193,62 +152,11 @@ const cancelOrder = async (req, res) => {
   }
 };
 
-// const cancelOrder = async (req, res) => {
-//   try {
-//     const orderId = req.params.orderId;
-
-//     const order = await Order.findById(orderId);
-
-//     if (!order) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Order not found." });
-//     }
-
-//     if (order.status !== "pending") {
-//       return res.status(400).json({
-//         success: false,
-//         message:
-//           "Cannot cancel the order. Only orders in 'pending' status can be canceled.",
-//       });
-//     }
-
-//     for (const item of order.productItems) {
-//       const { productId, quantity } = item;
-//       const warehousingProduct = await Warehousing.findOne({ productId });
-
-//       if (warehousingProduct) {
-//         const updatedQuantity = warehousingProduct.quantity + quantity;
-
-//         warehousingProduct.quantity = updatedQuantity;
-//         await warehousingProduct.save();
-//       } else {
-//         console.log(`Product with ID ${productId} not found in the warehouse.`);
-//       }
-//     }
-
-//     order.status = "canceled";
-//     await order.save();
-
-//     await Order.findByIdAndRemove(orderId);
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Order canceled and deleted successfully!",
-//     });
-//   } catch (error) {
-//     console.error("Error while canceling order:", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "An error occurred while canceling the order.",
-//       error: error.message,
-//     });
-//   }
-// };
-
 const getOrders = asyncHandler(async (req, res) => {
   try {
-    const orders = await Order.find().populate("userId");
+    const orders = await Order.find()
+      .sort({ createdAt: -1 })
+      .populate("userId");
     res.status(200).json({
       success: true,
       message: "Show all orders successfully",
@@ -259,6 +167,43 @@ const getOrders = asyncHandler(async (req, res) => {
   }
 });
 
+// biểu đồ thống kê doanh thu theo tháng
+
+const Income = asyncHandler(async (req, res) => {
+  const productId = req.query.pid;
+
+  try {
+    const income = await Order.aggregate([
+      {
+        $match: {
+          ...(productId && {
+            "productItems.productId": productId,
+          }),
+        },
+      },
+      {
+        $project: {
+          month: { $month: "$createdAt" },
+          year: { $year: "$createdAt" },
+          sales: "$total_price",
+        },
+      },
+      {
+        $group: {
+          _id: { month: "$month", year: "$year" },
+          total: { $sum: "$sales" },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+    ]);
+    res.status(200).json(income);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = {
   createOrder,
   getOrdersByUser,
@@ -266,4 +211,5 @@ module.exports = {
   updateOrderStatus,
   cancelOrder,
   getOrders,
+  Income,
 };

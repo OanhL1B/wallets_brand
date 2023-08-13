@@ -11,3 +11,5 @@ export const CANCELED = "CANCELED";
 export const DELETE_CART = "DELETE_CART";
 export const QUEN_MAT_KHAU = "QUEN_MAT_KHAU";
 export const RESET_PASSWORD = "RESET_PASSWORD";
+export const GET_CURRENT_USER = "GET_CURRENT_USER";
+export const UPDATE_USER = "UPDATE_USER";

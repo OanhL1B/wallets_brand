@@ -112,7 +112,7 @@ const Cart = () => {
                       </div>
                       <button
                         className="text-red-500"
-                        onClick={() => handleDelete(item._id)}
+                        onClick={() => handleDelete(item.cartId)}
                       >
                         Xóa
                       </button>

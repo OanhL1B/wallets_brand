@@ -6,6 +6,7 @@ import {
   CANCELED,
   DELETE_CART,
   GET_CART_USER,
+  GET_CURRENT_USER,
   GET_ORDER_USER,
   INCREASE_CART_ITEM_QUANTITY,
   LOGIN,
@@ -14,18 +15,39 @@ import {
   SET_ERRORS,
   UPDATE_CART,
   UPDATE_CART_ITEM_QUANTITY,
+  UPDATE_USER,
 } from "../actionTypes";
 import * as api from "../api/customerapi";
 
+// export const userLogin = (formData, navigate) => async (dispatch) => {
+//   try {
+//     const { data } = await api.userLogin(formData);
+//     if (data.success === true) {
+//       dispatch({ type: LOGIN, data: data });
+//       toast.success("Đăng nhập thành công!");
+//       navigate("/");
+//     } else {
+//       toast.error("email hoặc mật khẩu hoặc mật khẩu chưa đúng!");
+//     }
+//   } catch (error) {
+//     dispatch({ type: SET_ERRORS, payload: error.response.data });
+//   }
+// };
 export const userLogin = (formData, navigate) => async (dispatch) => {
   try {
     const { data } = await api.userLogin(formData);
     if (data.success === true) {
-      dispatch({ type: LOGIN, data: data });
-      toast.success("Đăng nhập thành công!");
-      navigate("/");
+      if (data.userData.isBlocked) {
+        toast.error(
+          "Tài khoản của bạn đã bị block. Vui lòng liên hệ quản trị viên."
+        );
+      } else {
+        dispatch({ type: LOGIN, data: data });
+        toast.success("Đăng nhập thành công!");
+        navigate("/");
+      }
     } else {
-      toast.error("email hoặc mật khẩu hoặc mật khẩu chưa đúng!");
+      toast.error("Email hoặc mật khẩu không đúng!");
     }
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
@@ -199,6 +221,7 @@ export const quenMatKhau = (email) => async (dispatch) => {
   try {
     const { data } = await api.quenMatKhau(email);
     if (data.success === true) {
+      toast.success("Đã gởi mail thành công!");
       dispatch({ type: QUEN_MAT_KHAU, payload: true });
     }
   } catch (error) {
@@ -212,6 +235,30 @@ export const Resetpassword = (dataBody, pass) => async (dispatch) => {
     if (data.success === true) {
       dispatch({ type: RESET_PASSWORD, payload: true });
       toast.success("Đặt lại mật khẩu thành công!");
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getCurrentUser = () => async (dispatch) => {
+  try {
+    const { data } = await api.getCurrentUser();
+    dispatch({ type: GET_CURRENT_USER, payload: data.retObj });
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const updateUser = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updateUser(formData);
+    if (data.success === true) {
+      toast.success("Cập nhật thông tin thành công!");
+      dispatch({ type: UPDATE_USER, payload: true });
+    } else {
+      toast.error("Chỉnh sửa thông tin thất bại!");
+      dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });

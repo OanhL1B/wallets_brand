@@ -9,12 +9,10 @@ const Body = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const [error, setError] = useState({});
-  console.log("error", error);
   const [value, setValue] = useState({
     email: "",
   });
 
-  console.log("value", value);
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
@@ -50,7 +48,8 @@ const Body = () => {
       <div className="space-y-3">
         <div className="flex flex-col">
           <h1 className="mt-5 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
-            Quên mật khẩu
+            Hãy nhập email của bạn, chúng tôi sẽ gởi link đổi mật khẩu vào email
+            của bạn!
           </h1>
         </div>
         <div className="flex flex-col bg-white rounded-xl">
@@ -71,7 +70,7 @@ const Body = () => {
             </div>
             <div className="flex items-center justify-center mt-10 space-x-6">
               <button className={classes.adminFormSubmitButton} type="submit">
-                Gởi
+                Gửi
               </button>
               <Link to="/login">
                 <button

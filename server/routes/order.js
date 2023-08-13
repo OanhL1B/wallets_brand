@@ -9,6 +9,7 @@ const {
 
 router.post("/", [verifyAccessToken], ctrls.createOrder);
 router.get("/", [verifyAccessToken, isAdminOrEmployee], ctrls.getOrders);
+router.get("/income", [verifyAccessToken, isAdminOrEmployee], ctrls.Income);
 
 router.get("/user/:userId", verifyAccessToken, ctrls.getOrdersByUser);
 router.get("/:orderId", ctrls.getOrderById);

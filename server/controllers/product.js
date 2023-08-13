@@ -79,7 +79,6 @@ const getProduct = asyncHandler(async (req, res) => {
   try {
     const { pid } = req.params;
 
-    // Tìm bảng giá mới nhất ở quá khứ
     const activePricelist = await Pricelist.findOne({
       isActive: true,
       applyDate: { $lte: new Date() },
@@ -99,7 +98,6 @@ const getProduct = asyncHandler(async (req, res) => {
 
     const warehouseEntry = await Warehousing.findOne({ productId: pid });
 
-    // Lấy giá sản phẩm từ bảng giá mới nhất ở quá khứ
     const priceEntry = await ProductPrice.findOne({
       productId: pid,
       pricelistId: activePricelist._id,

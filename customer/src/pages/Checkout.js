@@ -83,7 +83,9 @@ const Checkout = () => {
   return (
     <>
       <Header />
-      <div className="mx-auto">Thông tin giao hàng</div>
+      <div className="text-xl font-semibold text-center">
+        Thông tin giao hàng
+      </div>
 
       <div className="items-center justify-center w-full m-10 mx-auto">
         <form

@@ -111,7 +111,7 @@ const Body = () => {
                 style={{ width: "130px", textAlign: "left" }}
               >
                 <span className="font-sans">Họ và tên</span>
-                <span className="font-sans">email</span>
+                <span className="font-sans">Email</span>
                 <span className="font-sans">Số điện thoại</span>
                 <span className="font-sans">Địa chỉ</span>
               </div>

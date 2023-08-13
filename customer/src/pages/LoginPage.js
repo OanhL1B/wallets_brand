@@ -122,12 +122,16 @@ const LoginPage = () => {
             </Link>
           </div>
 
-          <button
-            type="submit"
-            className="flex items-center justify-center p-4 text-base font-semibold rounded-xl min-h-[56px] bg-secondary text-white  w-full"
-          >
-            Đăng nhập
-          </button>
+          {!error.message ||
+          error.message !==
+            "Tài khoản của bạn đã bị block. Vui lòng liên hệ quản trị viên." ? (
+            <button
+              type="submit"
+              className="flex items-center justify-center p-4 text-base font-semibold rounded-xl min-h-[56px] bg-secondary text-white w-full"
+            >
+              Đăng nhập
+            </button>
+          ) : null}
 
           {loading && (
             <Spinner

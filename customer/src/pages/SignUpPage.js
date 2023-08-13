@@ -13,7 +13,7 @@ const SignUpPage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [adress, setAdress] = useState("");
+  const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -38,7 +38,7 @@ const SignUpPage = () => {
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,
-        adress: adress,
+        address: address,
       })
     );
   };
@@ -47,7 +47,7 @@ const SignUpPage = () => {
       setLoading(false);
       setEmail("");
       setPassword("");
-      setAdress("");
+      setAddress("");
       setEmail("");
       setError("");
       setFirstName("");
@@ -60,7 +60,7 @@ const SignUpPage = () => {
     if (store.errors || store.customer.userAdded) {
       setLoading(false);
       if (store.customer.userAdded) {
-        setAdress("");
+        setAddress("");
         setEmail("");
         setError("");
         setFirstName("");
@@ -209,8 +209,8 @@ const SignUpPage = () => {
             </label>
             <div className="flex items-center w-full bg-white rounded-lg ">
               <input
-                onChange={(e) => setAdress(e.target.value)}
-                value={adress}
+                onChange={(e) => setAddress(e.target.value)}
+                value={address}
                 name="adress"
                 type="text"
                 required
@@ -223,7 +223,7 @@ const SignUpPage = () => {
             type="submit"
             className="flex items-center justify-center p-4 text-base font-semibold rounded-xl min-h-[56px] bg-secondary text-white w-full"
           >
-            Create my account
+            Đăng ký tài khoản
           </button>
           {loading && (
             <Spinner

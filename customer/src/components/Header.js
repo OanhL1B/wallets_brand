@@ -1,12 +1,24 @@
 import SearchIcon from "@mui/icons-material/Search";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Badge from "@mui/material/Badge";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartUser } from "../redux/actions";
-const Header = () => {
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
+import axios from "axios";
+const Header = ({ onCategoryFilter }) => {
+  const handleCategoryClick = (event) => {
+    const categoryId = event.target.getAttribute("data-categoryid");
+    if (categoryId === "all") {
+      onCategoryFilter(null);
+    } else {
+      onCategoryFilter(categoryId);
+    }
+  };
+
   const user = JSON.parse(localStorage.getItem("user"));
   const quantity = useSelector((state) => state.customer?.userCarts);
 
@@ -33,13 +45,43 @@ const Header = () => {
     });
   };
 
+  // phục vụ phần lọc
+  const [productfilters, setProductFilters] = useState([]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/product");
+        setProductFilters(res.data.retObj);
+      } catch (err) {}
+    };
+    getProducts();
+  }, []);
+
+  const activeProductFilters = productfilters.filter((item) => item?.isActive);
+  // handle search
+  const [filteredList, setFilteredList] = new useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const filterBySearch = (event) => {
+    const query = event.target.value;
+    setSearchValue(query);
+    var updatedList = [...activeProductFilters];
+    updatedList = updatedList.filter((item) => {
+      return (
+        item?.productName?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+    });
+    setFilteredList(updatedList);
+  };
   return (
     <div>
       <div className="w-full h-[50px] bg-[#F5F5F5] text-[#666666] font-normal text-base fixed top-0 z-50 ">
         <div className="container flex items-center justify-between h-[40px] mx-auto px-36 pt-2">
-          <div>
-            <p className="text-[#000]">Camelia Brand ®</p>
-          </div>
+          <Link to="/">
+            <div>
+              <p className="text-[#000]">Camelia Brand ®</p>
+            </div>
+          </Link>
           <div className="flex items-center gap-x-3">
             <div className="flex items-center text-black gap-x-1">
               <img
@@ -47,6 +89,7 @@ const Header = () => {
                 alt=""
                 className="w-3 h-3"
               />
+
               <span>0961319365</span>
             </div>
             <div className="flex items-center text-black gap-x-1">
@@ -57,14 +100,49 @@ const Header = () => {
               />
               <span>thecameliavn@gmail.com</span>
             </div>
-            <div className="flex items-center px-2 py-1 space-x-2 bg-white border border-gray-300 rounded">
-              <input
-                className="w-20 text-base bg-transparent border-none outline-none md:w-40"
-                type="text"
-                placeholder="Nhập tên sản phẩm..."
-              />
-              <SearchIcon className="text-gray-500" style={{ fontSize: 20 }} />
+
+            <div className="relative">
+              <div className="flex items-center px-2 py-1 space-x-2 bg-white border border-gray-300 rounded">
+                <input
+                  className="w-20 text-base bg-transparent border-none outline-none md:w-40"
+                  type="text"
+                  placeholder="Nhập tên sản phẩm..."
+                  onChange={filterBySearch}
+                />
+                <SearchIcon
+                  className="text-gray-500"
+                  style={{ fontSize: 20 }}
+                />
+              </div>
+
+              {searchValue && (
+                <div className="absolute left-0  bg-white border border-gray-300 rounded shadow top-10 w-[300px]">
+                  <div className="flex flex-wrap p-4">
+                    {filteredList.map((product) => (
+                      <Link to={`/product/${product._id}`}>
+                        <div
+                          key={product._id}
+                          className="flex items-center p-2"
+                        >
+                          <img
+                            src={product.thumb}
+                            alt={product.productName}
+                            className="w-20 h-auto"
+                          />
+                          <div className="flex flex-col ml-2">
+                            <div className="font-medium text-center">
+                              {product.productName}
+                            </div>
+                            <div className="text-center">{product.price}đ</div>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+
             <div className="flex items-center space-x-4">
               {user ? (
                 <div onClick={logout}>Đăng xuất</div>
@@ -98,17 +176,26 @@ const Header = () => {
                   )}
                 </div>
               </Link>
-              <Link
-                to="/user-order"
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Đơn hàng
-              </Link>
+              {user && (
+                <Link
+                  to="/user-order"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Đơn hàng
+                </Link>
+              )}
             </div>
             {user && (
-              <span className="text-xl font-semibold">
-                {user?.userData?.lastName} {user?.userData?.firstName}{" "}
-              </span>
+              <div className="flex gap-x-2">
+                <span className="text-xl font-semibold">
+                  {user?.userData?.lastName} {user?.userData?.firstName}{" "}
+                </span>
+                <Link to={"/profile"}>
+                  <div className="items-center">
+                    <AccountCircleIcon />
+                  </div>
+                </Link>
+              </div>
             )}
           </div>
         </div>
@@ -147,6 +234,8 @@ const Header = () => {
             alt=""
             height={60}
             width={60}
+            data-categoryid="64d7510e56bba7acf5012948"
+            onClick={(e) => handleCategoryClick(e)}
           />
         </div>
         <div className="flex px-10 border-l-2">
@@ -155,6 +244,8 @@ const Header = () => {
             alt=""
             width={86}
             height={60}
+            data-categoryid="64d7511356bba7acf501294b"
+            onClick={(e) => handleCategoryClick(e)}
           />
         </div>
         <div className="flex px-10 border-l-2 border-r-2">
@@ -163,6 +254,8 @@ const Header = () => {
             alt=""
             width={79}
             height={60}
+            data-categoryid="64d7511856bba7acf501294e"
+            onClick={(e) => handleCategoryClick(e)}
           />
         </div>
         <div className="flex px-10">
@@ -171,6 +264,8 @@ const Header = () => {
             alt=""
             width={120}
             height={60}
+            data-categoryid="64d7511d56bba7acf5012951"
+            onClick={(e) => handleCategoryClick(e)}
           />
         </div>
       </div>

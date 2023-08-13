@@ -38,10 +38,6 @@ var productSchema = new mongoose.Schema(
       lowercase: true,
     },
 
-    sold: {
-      type: Number,
-      default: 0,
-    },
     isActive: {
       type: Boolean,
       default: true,

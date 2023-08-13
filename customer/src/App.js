@@ -10,18 +10,16 @@ import UserOrder from "./pages/UserOrder";
 import SuccessPage from "./pages/SuccessPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import ProfilePage from "./pages/ProfilePage";
 function App() {
   return (
     <Routes>
       <Route exact path="/" element={<Home />} />
-      {/* <Route path="/products/:category"><ProductList /></Route> */}
       <Route path="/product/:productId" element={<ProductDetail />}></Route>
       <Route path="/cart" element={<Cart />}></Route>
       <Route path="/checkout" element={<Checkout />}></Route>
       <Route path="/user-order" element={<UserOrder />}></Route>
-
       <Route path="/success" element={<SuccessPage />}></Route>
-      {/* <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route> */}
       <Route path="/login" element={<LoginPage />}></Route>
       <Route path="/sign-up" element={<SignUpPage />}></Route>
       <Route path="/forgot-password" element={<ForgotPassword />}></Route>
@@ -29,10 +27,7 @@ function App() {
         path="/forgot-password/api/user/reset-password/:token"
         element={<ResetPassword />}
       ></Route>
-
-      {/* <Route path="/register">
-        {user ? <Redirect to="/" /> : <Register />}
-      </Route> */}
+      <Route path="/profile" element={<ProfilePage />}></Route>
     </Routes>
   );
 }

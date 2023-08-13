@@ -21,3 +21,8 @@ export const quenMatKhau = (email) =>
 
 export const Resetpassword = (pass, dataBody) =>
   APIPUBLIC.put(`api/user/resetpassword?password=${pass}`, dataBody);
+
+// users
+export const updateUser = (updateUser) =>
+  APIV1.put("/api/user/current", updateUser);
+export const getCurrentUser = () => APIV1.get("/api/user/current");

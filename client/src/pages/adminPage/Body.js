@@ -5,6 +5,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import React from "react";
 import CategoryIcon from "@mui/icons-material/Category";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import Income from "../../components/Income";
 
 const Body = () => {
   const products = useSelector((state) => state.admin.allProduct);
@@ -95,6 +96,7 @@ const Body = () => {
           </div>
         </div>
       </div>
+      <Income />
     </div>
   );
 };

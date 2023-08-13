@@ -37,9 +37,9 @@ const Body = () => {
   const store = useSelector((state) => state);
   const products = useSelector((state) => state.admin.allProduct);
   const categories = useSelector((state) => state.admin.allCategory);
-  products.sort(
-    (a, b) => a.productName.charCodeAt(0) - b.productName.charCodeAt(0)
-  );
+  // products.sort(
+  //   (a, b) => a.productName.charCodeAt(0) - b.productName.charCodeAt(0)
+  // );
   const initialProducts = products;
   const [selectedProduct, setSelectedProduct] = useState("");
   const [error, setError] = useState({});
@@ -274,7 +274,6 @@ const Body = () => {
                   <th className="px-4 py-1">STT</th>
                   <th className="px-4 py-1 text-left">Tên sản phẩm</th>
                   <th className="px-4 py-1 text-right">Giá</th>
-                  <th className="px-4 py-1">Đã bán</th>
                   <th className="px-4 py-1 text-right">Số lượng</th>
                   <th className="px-4 py-1 text-left">Trạng thái</th>
                   <th className="px-4 py-1">Hành cộng</th>
@@ -294,9 +293,7 @@ const Body = () => {
                     <td className="px-4 py-1 text-right border">
                       {product.price}
                     </td>
-                    <td className="px-4 py-1 text-center border">
-                      {product.sold}
-                    </td>
+
                     <td className="px-4 py-1 text-right border">
                       {product.quantity}
                     </td>
@@ -351,7 +348,6 @@ const Body = () => {
                   <th className="px-4 py-1">STT</th>
                   <th className="px-4 py-1 text-left">Tên sản phẩm</th>
                   <th className="px-4 py-1 text-right">Giá</th>
-                  <th className="px-4 py-1">Đã bán</th>
                   <th className="px-4 py-1 text-right">Số lượng</th>
                   <th className="px-4 py-1 text-left">Trạng thái</th>
                   <th className="px-4 py-1">Hành cộng</th>
@@ -371,9 +367,7 @@ const Body = () => {
                     <td className="px-4 py-1 text-right border">
                       {product.price}
                     </td>
-                    <td className="px-4 py-1 text-center border">
-                      {product.sold}
-                    </td>
+
                     <td className="px-4 py-1 text-right border">
                       {product.quantity}
                     </td>
@@ -460,7 +454,7 @@ const Body = () => {
                     placeholder={selectedProduct?.category?.categoryName}
                     sx={{ height: 36 }}
                     inputProps={{ "aria-label": "Without label" }}
-                    value={value.category}
+                    value={value.category || selectedProduct?.category?._id}
                     onChange={(e) =>
                       setValue({ ...value, category: e.target.value })
                     }
