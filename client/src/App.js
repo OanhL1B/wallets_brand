@@ -15,6 +15,8 @@ import User from "./pages/adminPage/user/User";
 import Order from "./pages/adminPage/order/Order";
 import OrderView from "./pages/adminPage/orderview/OrderView";
 import Inventory from "./pages/adminPage/inventory/Inventory";
+import UpdatePassWord from "./pages/adminPage/change-password/UpdatePassWord";
+
 function App() {
   return (
     <Routes>
@@ -33,6 +35,7 @@ function App() {
       <Route path="/manage-orders" element={<Order />} />
       <Route path="/inventory" element={<Inventory />} />
       <Route path="/order/:id" element={<OrderView />} />
+      <Route path="/update-password" element={<UpdatePassWord />} />
     </Routes>
   );
 }

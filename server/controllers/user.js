@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
+const bcrypt = require("bcrypt");
+
 const {
   generateAccessToken,
   generateRefreshToken,
@@ -31,45 +33,10 @@ const register = asyncHandler(async (req, res) => {
 
 // Refresh token => Cấp mới access token
 // Access token => Xác thực người dùng, phân quyền người dùng
-// const login = asyncHandler(async (req, res) => {
-//   const { email, password } = req.body;
-//   if (!email || !password)
-//     return res.status(400).json({
-//       success: false,
-//       mes: "Missing inputs",
-//     });
 
-//   // plain object
-//   const response = await User.findOne({ email });
-//   if (response && (await response.isCorrectPassword(password))) {
-//     // Tách password và role ra khỏi response
-//     const { password, role, refreshToken, ...userData } = response.toObject();
-//     // Tạo access token
-//     const accessToken = generateAccessToken(response._id, role);
-//     // Tạo refresh token
-//     const newRefreshToken = generateRefreshToken(response._id);
-//     // Lưu refresh token vào database
-//     await User.findByIdAndUpdate(
-//       response._id,
-//       { refreshToken: newRefreshToken },
-//       { new: true }
-//     );
-//     // Lưu refresh token vào cookie
-//     res.cookie("refreshToken", newRefreshToken, {
-//       httpOnly: true,
-//       maxAge: 7 * 24 * 60 * 60 * 1000,
-//     });
-//     return res.status(200).json({
-//       success: true,
-//       accessToken,
-//       userData,
-//     });
-//   } else {
-//     throw new Error("Invalid credentials!");
-//   }
-// });
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  console.log("password", password);
   if (!email || !password) {
     return res.status(400).json({
       success: false,
@@ -80,6 +47,7 @@ const login = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (user && (await user.isCorrectPassword(password))) {
     const { password, role, refreshToken, ...userData } = user.toObject();
+    console.log("password", password);
     const accessToken = generateAccessToken(user._id, role);
     const newRefreshToken = generateRefreshToken(user._id);
 
@@ -170,11 +138,11 @@ const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.query;
   if (!email) throw new Error("Missing email");
   const user = await User.findOne({ email });
-  if (!user) throw new Error("User not found");
+  if (!user) throw new Error("Email này chưa được được ký tài khoản!");
   const resetToken = user.createPasswordChangedToken();
   await user.save();
 
-  const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. <a href='http://localhost:3000/forgot-password/api/user/reset-password/${resetToken}'>Click here</a>`;
+  const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 10 phút kể từ bây giờ. <a href='http://localhost:3000/forgot-password/api/user/reset-password/${resetToken}'>Click here</a>`;
 
   const data = {
     email,
@@ -187,7 +155,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
   });
 });
 
-// người dùng đổi mật khẩu
+// người dùng đổi mật khẩu cho tác vụ quên mật khẩu
 const resetPassword = asyncHandler(async (req, res) => {
   const { password, token } = req.body;
   if (!password || !token) throw new Error("Missing imputs ");
@@ -210,6 +178,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     mes: user ? "Updated password" : "Something went wrong",
   });
 });
+
 const getUsers = asyncHandler(async (req, res) => {
   const response = await User.find().select("-refreshToken -password");
   return res.status(200).json({
@@ -217,6 +186,7 @@ const getUsers = asyncHandler(async (req, res) => {
     retObj: response,
   });
 });
+
 const deleteUser = asyncHandler(async (req, res) => {
   const { _id } = req.query;
   if (!_id) throw new Error("Missing inputs");
@@ -228,8 +198,8 @@ const deleteUser = asyncHandler(async (req, res) => {
       : "No user delete",
   });
 });
+
 const updateUser = asyncHandler(async (req, res) => {
-  //
   const { _id } = req.user;
   if (!_id || Object.keys(req.body).length === 0)
     throw new Error("Missing inputs");
@@ -244,7 +214,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
 const updateUserByAdmin = asyncHandler(async (req, res) => {
   try {
-    const { userId } = req.body; // Lấy userId từ req.body
+    const { userId } = req.body;
     if (!userId) {
       throw new Error("Missing userId");
     }
@@ -266,6 +236,44 @@ const updateUserByAdmin = asyncHandler(async (req, res) => {
   }
 });
 
+const changePassword = asyncHandler(async (req, res) => {
+  const { userId, currentPassword, newPassword } = req.body;
+
+  if (!userId || !currentPassword || !newPassword) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing inputs",
+    });
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "Không có user này trong hệ thống",
+    });
+  }
+
+  if (!(await user.isCorrectPassword(currentPassword))) {
+    return res.status(401).json({
+      success: false,
+      message: "Mật khẩu hiện tại chưa đúng",
+    });
+  }
+
+  user.password = newPassword;
+  user.passwordChangedAt = Date.now();
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+
+  await user.save();
+
+  return res.status(200).json({
+    success: true,
+    message: "Đổi mật khẩu thành công",
+  });
+});
+
 module.exports = {
   register,
   login,
@@ -278,4 +286,5 @@ module.exports = {
   deleteUser,
   updateUser,
   updateUserByAdmin,
+  changePassword,
 };

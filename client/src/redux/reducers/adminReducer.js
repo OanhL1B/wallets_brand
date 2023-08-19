@@ -17,6 +17,7 @@ import {
   UPDATE_CATEGORY,
   UPDATE_INVENTORY,
   UPDATE_ORDER_STATUS,
+  UPDATE_PASSWORD,
   UPDATE_PRICELIST,
   UPDATE_PRODUCT,
   UPDATE_PRODUCT_PRICE,
@@ -32,6 +33,7 @@ const initialState = {
   updatedCategory: false,
   updatedUser: false,
   updatedCurrentUser: false,
+  updatePassworded: false,
 
   productpriceAdded: false,
   updatedProduct: false,
@@ -169,6 +171,11 @@ const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         productDeleted: action.payload,
+      };
+    case UPDATE_PASSWORD:
+      return {
+        ...state,
+        updatePassworded: action.payload,
       };
     default:
       return state;

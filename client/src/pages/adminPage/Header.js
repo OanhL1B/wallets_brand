@@ -2,15 +2,19 @@ import { Avatar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import React from "react";
+import React, { useEffect } from "react";
 import Swal from "sweetalert2";
+import { getCurrentUser } from "../../redux/actions/adminActions";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const authDataSelector = (state) => state.admin.authData;
-  const user = useSelector(authDataSelector);
-  console.log("uset", user?.userData?.email);
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
+  const user = useSelector((state) => state.admin.usercurrent);
 
   const logout = () => {
     Swal.fire({
@@ -34,8 +38,10 @@ const Header = () => {
     >
       <div className="flex items-center"></div>
       <div className="flex items-center mx-5 space-x-3">
-        <Avatar />
-        <h1>{user?.userData?.email}</h1>
+        <Avatar src={user?.image} />
+        <h1>
+          {user?.lastName} {user?.firstName}
+        </h1>
         <LogoutIcon
           onClick={logout}
           className="transition-all cursor-pointer hover:scale-125 "

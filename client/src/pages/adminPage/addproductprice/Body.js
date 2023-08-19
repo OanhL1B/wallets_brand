@@ -7,6 +7,8 @@ import Select from "@mui/material/Select";
 import Spinner from "../../../utils/Spinner";
 import { addProductPrice } from "../../../redux/actions/adminActions";
 import { Link } from "react-router-dom";
+import ReactSelect from "react-select";
+import makeAnimated from "react-select/animated";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -15,8 +17,7 @@ const Body = () => {
   const pricelists = useSelector((state) => state.admin.allPricelist);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
-  console.log("productpriceError");
-
+  const animatedComponents = makeAnimated();
   const [value, setValue] = useState({
     productId: "",
     pricelistId: "",
@@ -80,31 +81,41 @@ const Body = () => {
             <div className={classes.FormItem}>
               <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Chọn sản phẩm *:</h1>
-                <Select
-                  required
-                  displayEmpty
-                  sx={{ height: 36 }}
-                  inputProps={{ "aria-label": "Without label" }}
-                  value={value.productId}
-                  onChange={(e) =>
-                    setValue({ ...value, productId: e.target.value })
+
+                <ReactSelect
+                  components={animatedComponents}
+                  options={products.map((product) => ({
+                    value: product._id,
+                    label: product.productName,
+                  }))}
+                  value={
+                    value.productId
+                      ? {
+                          value: value.productId,
+                          label: products.find(
+                            (product) => product._id === value.productId
+                          ).productName,
+                        }
+                      : null
                   }
-                  className={`${classes.InputStyle} hover:focus:border-none `}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: 300,
-                      },
-                    },
+                  onChange={(selectedOption) =>
+                    setValue({
+                      ...value,
+                      productId: selectedOption ? selectedOption.value : "",
+                    })
+                  }
+                  styles={{
+                    menu: (provided) => ({
+                      ...provided,
+                      maxHeight: 300,
+                      overflowY: "auto",
+                    }),
                   }}
-                >
-                  <MenuItem value="">None</MenuItem>
-                  {products?.map((product, idx) => (
-                    <MenuItem key={idx} value={product._id}>
-                      {product.productName}
-                    </MenuItem>
-                  ))}
-                </Select>
+                  className={` hover:focus:border-none `}
+                  placeholder="Chọn sản phẩm *"
+                  isClearable
+                  isSearchable
+                />
               </div>
               <div className={`${classes.WrapInputLabel} `}>
                 <h1 className={classes.LabelStyle}>Chọn bảng giá *:</h1>
@@ -191,3 +202,30 @@ const Body = () => {
 };
 
 export default Body;
+{
+  /* <Select
+                  required
+                  displayEmpty
+                  sx={{ height: 36 }}
+                  inputProps={{ "aria-label": "Without label" }}
+                  value={value.productId}
+                  onChange={(e) =>
+                    setValue({ ...value, productId: e.target.value })
+                  }
+                  className={`${classes.InputStyle} hover:focus:border-none `}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 300,
+                      },
+                    },
+                  }}
+                >
+                  <MenuItem value="">None</MenuItem>
+                  {products?.map((product, idx) => (
+                    <MenuItem key={idx} value={product._id}>
+                      {product.productName}
+                    </MenuItem>
+                  ))}
+                </Select> */
+}

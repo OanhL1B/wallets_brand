@@ -82,12 +82,13 @@ const getOrderById = asyncHandler(async (req, res) => {
 
 const updateOrderStatus = asyncHandler(async (req, res) => {
   try {
-    const { orderId, status } = req.body;
+    const { orderId, status, Order_ReviewerId } = req.body;
     const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
     order.status = status;
+    order.Order_ReviewerId = Order_ReviewerId;
     await order.save();
 
     res.status(200).json({
@@ -156,7 +157,11 @@ const getOrders = asyncHandler(async (req, res) => {
   try {
     const orders = await Order.find()
       .sort({ createdAt: -1 })
-      .populate("userId");
+      .populate("userId")
+      .populate({
+        path: "Order_ReviewerId",
+        select: "lastName firstName",
+      });
     res.status(200).json({
       success: true,
       message: "Show all orders successfully",

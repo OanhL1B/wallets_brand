@@ -40,18 +40,19 @@ const Body = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (Object.keys(store.errors).length !== 0) {
+      setError(store.errors);
+      setValue({ ...value });
+    }
+  }, [store.errors]);
+
+  useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
   }, []);
-
-  useEffect(() => {
-    if (Object.keys(store.errors).length !== 0) {
-      setError(store.errors);
-    }
-  }, [store.errors]);
 
   // Begin-edit
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -95,14 +96,15 @@ const Body = () => {
 
   useEffect(() => {
     if (store.admin.updatedCategory) {
-      setError({});
       closeModal();
       dispatch(getCategories());
+      dispatch({ type: SET_ERRORS, payload: {} });
     }
   }, [dispatch, store.errors, store.admin.updatedCategory]);
 
   const handleModalError = () => {
     setError({});
+    dispatch({ type: SET_ERRORS, payload: {} });
     closeModal();
   };
   // End edit
@@ -126,10 +128,7 @@ const Body = () => {
   };
 
   useEffect(() => {
-    console.log("EHCKDJC");
     if (store.admin.categoryDeleted) {
-      console.log("vô nè");
-
       dispatch(getCategories());
       dispatch({ type: DELETE_CATEGORY, payload: false });
     } else {
@@ -143,7 +142,7 @@ const Body = () => {
         <Link to="/add-category" className="btn btn-primary">
           <button
             className="items-center gap-[9px]  w-[88px] h-[40px] hover:bg-[#04605E] block py-2 font-bold text-white rounded-lg px-4 
-           bg-[#157572] focus:outline-none focus:shadow-outline "
+            bg-[#157572] focus:outline-none focus:shadow-outline "
           >
             Thêm
           </button>
@@ -151,41 +150,43 @@ const Body = () => {
       </div>
       <div className="w-full my-8 mt-6">
         {categories?.length !== 0 && (
-          <table className="w-full table-auto ">
-            <thead className="bg-[#E1EEEE]">
-              <tr>
-                <th className="px-4 py-1 text-left">STT</th>
-                <th className="px-4 py-1 text-left">Tên danh mục</th>
-                <th className="px-4 py-1">Hành động</th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {categories?.map((cate, idx) => (
-                <tr className="justify-center hover:bg-[#EEF5F5]" key={idx}>
-                  <td className="px-4 py-1 border">{idx + 1}</td>
-                  <td className="px-4 py-1 border">{cate.categoryName}</td>
-
-                  <td
-                    className="items-center justify-center px-4 py-1 mr-0 border"
-                    style={{ display: "flex", justifyContent: "center" }}
-                  >
-                    <button
-                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base  mr-5"
-                      onClick={() => handleEditClick(cate)}
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      className="items-center gap-[9px]  block px-3.5 py-1 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded hover:bg-[#FD9999] focus:#FD9999 focus:shadow-outline"
-                      onClick={() => dltCategory(cate._id)}
-                    >
-                      Xóa
-                    </button>
-                  </td>
+          <div className="overflow-auto max-h-[530px]">
+            <table className="sticky top-0 w-full table-auto">
+              <thead className="bg-[#E1EEEE] ">
+                <tr>
+                  <th className="px-4 py-1 text-left">STT</th>
+                  <th className="px-4 py-1 text-left">Tên danh mục</th>
+                  <th className="px-4 py-1">Hành động</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="">
+                {categories?.map((cate, idx) => (
+                  <tr className="justify-center hover:bg-[#EEF5F5]" key={idx}>
+                    <td className="px-4 py-1 border">{idx + 1}</td>
+                    <td className="px-4 py-1 border">{cate.categoryName}</td>
+
+                    <td
+                      className="items-center justify-center px-4 py-1 mr-0 border"
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <button
+                        className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base  mr-5"
+                        onClick={() => handleEditClick(cate)}
+                      >
+                        Sửa
+                      </button>
+                      <button
+                        className="items-center gap-[9px]  block px-3.5 py-1 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded hover:bg-[#FD9999] focus:#FD9999 focus:shadow-outline"
+                        onClick={() => dltCategory(cate._id)}
+                      >
+                        Xóa
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
       {selectedCategory ? (
@@ -231,8 +232,8 @@ const Body = () => {
                 </button>
               </div>
               <div className="mt-5">
-                {error?.categoryError ? (
-                  <p className="text-red-500">{error?.categoryError}</p>
+                {store?.errors?.categoryError ? (
+                  <p className="text-red-500">{store?.errors?.categoryError}</p>
                 ) : null}
               </div>
             </form>

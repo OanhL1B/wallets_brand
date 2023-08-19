@@ -51,3 +51,7 @@ export const updateOrderStatus = (updateOrder) =>
 export const getWarehousing = () => APIV1.get("/api/warehousing");
 export const updateWarehousing = (updateWarehousing) =>
   APIV1.put("/api/warehousing", updateWarehousing);
+// changepassword
+// đổi mật khẩu
+export const updatePassword = (updatePassword) =>
+  APIV1.put("/api/user/changepassword", updatePassword);

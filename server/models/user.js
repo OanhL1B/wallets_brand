@@ -34,6 +34,9 @@ var userSchema = new mongoose.Schema(
     address: {
       type: String,
     },
+    image: {
+      type: String,
+    },
 
     isBlocked: {
       type: Boolean,
@@ -47,11 +50,9 @@ var userSchema = new mongoose.Schema(
       type: String,
     },
     passwordResetToken: {
-      // lưu token
       type: String,
     },
     passwordResetExpires: {
-      // thời gian có giá trị còn hạn của token ở trên khoảng 5 hay 10 phút gì đấy
       type: String,
     },
   },
@@ -70,7 +71,6 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods = {
-  // check trùng password
   isCorrectPassword: async function (password) {
     return await bcrypt.compare(password, this.password);
   },
@@ -81,7 +81,7 @@ userSchema.methods = {
       .createHash("sha256")
       .update(resetToken)
       .digest("hex");
-    this.passwordResetExpires = Date.now() + 15 * 60 * 1000;
+    this.passwordResetExpires = Date.now() + 4 * 60 * 1000;
     return resetToken;
   },
 };

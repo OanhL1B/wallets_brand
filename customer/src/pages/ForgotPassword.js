@@ -48,8 +48,8 @@ const Body = () => {
       <div className="space-y-3">
         <div className="flex flex-col">
           <h1 className="mt-5 bg-text4 bg-opacity-5 rounded-xl font-bold text-[25px] inline-block ">
-            Hãy nhập email của bạn, chúng tôi sẽ gởi link đổi mật khẩu vào email
-            của bạn!
+            Hãy nhập email đã đăng ký tài khoản của bạn, chúng tôi sẽ gởi link
+            đổi mật khẩu vào email của bạn!
           </h1>
         </div>
         <div className="flex flex-col bg-white rounded-xl">
@@ -83,7 +83,7 @@ const Body = () => {
                   className={classes.adminFormClearButton}
                   type="button"
                 >
-                  Trang Chủ
+                  Trang chủ
                 </button>
               </Link>
             </div>

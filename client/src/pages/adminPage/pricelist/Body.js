@@ -124,56 +124,60 @@ const Body = () => {
       </Link>
       <div className="w-full my-8 mt-6">
         {pricelists?.length !== 0 && (
-          <table className="w-full table-auto ">
-            <thead className="bg-[#E1EEEE] items-center">
-              <tr>
-                <th className="px-4 py-1">STT</th>
-                <th className="px-4 py-1">Tên bảng giá</th>
-                <th className="px-4 py-1">Ngày áp dụng</th>
-                <th className="px-4 py-1">Trạng thái</th>
-                <th className="px-4 py-1">Hành động</th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {pricelists?.map((pricelist, idx) => (
-                <tr
-                  className="justify-center item-center hover:bg-[#EEF5F5]"
-                  key={idx}
-                >
-                  <td className="px-4 py-1 text-center border ">{idx + 1}</td>
-
-                  <td className="px-4 py-1 text-center border">
-                    {pricelist.pricelistName}
-                  </td>
-                  <td className="px-4 py-2 text-center border">
-                    {new Date(pricelist.applyDate).toLocaleDateString("en-GB")}
-                  </td>
-                  {pricelist.isActive === true && (
-                    <td className="px-4 py-2 text-center border">
-                      Đang áp dụng
-                    </td>
-                  )}
-                  {pricelist.isActive === false && (
-                    <td className="px-4 py-2 text-center border">
-                      Ngừng áp dụng
-                    </td>
-                  )}
-
-                  <td
-                    className="items-center justify-center px-4 py-1 mr-0 border"
-                    style={{ display: "flex", justifyContent: "center" }}
-                  >
-                    <button
-                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
-                      onClick={() => handleEditClick(pricelist)}
-                    >
-                      Sửa
-                    </button>
-                  </td>
+          <div className="overflow-auto max-h-[530px]">
+            <table className="w-full table-auto ">
+              <thead className="bg-[#E1EEEE] items-center sticky top-0">
+                <tr>
+                  <th className="px-4 py-1">STT</th>
+                  <th className="px-4 py-1">Tên bảng giá</th>
+                  <th className="px-4 py-1">Ngày áp dụng</th>
+                  <th className="px-4 py-1">Trạng thái</th>
+                  <th className="px-4 py-1">Hành động</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="">
+                {pricelists?.map((pricelist, idx) => (
+                  <tr
+                    className="justify-center item-center hover:bg-[#EEF5F5]"
+                    key={idx}
+                  >
+                    <td className="px-4 py-1 text-center border ">{idx + 1}</td>
+
+                    <td className="px-4 py-1 text-center border">
+                      {pricelist.pricelistName}
+                    </td>
+                    <td className="px-4 py-2 text-center border">
+                      {new Date(pricelist.applyDate).toLocaleDateString(
+                        "en-GB"
+                      )}
+                    </td>
+                    {pricelist.isActive === true && (
+                      <td className="px-4 py-2 text-center border">
+                        Đang áp dụng
+                      </td>
+                    )}
+                    {pricelist.isActive === false && (
+                      <td className="px-4 py-2 text-center border">
+                        Ngừng áp dụng
+                      </td>
+                    )}
+
+                    <td
+                      className="items-center justify-center px-4 py-1 mr-0 border"
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <button
+                        className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
+                        onClick={() => handleEditClick(pricelist)}
+                      >
+                        Sửa
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
       {/* modal edit */}

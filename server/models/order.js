@@ -47,6 +47,10 @@ var orderSchema = new mongoose.Schema(
       type: String,
       default: "pending",
     },
+    Order_ReviewerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   {
     timestamps: true,

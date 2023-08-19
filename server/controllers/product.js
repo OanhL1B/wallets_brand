@@ -26,7 +26,6 @@ const createProduct = asyncHandler(async (req, res) => {
 
     const warehousingData = {
       productId: newProduct._id,
-      productName: newProduct.productName,
       quantity: req.body.quantity || 0,
     };
 
@@ -181,10 +180,49 @@ const getProducts = asyncHandler(async (req, res) => {
   }
 });
 
+// const updateProduct = asyncHandler(async (req, res) => {
+//   try {
+//     const errors = { productError: String };
+//     const { productId, title } = req.body;
+
+//     if (!productId) {
+//       errors.productError = "Thiếu thông tin productId";
+//       return res.status(400).json(errors);
+//     }
+
+//     const product = await Product.findById(productId);
+//     if (!product) {
+//       return res.status(400).json({ productError: "Sản phẩm không tồn tại" });
+//     }
+
+//     if (title) {
+//       req.body.slug = slugify(title);
+//     }
+
+//     const updatedProduct = await Product.findByIdAndUpdate(
+//       productId,
+//       req.body,
+//       {
+//         new: true,
+//       }
+//     );
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Cập nhật sản phẩm thành công",
+//       updatedProduct,
+//     });
+//   } catch (error) {
+//     const errors = { backendError: String };
+//     errors.backendError = error;
+//     res.status(500).json(errors);
+//   }
+// });
+
 const updateProduct = asyncHandler(async (req, res) => {
   try {
     const errors = { productError: String };
-    const { productId, title } = req.body;
+    const { productId, productName } = req.body;
 
     if (!productId) {
       errors.productError = "Thiếu thông tin productId";
@@ -196,8 +234,20 @@ const updateProduct = asyncHandler(async (req, res) => {
       return res.status(400).json({ productError: "Sản phẩm không tồn tại" });
     }
 
-    if (title) {
-      req.body.slug = slugify(title);
+    if (productName && productName !== product.productName) {
+      const existingProduct = await Product.findOne({
+        productName: productName,
+      });
+
+      if (existingProduct) {
+        return res
+          .status(400)
+          .json({ productError: "Tên sản phẩm này đã tồn tại" });
+      }
+    }
+
+    if (productName) {
+      req.body.slug = slugify(productName);
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -244,12 +294,14 @@ const deleteProduct = asyncHandler(async (req, res) => {
             "Không thể xóa sản phẩm đã có trong giỏ hàng hoặc đơn hàng",
         });
       }
-
+      await ProductPrice.deleteMany({ productId: productId });
       await Product.findByIdAndDelete(productId);
+      await Warehousing.findOneAndDelete({ productId: productId });
     }
 
     res.status(200).json({ success: true, message: "Xóa sản phẩm thành công" });
   } catch (error) {
+    console.log("error", error);
     const errors = { backendError: String };
     errors.backendError = error;
     res.status(500).json(errors);

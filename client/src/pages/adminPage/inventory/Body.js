@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  getCurrentUser,
   getWarehousing,
   updateWarehousing,
 } from "../../../redux/actions/adminActions";
@@ -24,6 +25,7 @@ const modalStyles = {
 const Body = () => {
   const store = useSelector((state) => state);
   const inventorys = useSelector((state) => state.admin.allInventory);
+  console.log("inventorys", inventorys);
   const initialInventorys = inventorys;
   const [selectedInventory, setSelectedInventory] = useState("");
   const [error, setError] = useState({});
@@ -45,17 +47,25 @@ const Body = () => {
   }, [store.errors]);
 
   // Begin-edit
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
+  const user = useSelector((state) => state.admin.usercurrent);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [value, setValue] = useState({
     categoryName: "",
     categoryId: "",
+    userId: "",
   });
   const handleEditClick = (inventory) => {
     setSelectedInventory(inventory);
     setIsModalOpen(true);
     setValue({
-      quantity: "",
+      quantity: inventory.quantity,
       productId: inventory?.productId,
+      userId: user?._id,
     });
   };
 
@@ -79,7 +89,11 @@ const Body = () => {
     } else {
       updatedValue.quantity = selectedInventory.quantity;
     }
-
+    if (value.userId !== "") {
+      updatedValue.userId = value.userId;
+    } else {
+      updatedValue.userId = selectedInventory.userId;
+    }
     dispatch(updateWarehousing({ ...selectedInventory, ...updatedValue }));
     dispatch({ type: UPDATE_INVENTORY, payload: false });
   };
@@ -131,6 +145,7 @@ const Body = () => {
                   <th className="px-4 py-1 text-center">STT</th>
                   <th className="px-4 py-1 text-left">Sản phẩm</th>
                   <th className="px-4 py-1 text-right">Số lượng</th>
+                  <th className="px-4 py-1 text-right">Người cập nhật</th>
                   <th className="px-4 py-1">Hành động</th>
                 </tr>
               </thead>
@@ -142,12 +157,15 @@ const Body = () => {
                   >
                     <td className="px-4 py-1 text-center border">{idx + 1}</td>
                     <td className="px-4 py-1 border">
-                      {inventory.productName}
+                      {inventory?.productId?.productName}
                     </td>
                     <td className="px-4 py-1 text-right border">
                       {inventory.quantity}
                     </td>
-
+                    <td className="px-4 py-1 text-right border">
+                      {inventory?.userId?.lastName}{" "}
+                      {inventory?.userId?.firstName}
+                    </td>
                     <td
                       className="items-center justify-center px-4 py-1 mr-0 border"
                       style={{ display: "flex", justifyContent: "center" }}
@@ -172,6 +190,8 @@ const Body = () => {
                   <th className="px-4 py-1 text-center">STT</th>
                   <th className="px-4 py-1 text-left">Sản phẩm</th>
                   <th className="px-4 py-1 text-right">Số lượng</th>
+                  <th className="px-4 py-1 text-left">Người cập nhật</th>
+
                   <th className="px-4 py-1">Hành động</th>
                 </tr>
               </thead>
@@ -183,10 +203,14 @@ const Body = () => {
                   >
                     <td className="px-4 py-1 text-center border">{idx + 1}</td>
                     <td className="px-4 py-1 border">
-                      {inventory.productName}
+                      {inventory?.productId?.productName}
                     </td>
                     <td className="px-4 py-1 text-right border">
                       {inventory.quantity}
+                    </td>
+                    <td className="px-4 py-1 text-left border">
+                      {inventory?.userId?.lastName}{" "}
+                      {inventory?.userId?.firstName}
                     </td>
 
                     <td
@@ -224,7 +248,7 @@ const Body = () => {
                 <div className={classes.WrapInputLabel}>
                   <h1 className={classes.LabelStyle}>Tên sản phẩm :</h1>
                   <input
-                    placeholder={selectedInventory?.productName}
+                    placeholder={selectedInventory?.productId?.productName}
                     className={classes.InputStyle}
                     type="text"
                     value={value.categoryName}
@@ -237,7 +261,7 @@ const Body = () => {
                     placeholder={selectedInventory?.quantity}
                     className={classes.InputStyle}
                     type="text"
-                    value={value.quantity || selectedInventory?.quantity}
+                    value={value.quantity}
                     onChange={(e) =>
                       setValue({
                         ...value,

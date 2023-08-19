@@ -37,11 +37,9 @@ const Body = () => {
   const store = useSelector((state) => state);
   const products = useSelector((state) => state.admin.allProduct);
   const categories = useSelector((state) => state.admin.allCategory);
-  // products.sort(
-  //   (a, b) => a.productName.charCodeAt(0) - b.productName.charCodeAt(0)
-  // );
+
   const initialProducts = products;
-  const [selectedProduct, setSelectedProduct] = useState("");
+
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();
@@ -60,7 +58,7 @@ const Body = () => {
   }, [store.errors]);
 
   // Begin-edit
-
+  const [selectedProduct, setSelectedProduct] = useState("");
   const modules = useMemo(
     () => ({
       toolbar: [
@@ -105,22 +103,22 @@ const Body = () => {
     productId: "",
     isActive: "",
   });
+  console.log("value".value);
 
-  console.log("value", value);
   const handleEditClick = (pod) => {
     setModalMode("edit");
     setSelectedProduct(pod);
     setIsModalOpen(true);
     setValue({
-      productName: "",
+      productName: pod.productName,
       category: "",
-      material: "",
-      size: "",
-      design: "",
+      material: pod.material,
+      size: pod.size,
+      design: pod.design,
       images: [],
-      thumb: "",
+      thumb: pod.thumb,
       productId: pod._id,
-      isActive: "",
+      isActive: pod.isActive,
     });
   };
   const openModal = () => {
@@ -163,7 +161,7 @@ const Body = () => {
       updatedValue.design = selectedProduct.design;
     }
 
-    if (value.images !== "") {
+    if (value.images.length > 0) {
       updatedValue.images = value.images;
     } else {
       updatedValue.images = selectedProduct.images;
@@ -193,6 +191,7 @@ const Body = () => {
 
   const handleModalError = () => {
     setError({});
+    dispatch({ type: SET_ERRORS, payload: {} });
     closeModal();
   };
   // End edit
@@ -436,7 +435,7 @@ const Body = () => {
                     placeholder={selectedProduct?.productName}
                     className={classes.InputStyle}
                     type="text"
-                    value={value.productName || selectedProduct?.productName}
+                    value={value.productName}
                     onChange={(e) =>
                       setValue({
                         ...value,
@@ -479,7 +478,7 @@ const Body = () => {
                     required
                     className={classes.InputStyle}
                     type="text"
-                    value={value.material || selectedProduct.material}
+                    value={value.material}
                     onChange={(e) =>
                       setValue({ ...value, material: e.target.value })
                     }
@@ -493,7 +492,7 @@ const Body = () => {
                     required
                     className={classes.InputStyle}
                     type="text"
-                    value={value.size || selectedProduct.size}
+                    value={value.size}
                     onChange={(e) =>
                       setValue({ ...value, size: e.target.value })
                     }
@@ -507,7 +506,7 @@ const Body = () => {
                     required
                     className={classes.InputStyle}
                     type="text"
-                    value={value.design || selectedProduct.design}
+                    value={value.design}
                     onChange={(e) =>
                       setValue({ ...value, design: e.target.value })
                     }
@@ -612,8 +611,8 @@ const Body = () => {
                 </button>
               </div>
               <div className="mt-5">
-                {error?.message ? (
-                  <p className="text-red-500">{error?.message}</p>
+                {error?.productError ? (
+                  <p className="text-red-500">{error?.productError}</p>
                 ) : null}
               </div>
             </form>

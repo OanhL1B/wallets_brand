@@ -7,7 +7,7 @@ module.exports = {
         primary: ["Epilogue", "sans-serif"],
       },
       colors: {
-        primary: "#1DC071",
+        primary: "#157572",
         secondary: "#6F49FD",
         text1: "#171725",
         text2: "#4B5264",
@@ -31,10 +31,6 @@ module.exports = {
 
       boxShadow: {
         sdprimary: "10px 10px 20px rgba(211, 211, 211, 0.25)",
-      },
-      backgroundImage: {
-        bg_product:
-          "url('https://theme.hstatic.net/1000365849/1000614631/14/home_video_bg.jpg?v=174')",
       },
     },
   },

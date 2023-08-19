@@ -18,6 +18,7 @@ import {
   UPDATE_CATEGORY,
   UPDATE_INVENTORY,
   UPDATE_ORDER_STATUS,
+  UPDATE_PASSWORD,
   UPDATE_PRICELIST,
   UPDATE_PRODUCT,
   UPDATE_PRODUCT_PRICE,
@@ -30,7 +31,7 @@ export const addCategory = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addCategory(formData);
     if (data.success === true) {
-      toast.success("Thêm  mới thành công!");
+      toast.success("Thêm mới danh mục thành công!");
       dispatch({ type: ADD_CATEGORY, payload: true });
     } else {
       dispatch({ type: SET_ERRORS, payload: data });
@@ -53,7 +54,7 @@ export const addPriceList = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addPriceList(formData);
     if (data.success === true) {
-      toast.success("Thêm  mới thành công!");
+      toast.success("Thêm  mới bảng giá thành công!");
       dispatch({ type: ADD_PRICELIST, payload: true });
     } else {
       dispatch({ type: SET_ERRORS, payload: data });
@@ -77,7 +78,7 @@ export const addProduct = (formData) => async (dispatch) => {
     const { data } = await api.addProduct(formData);
     console.log("data", data);
     if (data.success === true) {
-      toast.success("Thêm  mới thành công!");
+      toast.success("Thêm  mới sản phẩm thành công!");
       dispatch({ type: ADD_PRODUCT, payload: true });
     } else {
       dispatch({ type: SET_ERRORS, payload: data });
@@ -100,7 +101,7 @@ export const addProductPrice = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addProductPrice(formData);
     if (data.success === true) {
-      toast.success("Thêm  mới thành công!");
+      toast.success("Thêm  mới giá sản phẩm thành công!");
       dispatch({ type: ADD_PRODUCT_PRICE, payload: true });
     } else {
       dispatch({ type: SET_ERRORS, payload: data });
@@ -122,12 +123,11 @@ export const getProductPrices = () => async (dispatch) => {
 export const updateCategory = (formData) => async (dispatch) => {
   try {
     const { data } = await api.updateCategory(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Cập nhật danh mục thành công!");
       dispatch({ type: UPDATE_CATEGORY, payload: true });
     } else {
-      toast.error("Cập nhật danh mục thất bại!");
+      toast.error("Cập nhật bị lỗi!");
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
@@ -148,7 +148,7 @@ export const updateProduct = (formData) => async (dispatch) => {
   try {
     const { data } = await api.updateProduct(formData);
     if (data.success === true) {
-      toast.success("updated product successfully!");
+      toast.success("Cập nhật sản phẩm thành công!");
       dispatch({ type: UPDATE_PRODUCT, payload: true });
     } else {
       toast.error("updated error!");
@@ -205,10 +205,10 @@ export const updateUserbyAdmin = (formData) => async (dispatch) => {
   try {
     const { data } = await api.updateUserbyAdmin(formData);
     if (data.success === true) {
-      toast.success("updated user price successfully!");
+      toast.success("Cập nhật người dùng thành công!");
       dispatch({ type: UPDATE_USER_BY_ADMIN, payload: true });
     } else {
-      toast.error("updated error!");
+      toast.error("Cập nhật bị lỗi!");
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
@@ -246,10 +246,10 @@ export const updateOrderStatus = (formData) => async (dispatch) => {
   try {
     const { data } = await api.updateOrderStatus(formData);
     if (data.success === true) {
-      toast.success("updated order successfully!");
+      toast.success("Cập nhật trạng thái đơn hàng thành công!");
       dispatch({ type: UPDATE_ORDER_STATUS, payload: true });
     } else {
-      toast.error("updated error!");
+      toast.error("Cập nhật bị lỗi!");
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
@@ -260,10 +260,10 @@ export const updateWarehousing = (formData) => async (dispatch) => {
   try {
     const { data } = await api.updateWarehousing(formData);
     if (data.success === true) {
-      toast.success("updated order successfully!");
+      toast.success("Cập nhật số lượng sản phẩm thành công!");
       dispatch({ type: UPDATE_INVENTORY, payload: true });
     } else {
-      toast.error("updated error!");
+      toast.error("Cập nhật bị lỗi!");
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
@@ -311,6 +311,22 @@ export const deleteProduct = (formData) => async (dispatch) => {
     }
   } catch (error) {
     toast.error(error.response.data.productError);
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const updatePassword = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.updatePassword(formData);
+
+    if (data.success === true) {
+      toast.success("Đổi mật khẩu thành công!");
+      dispatch({ type: UPDATE_PASSWORD, payload: true });
+    } else {
+      dispatch({ type: SET_ERRORS, payload: data });
+      toast.error("Đổi mật khẩu không thành công!");
+    }
+  } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };

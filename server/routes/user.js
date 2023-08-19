@@ -9,9 +9,12 @@ router.post("/refreshtoken", ctrls.refreshAccessToken);
 router.get("/logout", ctrls.logout);
 router.get("/forgotpassword", ctrls.forgotPassword);
 router.put("/resetpassword", ctrls.resetPassword);
+router.put("/changepassword", [verifyAccessToken], ctrls.changePassword);
+
 // cứ liên quan tới user thì nhân viên k có quyền vậy đi
 router.get("/", [verifyAccessToken, isAdmin], ctrls.getUsers); // getall
 router.delete("/", [verifyAccessToken, isAdmin], ctrls.deleteUser);
 router.put("/current", [verifyAccessToken], ctrls.updateUser);
 router.put("/", [verifyAccessToken, isAdmin], ctrls.updateUserByAdmin);
+
 module.exports = router;
