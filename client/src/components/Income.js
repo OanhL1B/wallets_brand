@@ -69,7 +69,7 @@ function Income() {
 
   return (
     <div className="mt-10 ml-10">
-      <h2 className="mx-auto text-center">Biểu đồ doanh thu theo tháng</h2>
+      <h2 className="mx-auto text-center">Biểu đồ doanh thu năm 2023</h2>
       <ComposedChart
         width={1000}
         height={300}

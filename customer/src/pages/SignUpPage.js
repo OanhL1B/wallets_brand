@@ -92,12 +92,12 @@ const SignUpPage = () => {
 
       <div className="w-full max-w-[556px] bg-white dark:bg-darkSecondary rounded-xl px-5 py-8 lg:px-16 lg:py-12 mx-auto shadow-2xl ">
         <h1 className="mb-1 text-lg font-semibold text-center lg:mb-3 lg:text-xl lg: text-text1 dark:text-white">
-          Sign Up
+          Đăng ký
         </h1>
         <p className="mb-6 text-xs font-normal text-center lg:text-sm text-text3 lg:mb-8">
-          Already have an account?{" "}
+          Bạn đã có tài khoản?{" "}
           <Link to="/login" className="font-medium underline text-secondary">
-            Login
+            Đăng nhập
           </Link>
         </p>
 
@@ -170,7 +170,7 @@ const SignUpPage = () => {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 className="relative w-full px-6 py-4 text-sm font-medium bg-transparent border focus:border-[#157572] focus:ring-secondary focus:outline-none focus:ring focus:ring-opacity-40  rounded-xl placeholder:text-text4 dark:placeholder:text-text2 dark:text-white border-strock text-text1 dark:border-darkStroke"
-                placeholder="Enter your password"
+                placeholder="Nhập mật khẩu.."
               />
               <div className="absolute ml-[384px] mt-2">
                 {showPassword ? (

@@ -5,34 +5,20 @@ import {
   ADD_USER,
   CANCELED,
   DELETE_CART,
+  GET_ALL_CATEGOIES,
+  GET_ALL_PRODUCTS,
   GET_CART_USER,
   GET_CURRENT_USER,
   GET_ORDER_USER,
-  INCREASE_CART_ITEM_QUANTITY,
   LOGIN,
   QUEN_MAT_KHAU,
   RESET_PASSWORD,
   SET_ERRORS,
   UPDATE_CART,
-  UPDATE_CART_ITEM_QUANTITY,
   UPDATE_USER,
 } from "../actionTypes";
 import * as api from "../api/customerapi";
 
-// export const userLogin = (formData, navigate) => async (dispatch) => {
-//   try {
-//     const { data } = await api.userLogin(formData);
-//     if (data.success === true) {
-//       dispatch({ type: LOGIN, data: data });
-//       toast.success("Đăng nhập thành công!");
-//       navigate("/");
-//     } else {
-//       toast.error("email hoặc mật khẩu hoặc mật khẩu chưa đúng!");
-//     }
-//   } catch (error) {
-//     dispatch({ type: SET_ERRORS, payload: error.response.data });
-//   }
-// };
 export const userLogin = (formData, navigate) => async (dispatch) => {
   try {
     const { data } = await api.userLogin(formData);
@@ -75,28 +61,6 @@ export const addUser = (formData) => async (dispatch) => {
     }
   }
 };
-
-// export const addCart = (formData) => async (dispatch) => {
-//   try {
-//     const { data } = await api.addCart(formData);
-//     if (data.success === true) {
-//       toast.success("Thêm vào giỏ hàng thành công!");
-//       dispatch({ type: ADD_CART, payload: true });
-//     } else {
-//       dispatch({ type: SET_ERRORS, payload: data });
-//     }
-//   } catch (error) {
-//     if (
-//       error.response &&
-//       error.response.data &&
-//       error.response.data.status === "error"
-//     ) {
-//       dispatch({ type: SET_ERRORS, payload: error.response });
-//     } else {
-//       console.log("Unknown error occurred");
-//     }
-//   }
-// };
 
 export const addCart = (formData) => async (dispatch) => {
   try {
@@ -262,5 +226,23 @@ export const updateUser = (formData) => async (dispatch) => {
     }
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getCategories = () => async (dispatch) => {
+  try {
+    const { data } = await api.getCategories();
+    dispatch({ type: GET_ALL_CATEGOIES, payload: data.retObj });
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const getProducts = () => async (dispatch) => {
+  try {
+    const { data } = await api.getProducts();
+    dispatch({ type: GET_ALL_PRODUCTS, payload: data.retObj });
+  } catch (error) {
+    console.log("Redux Error", error);
   }
 };

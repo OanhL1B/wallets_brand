@@ -64,7 +64,7 @@ const Body = () => {
     setSelectedCategory(cate);
     setIsModalOpen(true);
     setValue({
-      categoryName: "",
+      categoryName: cate.categoryName,
       categoryId: cate._id,
     });
   };
@@ -98,7 +98,6 @@ const Body = () => {
     if (store.admin.updatedCategory) {
       closeModal();
       dispatch(getCategories());
-      dispatch({ type: SET_ERRORS, payload: {} });
     }
   }, [dispatch, store.errors, store.admin.updatedCategory]);
 
@@ -208,7 +207,7 @@ const Body = () => {
                     placeholder={selectedCategory?.categoryName}
                     className={classes.InputStyle}
                     type="text"
-                    value={value.categoryName || selectedCategory?.categoryName}
+                    value={value.categoryName}
                     onChange={(e) =>
                       setValue({
                         ...value,

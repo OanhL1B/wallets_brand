@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactModal from "react-modal";
 import * as classes from "../utils/styles";
-import { getCurrentUser, updateUser } from "../redux/actions";
+import {
+  getCategories,
+  getCurrentUser,
+  getProducts,
+  updateUser,
+} from "../redux/actions";
 import { UPDATE_USER } from "../redux/actionTypes";
 import Header from "../components/Header";
-import IngNar from "../components/IngNar";
 import Footer from "../components/Footer";
+import { Avatar } from "@mui/material";
+import ImageUpload from "../components/ImageUpload";
 
 const modalStyles = {
   content: {
@@ -23,6 +29,17 @@ const modalStyles = {
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getProducts());
+  }, [dispatch]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setIsFiltering(true);
+  };
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
@@ -38,6 +55,7 @@ const ProfilePage = () => {
     email: "",
     phoneNumber: "",
     address: "",
+    image: "",
   });
   const handleEditClick = () => {
     setIsModalOpen(true);
@@ -47,6 +65,7 @@ const ProfilePage = () => {
       email: user?.email,
       phoneNumber: "",
       address: "",
+      image: "",
     });
   };
 
@@ -57,7 +76,15 @@ const ProfilePage = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
+  const handleUploadSuccess = (url) => {
+    setValue(() => ({
+      ...value,
+      image: url,
+    }));
+  };
+  const handleUploadError = () => {
+    console.log("error");
+  };
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const updatedValue = {};
@@ -81,6 +108,11 @@ const ProfilePage = () => {
     } else {
       updatedValue.phoneNumber = user.phoneNumber;
     }
+    if (value.image !== "") {
+      updatedValue.image = value.image;
+    } else {
+      updatedValue.image = user.image;
+    }
     dispatch(updateUser({ ...user, ...updatedValue }));
     dispatch({ type: UPDATE_USER, payload: false });
   };
@@ -98,12 +130,18 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Header />
+      <Header
+        onCategoryFilter={handleCategoryFilter}
+        selectedCategoryId={selectedCategory}
+      />
 
       <div>
         <div className="mx-2 mt-10 item-center ">
           <div className="items-center justify-center space-y-5">
             <div className="w-[1114px] h-[568px] py-8  text-center justify-center bg-[#F5F5F5] border rounded-md  shadow-md mx-auto flex   gap-x-10">
+              <div className="w-[220px] h-[220px] bg-[#DDDEEE] bg-opacity-50 rounded-full mr-10">
+                <Avatar src={user?.image} style={{ width: 220, height: 220 }} />
+              </div>
               <div
                 className="flex flex-row font-sans gap-x-3 "
                 style={{ alignItems: "baseline" }}
@@ -147,67 +185,84 @@ const ProfilePage = () => {
           >
             <div className="flex flex-col bg-white rounded-xl ">
               <form
-                className="w-[500px] min-h-[300px] py-10 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto"
+                className="w-[700px] min-h-[300px] py-10 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto"
                 onSubmit={handleFormSubmit}
               >
-                <div className="grid grid-cols-1">
-                  <div className={classes.WrapInputLabel}>
-                    <h1 className={classes.LabelStyle}>Tên :</h1>
-                    <input
-                      placeholder={user?.firstName}
-                      className={classes.InputStyle}
-                      type="text"
-                      value={value.firstName || user?.firstName}
-                      onChange={(e) =>
-                        setValue({
-                          ...value,
-                          firstName: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div className={classes.WrapInputLabel}>
-                    <h1 className={classes.LabelStyle}>Họ :</h1>
-                    <input
-                      className={classes.InputStyle}
-                      type="text"
-                      value={value.lastName || user?.lastName}
-                      onChange={(e) =>
-                        setValue({
-                          ...value,
-                          lastName: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+                <div className="flex gap-x-10">
+                  <div className="flex items-center gap-x-6">
+                    <div className="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 rounded-full">
+                      <Avatar
+                        src={value.image || user.image}
+                        style={{ width: 180, height: 180 }}
+                      />
+                    </div>
 
-                  <div className={classes.WrapInputLabel}>
-                    <h1 className={classes.LabelStyle}>Số điện thoại :</h1>
-                    <input
-                      className={classes.InputStyle}
-                      type="text"
-                      value={value.phoneNumber || user?.phoneNumber}
-                      onChange={(e) =>
-                        setValue({
-                          ...value,
-                          phoneNumber: e.target.value,
-                        })
-                      }
-                    />
+                    <div className="flex flex-col w-full gap-y-5">
+                      <ImageUpload
+                        onUploadSuccess={handleUploadSuccess}
+                        onUploadError={handleUploadError}
+                      />
+                    </div>
                   </div>
-                  <div className={classes.WrapInputLabel}>
-                    <h1 className={classes.LabelStyle}>Địa chỉ :</h1>
-                    <input
-                      className={classes.InputStyle}
-                      type="text"
-                      value={value.address || user.address}
-                      onChange={(e) =>
-                        setValue({
-                          ...value,
-                          address: e.target.value,
-                        })
-                      }
-                    />
+                  <div className="grid w-full grid-cols-1">
+                    <div className={classes.WrapInputLabel}>
+                      <h1 className={classes.LabelStyle}>Tên :</h1>
+                      <input
+                        placeholder={user?.firstName}
+                        className={classes.InputStyle}
+                        type="text"
+                        value={value.firstName || user?.firstName}
+                        onChange={(e) =>
+                          setValue({
+                            ...value,
+                            firstName: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className={classes.WrapInputLabel}>
+                      <h1 className={classes.LabelStyle}>Họ :</h1>
+                      <input
+                        className={classes.InputStyle}
+                        type="text"
+                        value={value.lastName || user?.lastName}
+                        onChange={(e) =>
+                          setValue({
+                            ...value,
+                            lastName: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className={classes.WrapInputLabel}>
+                      <h1 className={classes.LabelStyle}>Số điện thoại :</h1>
+                      <input
+                        className={classes.InputStyle}
+                        type="text"
+                        value={value.phoneNumber || user?.phoneNumber}
+                        onChange={(e) =>
+                          setValue({
+                            ...value,
+                            phoneNumber: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className={classes.WrapInputLabel}>
+                      <h1 className={classes.LabelStyle}>Địa chỉ :</h1>
+                      <input
+                        className={classes.InputStyle}
+                        type="text"
+                        value={value.address || user.address}
+                        onChange={(e) =>
+                          setValue({
+                            ...value,
+                            address: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
 

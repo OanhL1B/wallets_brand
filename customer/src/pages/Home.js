@@ -5,8 +5,15 @@ import Status from "../components/Status";
 import Footer from "../components/Footer";
 import IngNar from "../components/IngNar";
 import Products from "../components/Products";
+import { useDispatch } from "react-redux";
+import { getCategories, getProducts } from "../redux/actions";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getProducts());
+  }, [dispatch]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isFiltering, setIsFiltering] = useState(false);
 

@@ -4,6 +4,8 @@ import {
   ADD_USER,
   CANCELED,
   DELETE_CART,
+  GET_ALL_CATEGOIES,
+  GET_ALL_PRODUCTS,
   GET_CART_USER,
   GET_CURRENT_USER,
   GET_ORDER_USER,
@@ -29,6 +31,8 @@ const initialState = {
   cartItems: [],
   userCarts: [],
   userOrders: [],
+  allCategory: [],
+  allProduct: [],
 };
 
 const customerReducer = (state = initialState, action) => {
@@ -46,17 +50,6 @@ const customerReducer = (state = initialState, action) => {
         ...state,
         orderAdded: action.payload,
       };
-
-    // case ADD_CART:
-    //   const updatedUserCarts = state.userCarts.map((item) => {
-    //     if (item.productId._id === action.payload.productId._id) {
-    //       return {
-    //         ...item,
-    //         quantity: item.quantity + 1,
-    //       };
-    //     }
-    //     return item;
-    //   });
 
     case ADD_CART:
       const existingProduct = state.userCarts?.find(
@@ -129,6 +122,16 @@ const customerReducer = (state = initialState, action) => {
     case LOGOUT:
       localStorage.removeItem("user");
       return { ...state, authData: action?.data };
+    case GET_ALL_CATEGOIES:
+      return {
+        ...state,
+        allCategory: action.payload,
+      };
+    case GET_ALL_PRODUCTS:
+      return {
+        ...state,
+        allProduct: action.payload,
+      };
     default:
       return state;
   }

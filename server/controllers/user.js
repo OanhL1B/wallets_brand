@@ -36,7 +36,6 @@ const register = asyncHandler(async (req, res) => {
 
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log("password", password);
   if (!email || !password) {
     return res.status(400).json({
       success: false,
@@ -47,7 +46,6 @@ const login = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (user && (await user.isCorrectPassword(password))) {
     const { password, role, refreshToken, ...userData } = user.toObject();
-    console.log("password", password);
     const accessToken = generateAccessToken(user._id, role);
     const newRefreshToken = generateRefreshToken(user._id);
 

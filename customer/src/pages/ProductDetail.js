@@ -6,16 +6,32 @@ import AddIcon from "@mui/icons-material/Add";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { APIPUBLIC } from "../redux/config/config";
 import { useDispatch } from "react-redux";
-import { addCart, getCartUser } from "../redux/actions";
+import {
+  addCart,
+  getCartUser,
+  getCategories,
+  getProducts,
+} from "../redux/actions";
 const ProductDetail = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getProducts());
+  }, [dispatch]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setIsFiltering(true);
+  };
   const { productId } = useParams();
   const [product, setProduct] = useState({});
+  console.log("product", product?.images);
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState(null);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   useEffect(() => {
     getProduct();
   }, [productId]);
@@ -55,7 +71,6 @@ const ProductDetail = () => {
         productId: product._id,
         userId: user?.userData?._id,
         quantity,
-        price: quantity * product?.price,
       })
     );
     dispatch(getCartUser(user?.userData?._id));
@@ -63,7 +78,10 @@ const ProductDetail = () => {
 
   return (
     <div className="bg-gray-100">
-      <Header />
+      <Header
+        onCategoryFilter={handleCategoryFilter}
+        selectedCategoryId={selectedCategory}
+      />
       <div className="p-10 md:flex md:justify-center">
         <div className="w-full md:w-1/2 md:p-5">
           <img
@@ -71,6 +89,18 @@ const ProductDetail = () => {
             alt={product.productName}
             className="object-cover w-full h-90vh md:h-40vh"
           />
+          <h1>Những hình ảnh khác của sản phẩm:</h1>
+          <div className="flex w-full mt-4">
+            {product?.images &&
+              product?.images.map((i, index) => (
+                <img
+                  key={index}
+                  src={i}
+                  alt={`Anh ${index}`}
+                  className="object-cover w-full max-w-xs mr-2 h-90vh md:h-40vh"
+                />
+              ))}
+          </div>
         </div>
 
         <div className="w-full md:w-1/2 md:p-5">

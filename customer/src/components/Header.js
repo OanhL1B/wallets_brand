@@ -21,6 +21,12 @@ const Header = ({ onCategoryFilter }) => {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const quantity = useSelector((state) => state.customer?.userCarts);
+  const store = useSelector((state) => state);
+  const categories = useSelector((state) => state.customer.allCategory);
+  const products = useSelector((state) => state.customer.allProduct);
+  console.log("products", products);
+
+  console.log("categories", categories);
 
   const dispatch = useDispatch();
 
@@ -73,6 +79,13 @@ const Header = ({ onCategoryFilter }) => {
     });
     setFilteredList(updatedList);
   };
+
+  const Handlenavigate = (id) => {
+    setSearchValue("");
+    navigate(`/product/${id}`);
+    setFilteredList([]);
+  };
+
   return (
     <div>
       <div className="w-full h-[50px] bg-[#F5F5F5] text-[#666666] font-normal text-base fixed top-0 z-50 ">
@@ -116,27 +129,27 @@ const Header = ({ onCategoryFilter }) => {
               </div>
 
               {searchValue && (
-                <div className="absolute left-0  bg-white border border-gray-300 rounded shadow top-10 w-[300px]">
+                <div className="absolute left-0 bg-white border border-gray-300 rounded shadow top-10 max-h-[500px] overflow-y-auto w-[300px]">
                   <div className="flex flex-wrap p-4">
                     {filteredList.map((product) => (
-                      <Link to={`/product/${product._id}`}>
+                      <div key={product?._id}>
                         <div
-                          key={product._id}
-                          className="flex items-center p-2"
+                          className="flex items-center p-2 cursor-pointer"
+                          onClick={() => Handlenavigate(product._id)}
                         >
                           <img
-                            src={product.thumb}
-                            alt={product.productName}
+                            src={product?.thumb}
+                            alt={product?.productName}
                             className="w-20 h-auto"
                           />
                           <div className="flex flex-col ml-2">
                             <div className="font-medium text-center">
-                              {product.productName}
+                              {product?.productName}
                             </div>
-                            <div className="text-center">{product.price}đ</div>
+                            <div className="text-center">{product?.price}đ</div>
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -234,7 +247,7 @@ const Header = ({ onCategoryFilter }) => {
             alt=""
             height={60}
             width={60}
-            data-categoryid="64d7510e56bba7acf5012948"
+            data-categoryid={categories[0]?._id}
             onClick={(e) => handleCategoryClick(e)}
           />
         </div>
@@ -244,7 +257,7 @@ const Header = ({ onCategoryFilter }) => {
             alt=""
             width={86}
             height={60}
-            data-categoryid="64d7511356bba7acf501294b"
+            data-categoryid={categories[1]?._id}
             onClick={(e) => handleCategoryClick(e)}
           />
         </div>
@@ -254,7 +267,7 @@ const Header = ({ onCategoryFilter }) => {
             alt=""
             width={79}
             height={60}
-            data-categoryid="64d7511856bba7acf501294e"
+            data-categoryid={categories[2]?._id}
             onClick={(e) => handleCategoryClick(e)}
           />
         </div>
@@ -264,7 +277,7 @@ const Header = ({ onCategoryFilter }) => {
             alt=""
             width={120}
             height={60}
-            data-categoryid="64d7511d56bba7acf5012951"
+            data-categoryid={categories[3]?._id}
             onClick={(e) => handleCategoryClick(e)}
           />
         </div>

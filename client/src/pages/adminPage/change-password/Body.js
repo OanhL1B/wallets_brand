@@ -166,7 +166,7 @@ const Body = () => {
             </div>
             <div className={classes.adminFormButton}>
               <button className={classes.adminFormSubmitButton} type="submit">
-                Update
+                Cập nhật
               </button>
             </div>
             {loading && (

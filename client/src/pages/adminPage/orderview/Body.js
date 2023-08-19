@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { APIV1 } from "../../../redux/config/config";
 import { MenuItem, Select } from "@mui/material";
@@ -12,26 +12,31 @@ const Body = () => {
   const [order, setOrder] = useState({});
   const [statusOrder, setStatusOrder] = useState("");
 
-  console.log("");
+  const user = useSelector((state) => state.admin.usercurrent);
   const [statusE, setStatusE] = useState("");
   const dispatch = useDispatch();
   useEffect(() => {
-    const getProduct = async () => {
+    const getOrder = async () => {
       try {
         const res = await APIV1.get("api/order/" + id);
         setOrder(res?.data?.retObj);
         setStatusOrder(res?.data?.retObj?.status);
       } catch {}
     };
-    getProduct();
-  }, [id]);
+    getOrder();
+  }, [id, statusE, statusOrder]);
 
   const handleSetSattus = (e) => {
     e.preventDefault();
-    dispatch(updateOrderStatus({ orderId: id, status: statusE }));
+    dispatch(
+      updateOrderStatus({
+        orderId: id,
+        status: statusE,
+        Order_ReviewerId: user._id,
+      })
+    );
   };
 
-  console.log("order", order);
   const { shippingAddress, productItems, total_price, status } = order;
   return (
     <div className="w-full my-8 mt-6 bg-bg_product">
@@ -62,8 +67,17 @@ const Body = () => {
                 className={`${classes.InputStyle} hover:focus:border-none `}
               >
                 <MenuItem value="pending" disabled>
-                  Xác nhận đơn hàng
+                  Chờ xác nhận
                 </MenuItem>
+                {status === "delivered" ||
+                status === "canceled" ||
+                status === "shipped" ? (
+                  <MenuItem value="confirm" disabled>
+                    Xác nhận đơn hàng
+                  </MenuItem>
+                ) : (
+                  <MenuItem value="confirm"> Xác nhận đơn hàng</MenuItem>
+                )}
                 {status === "delivered" || status === "canceled" ? (
                   <MenuItem value="shipped" disabled>
                     Đang giao hàng

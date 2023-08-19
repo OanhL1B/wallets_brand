@@ -26,3 +26,8 @@ export const Resetpassword = (pass, dataBody) =>
 export const updateUser = (updateUser) =>
   APIV1.put("/api/user/current", updateUser);
 export const getCurrentUser = () => APIV1.get("/api/user/current");
+
+// catgory
+export const getCategories = () => APIV1.get("/api/category");
+// product
+export const getProducts = () => APIV1.get("/api/product");

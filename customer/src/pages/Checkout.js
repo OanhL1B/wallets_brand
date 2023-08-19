@@ -4,13 +4,28 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { addOrder, getCartUser } from "../redux/actions";
+import {
+  addOrder,
+  getCartUser,
+  getCategories,
+  getProducts,
+} from "../redux/actions";
 import { ADD_ORDER } from "../redux/actionTypes";
 import { useNavigate } from "react-router";
 
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getProducts());
+  }, [dispatch]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setIsFiltering(true);
+  };
   const store = useSelector((state) => state);
   const userCarts = useSelector((state) => state.customer?.userCarts);
   console.log("userCarts", userCarts);
@@ -82,7 +97,10 @@ const Checkout = () => {
 
   return (
     <>
-      <Header />
+      <Header
+        onCategoryFilter={handleCategoryFilter}
+        selectedCategoryId={selectedCategory}
+      />
       <div className="text-xl font-semibold text-center">
         Thông tin giao hàng
       </div>

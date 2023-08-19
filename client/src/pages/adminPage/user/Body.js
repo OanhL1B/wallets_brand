@@ -136,115 +136,61 @@ const Body = () => {
     setError({});
     closeModal();
   };
-  // End edit
 
-  // begin view
-  // const [modalMode, setModalMode] = useState(null);
-  //   const handleOpenViewModal = (product) => {
-  //     console.log("vô đây nè");
-  //     setSelectedProduct(product);
-  //     setModalMode("view");
-  //     setIsModalOpen(true);
-  //   };
-  //end view
-
-  // Begin delete
-  // const [checkedValue, setCheckedValue] = useState([]);
-
-  // const handleInputChange = (e) => {
-  //   const value = e.target.value;
-  //   const isChecked = e.target.checked;
-  //   setCheckedValue((prevState) =>
-  //     isChecked
-  //       ? [...prevState, value]
-  //       : prevState.filter((item) => item !== value)
-  //   );
-  // };
-
-  // const dltSubject = (e) => {
-  //   Swal.fire({
-  //     title: "Bạn có chắc chắn muốn xóa?",
-  //     text: "Hành động này sẽ không thể hoàn tác!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Đồng ý, Xóa!",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       dispatch(deleteDepartment(checkedValue));
-  //     }
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   if (store.admin.departmentDeleted) {
-  //     setCheckedValue([]);
-  //     dispatch(getAllDepartment());
-  //     dispatch({ type: DELETE_DEPARTMENT, payload: false });
-  //   }
-  // }, [store.admin.departmentDeleted]);
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
       <div className="flex mt-4"></div>
       <div className="w-full my-8 mt-6">
         {users?.length !== 0 && (
-          <table className="w-full table-auto ">
-            <thead className="bg-[#E1EEEE] items-center">
-              <tr>
-                <th className="px-4 py-1 text-left">STT</th>
-                <th className="px-4 py-1 text-left">Họ và tên</th>
-                <th className="px-4 py-1 text-left">email</th>
-                <th className="px-4 py-1 text-left">Số điện thoại</th>
-                <th className="px-4 py-1 text-left">Nhóm người dùng</th>
-                <th className="px-4 py-1 text-left">Trạng thái</th>
-                <th className="px-4 py-1">hàng động</th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {users?.map((user, idx) => (
-                <tr className="justify-center  hover:bg-[#EEF5F5]" key={idx}>
-                  <td className="px-4 py-1 text-left border ">{idx + 1}</td>
-
-                  <td className="px-4 py-1 text-left border">
-                    {user.lastName} {user.firstName}
-                  </td>
-                  <td className="px-4 py-1 text-left border">{user.email}</td>
-                  <td className="px-4 py-1 text-left border">
-                    {user.phoneNumber}
-                  </td>
-                  <td className="px-4 py-1 text-left border">{user.role}</td>
-                  <td className="px-4 py-1 text-left border">
-                    {user.isBlocked === false ? "Hoạt động" : "Đã chặn"}
-                  </td>
-                  <td
-                    className="items-center justify-center px-4 py-1 mr-0 border"
-                    style={{ display: "flex", justifyContent: "center" }}
-                  >
-                    {/* <button
-                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base mr-2"
-                      onClick={() => handleOpenViewModal(user)}
-                    >
-                      View
-                    </button> */}
-                    {/* {modalMode === "view" && (
-                      <ProductDetail
-                        isOpen={isModalOpen}
-                        onClose={closeModal}
-                        product={selectedProduct}
-                      />
-                    )} */}
-                    <button
-                      className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
-                      onClick={() => handleEditClick(user)}
-                    >
-                      Sửa
-                    </button>
-                  </td>
+          <div className="overflow-auto max-h-[530px]">
+            <table className="w-full table-auto ">
+              <thead className="bg-[#E1EEEE] items-center  sticky top-0">
+                <tr>
+                  <th className="px-4 py-1 text-left">STT</th>
+                  <th className="px-4 py-1 text-left">Họ và tên</th>
+                  <th className="px-4 py-1 text-left">email</th>
+                  <th className="px-4 py-1 text-left">Số điện thoại</th>
+                  <th className="px-4 py-1 text-left">Nhóm người dùng</th>
+                  <th className="px-4 py-1 text-left">Trạng thái</th>
+                  <th className="px-4 py-1">hàng động</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="">
+                {users?.map((user, idx) => (
+                  <tr className="justify-center  hover:bg-[#EEF5F5]" key={idx}>
+                    <td className="px-4 py-1 text-left border ">{idx + 1}</td>
+
+                    <td className="px-4 py-1 text-left border">
+                      {user.lastName} {user.firstName}
+                    </td>
+                    <td className="px-4 py-1 text-left border">{user.email}</td>
+                    <td className="px-4 py-1 text-left border">
+                      {user.phoneNumber}
+                    </td>
+                    <td className="px-4 py-1 text-left border">
+                      {user.role === "admin" && "Admin"}
+                      {user.role === "employee" && "Nhân viên"}
+                      {user.role === "customer" && "Khách hàng"}
+                    </td>
+                    <td className="px-4 py-1 text-left border">
+                      {user.isBlocked === false ? "Hoạt động" : "Đã chặn"}
+                    </td>
+                    <td
+                      className="items-center justify-center px-4 py-1 mr-0 border"
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <button
+                        className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
+                        onClick={() => handleEditClick(user)}
+                      >
+                        Sửa
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
       {/* modal edit */}
@@ -331,7 +277,7 @@ const Body = () => {
                     }
                     className={classes.InputStyle}
                   >
-                    <MenuItem value="true">Đã chặn</MenuItem>
+                    <MenuItem value="true">Chặn</MenuItem>
                     <MenuItem value="false">Hoạt động</MenuItem>
                   </Select>
                 </div>

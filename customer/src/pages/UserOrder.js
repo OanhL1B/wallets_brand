@@ -1,6 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Canceled, getOrderUser } from "../redux/actions";
+import {
+  Canceled,
+  getCategories,
+  getOrderUser,
+  getProducts,
+} from "../redux/actions";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swal from "sweetalert2";
@@ -11,6 +16,16 @@ const UserOrder = () => {
   const store = useSelector((state) => state);
 
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getProducts());
+  }, [dispatch]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setIsFiltering(true);
+  };
   useEffect(() => {
     dispatch(getOrderUser(user?.userData?._id));
   }, []);
@@ -39,7 +54,10 @@ const UserOrder = () => {
 
   return (
     <>
-      <Header />
+      <Header
+        onCategoryFilter={handleCategoryFilter}
+        selectedCategoryId={selectedCategory}
+      />
       <h1 className="text-2xl font-bold text-center">Đơn hàng của bạn</h1>
       <div className="w-full my-8 mt-6 bg-bg_product">
         {userOrders.length !== 0 && (
@@ -103,6 +121,12 @@ const UserOrder = () => {
                       Chờ xác nhận
                     </td>
                   )}
+                  {order.status === "confirm" && (
+                    <td className="px-4 py-1 text-center border border-[#c7c2c2]">
+                      Đã tiếp nhận đơn
+                    </td>
+                  )}
+
                   {order.status === "delivered" && (
                     <td className="px-4 py-1 text-center border border-[#c7c2c2]">
                       Đã giao hàng

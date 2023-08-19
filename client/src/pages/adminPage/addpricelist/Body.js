@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import * as classes from "../../../utils/styles";
 import React, { useEffect, useState } from "react";
 import Spinner from "../../../utils/Spinner";
-import CategoryIcon from "@mui/icons-material/Category";
 import { Link } from "react-router-dom";
 
 const Body = () => {
@@ -12,6 +11,8 @@ const Body = () => {
   const store = useSelector((state) => state);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
+  const [dateError, setDateError] = useState("");
+
   const [value, setValue] = useState({
     pricelistName: "",
     applyDate: "",
@@ -29,6 +30,18 @@ const Body = () => {
     setError({});
     setLoading(true);
     dispatch(addPriceList(value));
+  };
+  const handleDateChange = (e) => {
+    const selectedDate = new Date(e.target.value);
+    const currentDate = new Date();
+
+    if (selectedDate <= currentDate) {
+      setDateError("Ngày áp dụng phải lớp hơn ngày hiện tại.");
+    } else {
+      setDateError("");
+    }
+
+    setValue({ ...value, applyDate: e.target.value });
   };
 
   useEffect(() => {
@@ -90,10 +103,10 @@ const Body = () => {
                   className={classes.InputStyle}
                   type="date"
                   value={value.applyDate}
-                  onChange={(e) =>
-                    setValue({ ...value, applyDate: e.target.value })
-                  }
+                  onChange={handleDateChange}
+                  onFocus={() => setDateError("")}
                 />
+                {dateError && <p className="text-red-500">{dateError}</p>}
               </div>
             </div>
             <div className="flex items-center justify-center mt-10 space-x-6">

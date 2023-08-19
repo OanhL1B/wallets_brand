@@ -12,6 +12,7 @@ const Body = () => {
   const orders = useSelector((state) => state.admin.allOrder);
   const categories = useSelector((state) => state.admin.allCategory);
   const users = useSelector((state) => state.admin.allUsers);
+  const user = useSelector((state) => state.admin.usercurrent);
 
   return (
     <div className="mx-5 mt-1">
@@ -77,23 +78,25 @@ const Body = () => {
               </div>
             </div>
           </div>
-          <div className="p-3 bg-white rounded-lg">
-            <div className="">
-              <h1>Người dùng</h1>
-            </div>
-            <div className="mt-10 mb-6 border-b-2"></div>
-
-            <div className="flex justify-between w-full h-full">
-              <div>
-                <h2 className="text-4xl font-bold">{users?.length}</h2>
-                <span>Tổng số người dùng</span>
+          {user?.role === "admin" && (
+            <div className="p-3 bg-white rounded-lg">
+              <div className="">
+                <h1>Người dùng</h1>
               </div>
+              <div className="mt-10 mb-6 border-b-2"></div>
 
-              <div className="relative">
-                <GroupIcon className="text-primary" sx={{ fontSize: 60 }} />
+              <div className="flex justify-between w-full h-full">
+                <div>
+                  <h2 className="text-4xl font-bold">{users?.length}</h2>
+                  <span>Tổng số người dùng</span>
+                </div>
+
+                <div className="relative">
+                  <GroupIcon className="text-primary" sx={{ fontSize: 60 }} />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       <Income />

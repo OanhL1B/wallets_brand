@@ -4,14 +4,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { deleteCart, getCartUser, updateCartQuantity } from "../redux/actions";
+import {
+  deleteCart,
+  getCartUser,
+  getCategories,
+  getProducts,
+  updateCartQuantity,
+} from "../redux/actions";
 import { Link } from "react-router-dom";
 import { DELETE_CART } from "../redux/actionTypes";
+import Swal from "sweetalert2";
 
 const Cart = () => {
+  // thêm để lọc
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getProducts());
+  }, [dispatch]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isFiltering, setIsFiltering] = useState(false);
+
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setIsFiltering(true);
+  };
+
+  // end
   const store = useSelector((state) => state);
 
-  const dispatch = useDispatch();
   const [totalAmount, setTotalAmount] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
   const userCarts = useSelector((state) => state.customer?.userCarts);
@@ -37,9 +58,20 @@ const Cart = () => {
   }, [userCarts, updatedQuantities]);
 
   const handleDelete = (id) => {
-    dispatch(deleteCart(id));
+    Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa?",
+      text: "Hành động này sẽ không thể hoàn tác!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Đồng ý, Xóa!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteCart(id));
+      }
+    });
   };
-
   useEffect(() => {
     if (store.errors || store.customer.deletedCart) {
       if (store.customer.deletedCart) {
@@ -74,12 +106,17 @@ const Cart = () => {
 
   return (
     <div className="bg-gray-100">
-      <Header />
+      <Header
+        onCategoryFilter={handleCategoryFilter}
+        selectedCategoryId={selectedCategory}
+      />
       {userCarts.length === 0 && (
         <div className="text-center">
           Giỏ hàng đang trống, cùng thêm vào giỏ hàng nào!{" "}
         </div>
       )}
+      <h1 className="text-2xl font-bold text-center">Giỏ hàng của bạn</h1>
+
       <div className="w-full my-8 mt-6 item-center bg-bg_product">
         {userCarts.length !== 0 && (
           <table className="w-[80%] items-center table-auto  border border-[#c7c2c2] px-8 mx-auto bg-bg_product">
