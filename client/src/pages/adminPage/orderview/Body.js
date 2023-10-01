@@ -50,7 +50,7 @@ const Body = () => {
       <div className="px-8 py-6 border border-[#c7c2c2] bg-white">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="font-bold">Full Name:</p>
+            <p className="font-bold">Họ và tên:</p>
             <p>{`${shippingAddress?.firstName} ${shippingAddress?.lastName}`}</p>
           </div>
           <div className="flex p-8 gap-x-5 ">
@@ -114,7 +114,7 @@ const Body = () => {
             <thead>
               <tr>
                 <th className="px-4 py-2 border border-[#c7c2c2] ">
-                  Product Name
+                  Tên sản phẩm
                 </th>
                 <th className="px-4 py-2 border border-[#c7c2c2] text-right">
                   Số lượng

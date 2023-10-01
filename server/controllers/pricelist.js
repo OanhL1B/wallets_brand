@@ -9,7 +9,8 @@ const createPricelist = async (req, res) => {
     const errors = { pricelistError: String };
     const pricelist = await Pricelist.findOne({ pricelistName });
     if (pricelist) {
-      errors.pricelistError = "Đã tồn tại rồi";
+      errors.pricelistError =
+        "Bảng giá này đã tồn tại vui lòng chọn một tên khác!";
       return res.status(400).json(errors);
     }
 

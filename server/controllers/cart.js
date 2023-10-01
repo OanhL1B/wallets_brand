@@ -29,39 +29,6 @@ const addToCart = asyncHandler(async (req, res) => {
 
 // get theo user
 
-// const getCartItems = asyncHandler(async (req, res) => {
-//   try {
-//     const { userId } = req.params;
-
-//     const cartItems = await Cart.find({ userId }).populate("productId");
-
-//     const groupedProducts = {};
-
-//     cartItems.forEach((cartItem) => {
-//       const { _id: cartId, productId, quantity, price } = cartItem;
-//       const productDetails = productId;
-
-//       if (groupedProducts[productId._id]) {
-//         groupedProducts[productId._id].quantity += quantity;
-//         groupedProducts[productId._id].totalPrice += price * quantity;
-//       } else {
-//         groupedProducts[productId._id] = {
-//           cartId,
-//           ...productDetails.toObject(),
-//           quantity: quantity,
-//           price: price,
-//         };
-//       }
-//     });
-
-//     const groupedProductArray = Object.values(groupedProducts);
-
-//     res.status(200).json({ success: true, retObj: groupedProductArray });
-//   } catch (error) {
-//     const errors = { backendError: error.toString() };
-//     res.status(500).json(errors);
-//   }
-// });
 const getCartItems = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
@@ -141,7 +108,7 @@ const removeFromCart = asyncHandler(async (req, res) => {
     if (!cartItem) {
       return res.status(404).json({ error: "Cart item not found" });
     }
-    await cartItem.deleteOne(); // Xóa bản ghi trong database
+    await cartItem.deleteOne();
     res.status(200).json({
       success: true,
       message: "Product removed from the cart successfully",

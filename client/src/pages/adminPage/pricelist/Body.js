@@ -56,6 +56,7 @@ const Body = () => {
     isActive: "",
   });
   const handleEditClick = (pricelist) => {
+    setError({});
     setSelectedPricelist(pricelist);
     setIsModalOpen(true);
     setValue({
@@ -109,6 +110,7 @@ const Body = () => {
 
   const handleModalError = () => {
     setError({});
+    dispatch({ type: SET_ERRORS, payload: {} });
     closeModal();
   };
 

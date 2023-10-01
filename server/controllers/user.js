@@ -64,6 +64,7 @@ const login = asyncHandler(async (req, res) => {
       success: true,
       accessToken,
       userData,
+      role: role,
     });
   } else {
     return res.status(401).json({

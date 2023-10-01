@@ -174,15 +174,51 @@ const getOrders = asyncHandler(async (req, res) => {
 
 // biểu đồ thống kê doanh thu theo tháng
 
+// const Income = asyncHandler(async (req, res) => {
+//   const productId = req.query.pid;
+
+//   try {
+//     const income = await Order.aggregate([
+//       {
+//         $match: {
+//           ...(productId && {
+//             "productItems.productId": productId,
+//           }),
+//         },
+//       },
+//       {
+//         $project: {
+//           month: { $month: "$createdAt" },
+//           year: { $year: "$createdAt" },
+//           sales: "$total_price",
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: { month: "$month", year: "$year" },
+//           total: { $sum: "$sales" },
+//         },
+//       },
+//       {
+//         $sort: { "_id.year": 1, "_id.month": 1 },
+//       },
+//     ]);
+//     res.status(200).json(income);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+
 const Income = asyncHandler(async (req, res) => {
-  const productId = req.query.pid;
+  const productId = req.query.pid; // Lấy productId từ query parameter pid
 
   try {
     const income = await Order.aggregate([
       {
         $match: {
+          status: "delivered", // Chỉ tính đơn hàng đã giao hàng
           ...(productId && {
-            "productItems.productId": productId,
+            "productItems.productId": mongoose.Types.ObjectId(productId), // Chuyển productId sang kiểu ObjectId
           }),
         },
       },

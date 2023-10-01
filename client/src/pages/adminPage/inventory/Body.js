@@ -25,7 +25,6 @@ const modalStyles = {
 const Body = () => {
   const store = useSelector((state) => state);
   const inventorys = useSelector((state) => state.admin.allInventory);
-  console.log("inventorys", inventorys);
   const initialInventorys = inventorys;
   const [selectedInventory, setSelectedInventory] = useState("");
   const [error, setError] = useState({});
@@ -114,6 +113,7 @@ const Body = () => {
 
   // handle search
   const [filteredList, setFilteredList] = new useState([]);
+  console.log("filteredList", filteredList);
   const [searchValue, setSearchValue] = useState("");
   const filterBySearch = (event) => {
     const query = event.target.value;
@@ -121,7 +121,9 @@ const Body = () => {
     var updatedList = [...inventorys];
     updatedList = updatedList.filter((item) => {
       return (
-        item?.productName?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        item?.productId?.productName
+          ?.toLowerCase()
+          .indexOf(query.toLowerCase()) !== -1
       );
     });
     setFilteredList(updatedList);
@@ -260,7 +262,8 @@ const Body = () => {
                   <input
                     placeholder={selectedInventory?.quantity}
                     className={classes.InputStyle}
-                    type="text"
+                    type="number"
+                    min={0}
                     value={value.quantity}
                     onChange={(e) =>
                       setValue({
