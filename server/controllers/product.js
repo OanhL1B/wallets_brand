@@ -3,21 +3,29 @@ const Warehousing = require("../models/warehousing");
 const ProductPrice = require("../models/productprice");
 const Pricelist = require("../models/pricelist");
 const Cart = require("../models/cart");
-const Order = require("../models/order");
+const category = require("../models/category");
 
+const Order = require("../models/order");
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
+const message = require("../constan/error");
 
 // xong được api thêm sản phẩm
 
 const createProduct = asyncHandler(async (req, res) => {
   try {
-    const errors = { productError: String };
-    const { productName } = req.body;
+    const { productName, category, material, design, description } = req.body;
+    if (!productName || !category || !material || !design || !description)
+      return res.status(400).json({
+        success: false,
+        mes: message.MISSING_INPUT,
+      });
     const existingProduct = await Product.findOne({ productName });
     if (existingProduct) {
-      errors.productError = "Sản phẩm này đã này đã tồn tại";
-      return res.status(400).json(errors);
+      return res.status(400).json({
+        success: false,
+        mes: message.PRODUCT_ERROR,
+      });
     }
     if (req.body && req.body.productName)
       req.body.slug = slugify(req.body.productName);
@@ -33,10 +41,11 @@ const createProduct = asyncHandler(async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Thêm mới sản phẩm  thành công!",
+      message: message.PRODUCT_SUCCESS,
       retObj: newProduct,
     });
   } catch (error) {
+    console.log("errors", error);
     const errors = { backendError: String };
     errors.backendError = error;
     res.status(500).json(errors);
@@ -44,35 +53,6 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 // GET theo id sản phẩm
-
-// const getProduct = asyncHandler(async (req, res) => {
-//   try {
-//     const { pid } = req.params;
-
-//     const product = await Product.findById(pid);
-
-//     if (!product) {
-//       return res
-//         .status(404)
-//         .json({ success: false, error: "Product not found" });
-//     }
-
-//     const warehouseEntry = await Warehousing.findOne({ productId: pid });
-
-//     const priceEntry = await ProductPrice.findOne({ productId: pid });
-
-//     const productWithDetails = {
-//       ...product.toObject(),
-//       quantity: warehouseEntry ? warehouseEntry.quantity : 0,
-//       price: priceEntry ? priceEntry.price : 0,
-//     };
-
-//     res.json({ success: true, data: productWithDetails });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ success: false, error: "Server error" });
-//   }
-// });
 
 const getProduct = asyncHandler(async (req, res) => {
   try {

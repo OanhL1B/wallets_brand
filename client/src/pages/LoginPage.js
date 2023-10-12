@@ -31,9 +31,11 @@ const LoginPage = () => {
   };
   useEffect(() => {
     if (store.errors) {
+      setError(store.errors);
+
       setLoading(false);
-      setEmail("");
-      setPassword("");
+      setEmail(email);
+      setPassword(password);
     }
   }, [store.errors]);
 
@@ -66,7 +68,7 @@ const LoginPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 name="email"
-                type="email"
+                type="text"
                 required
                 className="w-full px-6 py-4 text-sm font-medium bg-transparent border focus:border-[#157572] focus:ring-primary focus:outline-none focus:ring focus:ring-opacity-40  rounded-xl placeholder:text-text4 dark:placeholder:text-text2 dark:text-white border-strock text-text1 dark:border-darkStroke"
                 placeholder="example@gmail.com"

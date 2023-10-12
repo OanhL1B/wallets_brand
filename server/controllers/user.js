@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
+const message = require("../constan/error");
 
 const {
   generateAccessToken,
@@ -15,18 +16,30 @@ const register = asyncHandler(async (req, res) => {
   if (!email || !password || !lastName || !firstName)
     return res.status(400).json({
       success: false,
-      mes: "Missing inputs",
+      mes: message.MISSING_INPUT,
     });
+  const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      success: false,
+      mes: message.VALIDATION_EMAIL_E001,
+    });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({
+      success: false,
+      mes: message.VALIDATION_PASSWORD_E002,
+    });
+  }
 
   const user = await User.findOne({ email });
-  if (user) throw new Error("User has existed");
+  if (user) throw new Error(message.SIGNUP_FAIL);
   else {
     const newUser = await User.create(req.body);
     return res.status(200).json({
       success: newUser ? true : false,
-      mes: newUser
-        ? "Register is successfully. Please go login~"
-        : "Something went wrong",
+      mes: newUser ? message.SIGNUP_SUCCESS : message.ERROR,
     });
   }
 });
@@ -39,7 +52,21 @@ const login = asyncHandler(async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({
       success: false,
-      mes: "Missing inputs",
+      message: message.MISSING_INPUT,
+    });
+  }
+  const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      success: false,
+      message: message.VALIDATION_EMAIL_E001,
+    });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({
+      success: false,
+      message: message.VALIDATION_PASSWORD_E002,
     });
   }
 
@@ -62,6 +89,7 @@ const login = asyncHandler(async (req, res) => {
 
     return res.status(200).json({
       success: true,
+      message: message.LOGIN_SUCCESS,
       accessToken,
       userData,
       role: role,
@@ -69,7 +97,7 @@ const login = asyncHandler(async (req, res) => {
   } else {
     return res.status(401).json({
       success: false,
-      message: "Mật khẩu hoặc password chưa đúng!",
+      message: message.LOGIN_E001,
     });
   }
 });

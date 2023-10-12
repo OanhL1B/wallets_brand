@@ -296,9 +296,7 @@ const Body = () => {
                     messageColor="157572"
                   />
                 )}
-                {error.productError ? (
-                  <p className="text-red-500">{error.productError}</p>
-                ) : null}
+                {error.mes ? <p className="text-red-500">{error.mes}</p> : null}
               </div>
             </div>
           </form>

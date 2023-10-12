@@ -46,19 +46,10 @@ export const addUser = (formData) => async (dispatch) => {
     if (data.success === true) {
       toast.success("Đăng ký tài khoản thành công!");
       dispatch({ type: ADD_USER, payload: true });
-    } else {
-      dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
-    if (
-      error.response &&
-      error.response.data &&
-      error.response.data.status === "error"
-    ) {
-      dispatch({ type: SET_ERRORS, payload: error.response });
-    } else {
-      console.log("Unknown error occurred");
-    }
+    console.log(error);
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
 

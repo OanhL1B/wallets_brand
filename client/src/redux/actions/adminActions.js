@@ -76,7 +76,6 @@ export const getpricelists = () => async (dispatch) => {
 export const addProduct = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addProduct(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Thêm  mới sản phẩm thành công!");
       dispatch({ type: ADD_PRODUCT, payload: true });
