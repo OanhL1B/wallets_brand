@@ -1,38 +1,18 @@
 import React from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import {
-  deleteCart,
-  getCartUser,
-  getCategories,
-  getProducts,
-  updateCartQuantity,
-} from "../redux/actions";
+import { deleteCart, getCartUser, updateCartQuantity } from "../redux/actions";
 import { Link } from "react-router-dom";
 import { DELETE_CART } from "../redux/actionTypes";
 import Swal from "sweetalert2";
+import Title from "../components/Title";
+import IconCategory from "../components/IconCategory";
 
 const Cart = () => {
-  // thêm để lọc
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCategories());
-    dispatch(getProducts());
-  }, [dispatch]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isFiltering, setIsFiltering] = useState(false);
-
-  const handleCategoryFilter = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setIsFiltering(true);
-  };
-
-  // end
   const store = useSelector((state) => state);
-
   const [totalAmount, setTotalAmount] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
   const userCarts = useSelector((state) => state.customer?.userCarts);
@@ -40,7 +20,7 @@ const Cart = () => {
 
   useEffect(() => {
     dispatch(getCartUser(user?.userData?._id));
-  }, []);
+  }, [updatedQuantities]);
 
   useEffect(() => {
     let sum = 0;
@@ -104,10 +84,10 @@ const Cart = () => {
 
   return (
     <div className="bg-gray-100">
-      <Header
-        onCategoryFilter={handleCategoryFilter}
-        selectedCategoryId={selectedCategory}
-      />
+      <Header />
+      <Title />
+      <IconCategory />
+
       {userCarts.length === 0 && (
         <div className="text-center">
           Giỏ hàng đang trống, cùng thêm vào giỏ hàng nào!{" "}

@@ -38,6 +38,10 @@ var orderSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+      phoneNumber: {
+        type: Number,
+        required: true,
+      },
     },
     total_price: {
       type: Number,
@@ -54,9 +58,6 @@ var orderSchema = new mongoose.Schema(
     Order_ReviewerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    },
-    tokenId: {
-      type: String,
     },
   },
   {

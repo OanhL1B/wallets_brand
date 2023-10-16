@@ -13,5 +13,6 @@ router.get("/", ctrls.getProducts);
 router.put("/", [verifyAccessToken, isAdminOrEmployee], ctrls.updateProduct);
 router.delete("/", [verifyAccessToken, isAdminOrEmployee], ctrls.deleteProduct);
 router.get("/:pid", ctrls.getProduct);
+router.get("/category/:categoryId", ctrls.getProductbyCategory);
 
 module.exports = router;

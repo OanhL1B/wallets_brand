@@ -1,31 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Canceled,
-  getCategories,
-  getOrderUser,
-  getProducts,
-} from "../redux/actions";
+import { Canceled, getOrderUser } from "../redux/actions";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Swal from "sweetalert2";
-import { APIV1 } from "../redux/config/config";
+import Title from "../components/Title";
+import IconCategory from "../components/IconCategory";
 
 const UserOrder = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const store = useSelector((state) => state);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCategories());
-    dispatch(getProducts());
-  }, [dispatch]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isFiltering, setIsFiltering] = useState(false);
-  const handleCategoryFilter = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setIsFiltering(true);
-  };
+
   useEffect(() => {
     dispatch(getOrderUser(user?.userData?._id));
   }, []);
@@ -54,10 +41,9 @@ const UserOrder = () => {
 
   return (
     <>
-      <Header
-        onCategoryFilter={handleCategoryFilter}
-        selectedCategoryId={selectedCategory}
-      />
+      <Header />
+      <Title></Title>
+      <IconCategory></IconCategory>
       <h1 className="text-2xl font-bold text-center">Đơn hàng của bạn</h1>
       <div className="w-full my-8 mt-6 bg-bg_product">
         {userOrders.length !== 0 && (

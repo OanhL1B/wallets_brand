@@ -5,23 +5,64 @@ const KEY = process.env.STRIPE_KEY;
 const stripe = require("stripe")(KEY);
 const asyncHandler = require("express-async-handler");
 
+// const createOrderPaymentOnline = asyncHandler(async (req, res) => {
+//   try {
+//     const { userId, productItems, shippingAddress, total_price, tokenId } =
+//       req.body;
+
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       amount: total_price,
+//       currency: "vnd",
+//     });
+//     const newOrder = await new Order({
+//       userId,
+//       productItems,
+//       shippingAddress,
+//       total_price,
+//       isPayment: true,
+//       tokenId,
+//     });
+//     await newOrder.save();
+
+//     for (const item of productItems) {
+//       const { productId, quantity } = item;
+//       const warehousingProduct = await Warehousing.findOne({ productId });
+
+//       if (warehousingProduct) {
+//         const updatedQuantity = warehousingProduct.quantity - quantity;
+
+//         warehousingProduct.quantity = updatedQuantity;
+//         await warehousingProduct.save();
+//       } else {
+//         console.log(`Product with ID ${productId} not found in the warehouse.`);
+//       }
+//     }
+
+//     await Cart.deleteMany({ userId });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Order placed successfully!",
+//       paymentIntent: paymentIntent,
+//       retObj: newOrder,
+//     });
+//   } catch (error) {
+//     const errors = { backendError: String };
+//     errors.backendError = error;
+//     res.status(500).json(errors);
+//   }
+// });
+
 const createOrderPaymentOnline = asyncHandler(async (req, res) => {
   try {
-    const { userId, productItems, shippingAddress, total_price, tokenId } =
-      req.body;
+    const { userId, productItems, shippingAddress, total_price } = req.body;
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: total_price,
-      currency: "vnd",
-      // source: req.body.tokenId,
-    });
     const newOrder = await new Order({
       userId,
       productItems,
       shippingAddress,
       total_price,
       isPayment: true,
-      tokenId,
     });
     await newOrder.save();
 
@@ -44,7 +85,6 @@ const createOrderPaymentOnline = asyncHandler(async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Order placed successfully!",
-      paymentIntent: paymentIntent,
       retObj: newOrder,
     });
   } catch (error) {
@@ -94,46 +134,6 @@ const createOrderPaymentCod = asyncHandler(async (req, res) => {
   }
 });
 
-// const createOrderPaymentCod = asyncHandler(async (req, res) => {
-//   try {
-//     const { userId, productItems, shippingAddress, total_price } = req.body;
-
-//     const newOrder = await new Order({
-//       userId,
-//       productItems,
-//       shippingAddress,
-//       total_price,
-//     });
-//     await newOrder.save();
-
-//     for (const item of productItems) {
-//       const { productId, quantity } = item;
-//       const warehousingProduct = await Warehousing.findOne({ productId });
-
-//       if (warehousingProduct) {
-//         const updatedQuantity = warehousingProduct.quantity - quantity;
-
-//         warehousingProduct.quantity = updatedQuantity;
-//         await warehousingProduct.save();
-//       } else {
-//         console.log(`Product with ID ${productId} not found in the warehouse.`);
-//       }
-//     }
-
-//     await Cart.deleteMany({ userId });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Order placed successfully!",
-//       retObj: newOrder,
-//     });
-//   } catch (error) {
-//     const errors = { backendError: String };
-//     errors.backendError = error;
-//     res.status(500).json(errors);
-//   }
-// });
-
 const getOrdersByUser = asyncHandler(async (req, res) => {
   try {
     const { userId } = req.params;
@@ -176,6 +176,9 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
     const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
+    }
+    if (status === "delivered") {
+      order.isPayment = true;
     }
     order.status = status;
     order.Order_ReviewerId = Order_ReviewerId;

@@ -5,40 +5,38 @@ import Footer from "../components/Footer";
 import AddIcon from "@mui/icons-material/Add";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { APIPUBLIC } from "../redux/config/config";
-import { useDispatch } from "react-redux";
-import {
-  addCart,
-  getCartUser,
-  getCategories,
-  getProducts,
-} from "../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { addCart, getCartUser, getProductsByCategory } from "../redux/actions";
+import Title from "../components/Title";
+import IconCategory from "../components/IconCategory";
+import Products from "../components/Products";
 const ProductDetail = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCategories());
-    dispatch(getProducts());
-  }, [dispatch]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isFiltering, setIsFiltering] = useState(false);
-  const handleCategoryFilter = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setIsFiltering(true);
-  };
+
   const { productId } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState(null);
-
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [category, setCategory] = useState();
+  const product_categorys = useSelector((state) => state.customer.allProduct);
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   useEffect(() => {
     getProduct();
+    dispatch(getProductsByCategory(category));
   }, [productId]);
 
   const getProduct = async () => {
     try {
       const res = await APIPUBLIC.get("api/product/" + productId);
+
       setProduct(res.data?.data);
+      setCategory(res.data?.data.category);
+      console.log("res.data?.data.category", res.data?.data.category);
+      if (res.data.data.thumb) {
+        setSelectedImage(res.data.data.thumb);
+      }
     } catch {}
   };
 
@@ -75,28 +73,36 @@ const ProductDetail = () => {
     dispatch(getCartUser(user?.userData?._id));
   };
 
+  const { images, thumb } = product;
+  const imageArray = images || [];
+
+  if (thumb && !imageArray.includes(thumb)) {
+    imageArray.push(thumb);
+  }
+
   return (
     <div className="bg-gray-100">
-      <Header
-        onCategoryFilter={handleCategoryFilter}
-        selectedCategoryId={selectedCategory}
-      />
-      <div className="p-10 md:flex md:justify-center">
-        <div className="w-full md:w-1/2 md:p-5">
-          <img
-            src={product?.thumb}
-            alt={product.productName}
-            className="object-cover w-full h-90vh md:h-40vh"
-          />
-          <h1>Những hình ảnh khác của sản phẩm:</h1>
-          <div className="flex w-full mt-4">
+      <Header />
+      <Title />
+      <IconCategory />
+      <div className="flex justify-center p-10">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-full max-w-xs md:max-w-2xl">
+            {selectedImage && (
+              <img src={selectedImage} alt="Main" className="w-[80%] h-auto" />
+            )}{" "}
+          </div>
+          <div className="flex space-x-4">
             {product?.images &&
-              product?.images.map((i, index) => (
+              imageArray.map((image, index) => (
                 <img
                   key={index}
-                  src={i}
-                  alt={`Anh ${index}`}
-                  className="object-cover w-full max-w-xs mr-2 h-90vh md:h-40vh"
+                  src={image}
+                  alt={`Thumbnail ${index}`}
+                  onClick={() => setSelectedImage(image)}
+                  className={`object-cover w-16 h-16 border border-gray-300 cursor-pointer md:w-24 md:h-24 hover:border-blue-500 ${
+                    selectedImage === image ? "border-blue-500" : ""
+                  }`}
                 />
               ))}
           </div>
@@ -151,6 +157,13 @@ const ProductDetail = () => {
             THÊM VÀO GIỎ
           </button>
         </div>
+      </div>
+      <div className="border-t-2 border-b-2">
+        <h1 className="mt-3 text-xl font-semibold text-center">
+          {" "}
+          Những sản phẩm liên quan
+        </h1>
+        <Products product={product_categorys}></Products>
       </div>
       <Footer />
     </div>

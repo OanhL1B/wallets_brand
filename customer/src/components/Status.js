@@ -2,7 +2,7 @@ import React from "react";
 
 const Status = () => {
   return (
-    <div className="flex flex-col items-center mt-5 text-center">
+    <div className="flex flex-col items-center mt-5 mb-10 text-center">
       <h1 className="text-[#333333] text-3xl font-normal">
         Lối sống Minimalism
       </h1>

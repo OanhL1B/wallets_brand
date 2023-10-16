@@ -2,30 +2,35 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import {
-  addOrderCod,
-  addOrderOnline,
-  getCartUser,
-  getCategories,
-  getProducts,
-} from "../redux/actions";
+import { addOrderCod, addOrderOnline, getCartUser } from "../redux/actions";
 import { useNavigate } from "react-router";
 import StripeCheckout from "react-stripe-checkout";
 import { ADD_ORDER_COD, ADD_ORDER_ONLINE } from "../redux/actionTypes";
+import { APIV1 } from "../redux/config/config";
+import Title from "../components/Title";
+import IconCategory from "../components/IconCategory";
 const KEY = process.env.REACT_APP_STRIPE;
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    dispatch(getCategories());
-    dispatch(getProducts());
-  }, [dispatch]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isFiltering, setIsFiltering] = useState(false);
-  const handleCategoryFilter = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setIsFiltering(true);
+
+  // test stripe
+  const [stripeToken, setStripeToken] = useState(null);
+  const onToken = (token) => {
+    setStripeToken(token);
   };
+  useEffect(() => {
+    const makeRequest = async () => {
+      await APIV1.post("/api/payment", {
+        tokenId: stripeToken.id,
+        amount: totalAmount,
+      });
+      handleToken();
+    };
+    stripeToken && makeRequest();
+  }, [stripeToken]);
+
+  //end test stripe
   const store = useSelector((state) => state);
   const userCarts = useSelector((state) => state.customer?.userCarts);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -34,6 +39,7 @@ const Checkout = () => {
     firstName: "",
     lastName: "",
     address: "",
+    phoneNumber: "",
   });
   const [cartProductState, setCartProductState] = useState([]);
 
@@ -63,7 +69,8 @@ const Checkout = () => {
     if (
       !shippingInfo.firstName ||
       !shippingInfo.lastName ||
-      !shippingInfo.address
+      !shippingInfo.address ||
+      !shippingInfo.phoneNumber
     ) {
       alert("Vui lòng điền đầy đủ thông tin địa chỉ giao hàng!");
       return;
@@ -76,6 +83,7 @@ const Checkout = () => {
         firstName: shippingInfo.firstName,
         lastName: shippingInfo.lastName,
         address: shippingInfo.address,
+        phoneNumber: shippingInfo.phoneNumber,
       },
       total_price: totalAmount,
     };
@@ -93,7 +101,7 @@ const Checkout = () => {
     }
   }, [store.customer.orderCodAdded]);
 
-  const handleToken = async (token) => {
+  const handleToken = async () => {
     const orderData = {
       userId: user?.userData?._id,
       productItems: userCarts.map((cartItem) => ({
@@ -103,7 +111,6 @@ const Checkout = () => {
       })),
       shippingAddress: shippingInfo,
       total_price: totalAmount,
-      tokenId: token.id,
     };
 
     dispatch(addOrderOnline(orderData));
@@ -123,19 +130,15 @@ const Checkout = () => {
   }, [store.customer.orderOnlineAdded]);
   return (
     <>
-      <Header
-        onCategoryFilter={handleCategoryFilter}
-        selectedCategoryId={selectedCategory}
-      />
-      <div className="text-xl font-semibold text-center">
+      <Header />
+      <Title></Title>
+      <IconCategory></IconCategory>
+      <div className="mt-4 text-xl font-semibold text-center">
         Thông tin giao hàng
       </div>
 
       <div className="items-center justify-center w-full m-10 mx-auto">
-        <form
-          // onSubmit={handleSubmitForm}
-          className="w-full max-w-md p-6 mx-auto space-y-6 bg-white rounded-lg shadow-md"
-        >
+        <form className="w-full max-w-md p-6 mx-auto space-y-6 bg-white rounded-lg shadow-md">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label
@@ -198,24 +201,44 @@ const Checkout = () => {
               placeholder="97 Man Thiện"
             />
           </div>
+          <div>
+            <label
+              htmlFor="phoneNumber"
+              className="block text-sm font-medium text-text2 dark:text-text3"
+            >
+              Số điện thoại nhận hàng *
+            </label>
+            <input
+              onChange={(e) =>
+                setShippingInfo({
+                  ...shippingInfo,
+                  phoneNumber: e.target.value,
+                })
+              }
+              value={shippingInfo.phoneNumber}
+              name="phoneNumber"
+              type="text"
+              required
+              className="w-full px-4 py-2 text-sm font-medium bg-transparent border border-[#157572] focus:border-[#157572] focus:ring-secondary focus:outline-none focus:ring focus:ring-opacity-40 rounded-xl placeholder-text-text4 dark:placeholder-text-text2 dark:text-white"
+            />
+          </div>
           <div className="text-text1 dark:text-darkStroke">
             Tổng tiền đơn hàng: {totalAmount}
           </div>
         </form>
-        <div className="flex flex-col gap-y-2">
+        <div className="flex flex-col mt-2 text-center gap-x-2 gap-y-2">
           <div>
             <StripeCheckout
-              token={handleToken}
+              token={onToken}
               stripeKey={KEY}
               amount={totalAmount}
               name="Camelia shop"
-              description="Mô tả đơn hàng"
+              description="Thanh toán đơn hàng"
             />
           </div>
-          <div>
+          <div className="w-full" style={{ "text-align": "-webkit-center" }}>
             <button
-              // type="submit"
-              className="flex items-center justify-center w-full px-4 py-3 text-base font-semibold text-white rounded-xl bg-secondary min-h-[56px]"
+              className="flex items-center text-center justify-center  px-3 py-2 text-base font-semibold text-white rounded-md bg-secondary min-h-[30px]"
               onClick={handleSubmitForm}
             >
               Thanh toán khi nhân hàng

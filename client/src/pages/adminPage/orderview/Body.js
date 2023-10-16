@@ -37,7 +37,8 @@ const Body = () => {
     );
   };
 
-  const { shippingAddress, productItems, total_price, status } = order;
+  const { shippingAddress, productItems, total_price, status, isPayment } =
+    order;
   return (
     <div className="w-full my-8 mt-6 bg-bg_product">
       <div className="flex mx-4">
@@ -49,10 +50,18 @@ const Body = () => {
       </div>
       <div className="px-8 py-6 border border-[#c7c2c2] bg-white">
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className="font-bold">Họ và tên:</p>
-            <p>{`${shippingAddress?.firstName} ${shippingAddress?.lastName}`}</p>
+          <div className="flex flex-col gap-y-2">
+            <div>
+              <p className="font-bold">Họ và tên:</p>
+              <p>{`${shippingAddress?.firstName} ${shippingAddress?.lastName}`}</p>
+            </div>
+            <div>
+              {isPayment && isPayment === true
+                ? "Đã thanh toán"
+                : "Chưa thanh toán"}
+            </div>
           </div>
+
           <div className="flex p-8 gap-x-5 ">
             <div className={classes.WrapInputLabel}>
               <h1 className={classes.LabelStyle}>Cập nhật trạng thái:</h1>

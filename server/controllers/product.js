@@ -160,44 +160,123 @@ const getProducts = asyncHandler(async (req, res) => {
   }
 });
 
-// const updateProduct = asyncHandler(async (req, res) => {
+// const getProductbyCategory = asyncHandler(async (req, res) => {
+//   const categoryId = req.params.categoryId;
+
 //   try {
-//     const errors = { productError: String };
-//     const { productId, title } = req.body;
-
-//     if (!productId) {
-//       errors.productError = "Thiếu thông tin productId";
-//       return res.status(400).json(errors);
+//     let products;
+//     if (categoryId === "all") {
+//       // Lấy tất cả sản phẩm khi categoryId là "all"
+//       products = await Product.find({ isActive: true })
+//         .populate({
+//           path: "category",
+//           select: "categoryName",
+//         })
+//         .exec();
+//     } else {
+//       // Lấy sản phẩm theo categoryId khi categoryId không phải là "all"
+//       products = await Product.find({
+//         category: categoryId,
+//         isActive: true,
+//       })
+//         .populate({
+//           path: "category",
+//           select: "categoryName",
+//         })
+//         .exec();
 //     }
 
-//     const product = await Product.findById(productId);
-//     if (!product) {
-//       return res.status(400).json({ productError: "Sản phẩm không tồn tại" });
-//     }
-
-//     if (title) {
-//       req.body.slug = slugify(title);
-//     }
-
-//     const updatedProduct = await Product.findByIdAndUpdate(
-//       productId,
-//       req.body,
-//       {
-//         new: true,
-//       }
-//     );
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Cập nhật sản phẩm thành công",
-//       updatedProduct,
-//     });
+//     res.json({ success: true, retObj: products });
 //   } catch (error) {
-//     const errors = { backendError: String };
-//     errors.backendError = error;
-//     res.status(500).json(errors);
+//     console.error(
+//       "Lỗi khi lấy thông tin sản phẩm theo danh mục:",
+//       error.message
+//     );
+//     res
+//       .status(500)
+//       .json({ error: "Lỗi khi lấy thông tin sản phẩm theo danh mục" });
 //   }
 // });
+const getProductbyCategory = asyncHandler(async (req, res) => {
+  const categoryId = req.params.categoryId;
+
+  try {
+    let products;
+    if (categoryId === "all") {
+      // Lấy tất cả sản phẩm khi categoryId là "all"
+      products = await Product.find({ isActive: true })
+        .populate({
+          path: "category",
+          select: "categoryName",
+        })
+        .exec();
+    } else {
+      // Lấy sản phẩm theo categoryId khi categoryId không phải là "all"
+      products = await Product.find({
+        category: categoryId,
+        isActive: true,
+      })
+        .populate({
+          path: "category",
+          select: "categoryName",
+        })
+        .exec();
+    }
+
+    const productIds = products.map((product) => product._id);
+
+    const quantities = await Warehousing.aggregate([
+      {
+        $match: { productId: { $in: productIds } },
+      },
+      {
+        $group: {
+          _id: "$productId",
+          quantity: { $sum: "$quantity" },
+        },
+      },
+    ]);
+
+    const activePricelist = await Pricelist.findOne({
+      isActive: true,
+      applyDate: { $lte: new Date() },
+    }).sort({ applyDate: -1 });
+
+    const prices = await ProductPrice.aggregate([
+      {
+        $match: {
+          productId: { $in: productIds },
+          pricelistId: activePricelist._id,
+        },
+      },
+      {
+        $group: {
+          _id: "$productId",
+          price: { $first: "$price" },
+        },
+      },
+    ]);
+
+    const productsWithDetails = products.map((product) => {
+      const quantityObj = quantities.find((q) => q._id.equals(product._id));
+      const priceObj = prices.find((p) => p._id.equals(product._id));
+      const quantity = quantityObj ? quantityObj.quantity : 0;
+      const price = priceObj ? priceObj.price : 0;
+
+      return {
+        ...product.toObject(),
+        quantity,
+        price,
+      };
+    });
+
+    res.json({ success: true, retObj: productsWithDetails });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Lỗi khi lấy thông tin sản phẩm theo danh mục" });
+  }
+});
 
 const updateProduct = asyncHandler(async (req, res) => {
   try {
@@ -294,4 +373,5 @@ module.exports = {
   getProducts,
   updateProduct,
   deleteProduct,
+  getProductbyCategory,
 };

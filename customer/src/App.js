@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ProfilePage from "./pages/ProfilePage";
 import Payment from "./pages/Payment";
+import Product_Category from "./pages/Product_Category";
 function App() {
   return (
     <Routes>
@@ -30,6 +31,10 @@ function App() {
       ></Route>
       <Route path="/profile" element={<ProfilePage />}></Route>
       <Route path="/payment" element={<Payment />}></Route>
+      <Route
+        path="/collections/:categoryId"
+        element={<Product_Category />}
+      ></Route>
     </Routes>
   );
 }
