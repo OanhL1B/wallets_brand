@@ -2,11 +2,13 @@ import axios from "axios";
 
 // api public
 export const APIPUBLIC = axios.create({
-  baseURL: "http://localhost:5000/",
+  baseURL: "https://lthdt-server.onrender.com/",
 });
 
 // api admin
-export const APIV1 = axios.create({ baseURL: "http://localhost:5000/" });
+export const APIV1 = axios.create({
+  baseURL: "https://lthdt-server.onrender.com/",
+});
 
 APIV1.interceptors.request.use((req) => {
   if (localStorage.getItem("user")) {
