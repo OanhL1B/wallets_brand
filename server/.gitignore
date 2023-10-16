@@ -9,6 +9,10 @@
 # testing
 /coverage
 /.env
+# .gitignore
+
+# Ignore all .env files
+.env*
 
 # production
 /build
