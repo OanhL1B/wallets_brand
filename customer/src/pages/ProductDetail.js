@@ -26,7 +26,6 @@ const ProductDetail = () => {
   };
   const { productId } = useParams();
   const [product, setProduct] = useState({});
-  console.log("product", product?.images);
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState(null);
 

@@ -94,7 +94,6 @@ const Body = () => {
     }),
     []
   );
-  console.log("mewo");
 
   const handleUploadImagesSuccess = (url) => {
     setValue((prevValue) => ({

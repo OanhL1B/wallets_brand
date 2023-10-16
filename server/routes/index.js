@@ -6,6 +6,7 @@ const productpriceRouter = require("./productprice");
 const warehousingRouter = require("./warehousing");
 const cartRouter = require("./cart");
 const orderRouter = require("./order");
+const stripeRouter = require("./stripe");
 
 const { notFound, errHandler } = require("../middlewares/errHandler");
 
@@ -18,6 +19,7 @@ const initRoutes = (app) => {
   app.use("/api/productprice", productpriceRouter);
   app.use("/api/warehousing", warehousingRouter);
   app.use("/api/order", orderRouter);
+  app.use("/api/payment", stripeRouter);
 
   app.use(notFound);
   app.use(errHandler);

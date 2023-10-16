@@ -47,9 +47,16 @@ var orderSchema = new mongoose.Schema(
       type: String,
       default: "pending",
     },
+    isPayment: {
+      type: Boolean,
+      default: false,
+    },
     Order_ReviewerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+    },
+    tokenId: {
+      type: String,
     },
   },
   {

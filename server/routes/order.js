@@ -7,7 +7,9 @@ const {
 
 // cả admin và nhân viên đều có quyền đối với danh mục nha
 
-router.post("/", [verifyAccessToken], ctrls.createOrder);
+router.post("/online", [verifyAccessToken], ctrls.createOrderPaymentOnline);
+router.post("/cod", [verifyAccessToken], ctrls.createOrderPaymentCod);
+
 router.get("/", [verifyAccessToken, isAdminOrEmployee], ctrls.getOrders);
 router.get("/income", [verifyAccessToken, isAdminOrEmployee], ctrls.Income);
 

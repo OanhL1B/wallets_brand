@@ -11,6 +11,7 @@ import SuccessPage from "./pages/SuccessPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ProfilePage from "./pages/ProfilePage";
+import Payment from "./pages/Payment";
 function App() {
   return (
     <Routes>
@@ -28,6 +29,7 @@ function App() {
         element={<ResetPassword />}
       ></Route>
       <Route path="/profile" element={<ProfilePage />}></Route>
+      <Route path="/payment" element={<Payment />}></Route>
     </Routes>
   );
 }

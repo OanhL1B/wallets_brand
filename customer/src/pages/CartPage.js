@@ -36,14 +36,12 @@ const Cart = () => {
   const [totalAmount, setTotalAmount] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
   const userCarts = useSelector((state) => state.customer?.userCarts);
-  console.log("userCarts", userCarts);
   const [updatedQuantities, setUpdatedQuantities] = useState({});
 
   useEffect(() => {
     dispatch(getCartUser(user?.userData?._id));
   }, []);
 
-  console.log("userCarts", userCarts);
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < userCarts?.length; index++) {

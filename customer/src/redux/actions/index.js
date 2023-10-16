@@ -1,7 +1,8 @@
 import { toast } from "react-toastify";
 import {
   ADD_CART,
-  ADD_ORDER,
+  ADD_ORDER_COD,
+  ADD_ORDER_ONLINE,
   ADD_USER,
   CANCELED,
   DELETE_CART,
@@ -75,13 +76,35 @@ export const addCart = (formData) => async (dispatch) => {
   }
 };
 
-export const addOrder = (formData) => async (dispatch) => {
+export const addOrderCod = (formData) => async (dispatch) => {
   try {
-    const { data } = await api.addOrder(formData);
+    const { data } = await api.addOrderCod(formData);
     console.log("data", data);
     if (data.success === true) {
       toast.success("Đặt hàng thành công hàng thành công!");
-      dispatch({ type: ADD_ORDER, payload: true });
+      dispatch({ type: ADD_ORDER_COD, payload: true });
+    } else {
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    if (
+      error.response &&
+      error.response.data &&
+      error.response.data.status === "error"
+    ) {
+      dispatch({ type: SET_ERRORS, payload: error.response });
+    } else {
+      console.log("Unknown error occurred");
+    }
+  }
+};
+export const addOrderOnline = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.addOrderOnline(formData);
+    console.log("data", data);
+    if (data.success === true) {
+      toast.success("Đặt hàng thành công hàng thành công!");
+      dispatch({ type: ADD_ORDER_ONLINE, payload: true });
     } else {
       dispatch({ type: SET_ERRORS, payload: data });
     }

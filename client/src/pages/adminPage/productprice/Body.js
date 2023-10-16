@@ -28,7 +28,6 @@ const Body = () => {
   const initialProductprices = productprices;
   const [selectedProductPrice, setSelectedProductPrice] = useState("");
   const [error, setError] = useState({});
-  console.log("error", error);
 
   const dispatch = useDispatch();
   useEffect(() => {

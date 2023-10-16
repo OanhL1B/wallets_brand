@@ -113,7 +113,6 @@ const Body = () => {
 
   // handle search
   const [filteredList, setFilteredList] = new useState([]);
-  console.log("filteredList", filteredList);
   const [searchValue, setSearchValue] = useState("");
   const filterBySearch = (event) => {
     const query = event.target.value;

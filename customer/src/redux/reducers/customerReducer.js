@@ -1,6 +1,7 @@
 import {
   ADD_CART,
-  ADD_ORDER,
+  ADD_ORDER_COD,
+  ADD_ORDER_ONLINE,
   ADD_USER,
   CANCELED,
   DELETE_CART,
@@ -20,7 +21,9 @@ import {
 const initialState = {
   authData: JSON.parse(localStorage.getItem("user")) || null,
   userAdded: false,
-  orderAdded: false,
+  orderOnlineAdded: false,
+  orderCodAdded: false,
+
   updatedCart: false,
   deleteOrder: false,
   deletedCart: false,
@@ -45,10 +48,15 @@ const customerReducer = (state = initialState, action) => {
         ...state,
         userAdded: action.payload,
       };
-    case ADD_ORDER:
+    case ADD_ORDER_ONLINE:
       return {
         ...state,
-        orderAdded: action.payload,
+        orderOnlineAdded: action.payload,
+      };
+    case ADD_ORDER_COD:
+      return {
+        ...state,
+        orderCodAdded: action.payload,
       };
 
     case ADD_CART:

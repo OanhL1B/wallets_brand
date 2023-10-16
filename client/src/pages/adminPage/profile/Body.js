@@ -32,7 +32,6 @@ const Body = () => {
   const store = useSelector((state) => state);
 
   const user = useSelector((state) => state.admin.usercurrent);
-  console.log("user", user);
 
   // EDIT
   const [isModalOpen, setIsModalOpen] = useState(false);

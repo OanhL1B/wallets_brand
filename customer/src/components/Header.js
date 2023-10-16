@@ -24,9 +24,6 @@ const Header = ({ onCategoryFilter }) => {
   const store = useSelector((state) => state);
   const categories = useSelector((state) => state.customer.allCategory);
   const products = useSelector((state) => state.customer.allProduct);
-  console.log("products", products);
-
-  console.log("categories", categories);
 
   const dispatch = useDispatch();
 

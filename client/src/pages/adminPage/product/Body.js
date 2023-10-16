@@ -103,7 +103,6 @@ const Body = () => {
     productId: "",
     isActive: "",
   });
-  console.log("value".value);
 
   const handleEditClick = (pod) => {
     setModalMode("edit");

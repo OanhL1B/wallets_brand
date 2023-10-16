@@ -12,7 +12,9 @@ export const updateCartQuantity = (data) => APIV1.put("/api/cart", data);
 export const deleteCart = (CartId) => APIV1.delete(`/api/cart/${CartId}`);
 
 // order
-export const addOrder = (order) => APIV1.post("/api/order", order);
+export const addOrderCod = (order) => APIV1.post("/api/order/cod", order);
+export const addOrderOnline = (order) => APIV1.post("/api/order/online", order);
+
 export const getOrderUser = (userId) => APIV1.get(`/api/order/user/${userId}`);
 export const Canceled = (orderId) => APIV1.delete(`/api/order/${orderId}`);
 // quên mật khẩu

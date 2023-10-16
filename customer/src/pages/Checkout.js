@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import {
-  addOrder,
+  addOrderCod,
+  addOrderOnline,
   getCartUser,
   getCategories,
   getProducts,
 } from "../redux/actions";
-import { ADD_ORDER } from "../redux/actionTypes";
 import { useNavigate } from "react-router";
-
+import StripeCheckout from "react-stripe-checkout";
+import { ADD_ORDER_COD, ADD_ORDER_ONLINE } from "../redux/actionTypes";
+const KEY = process.env.REACT_APP_STRIPE;
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ const Checkout = () => {
   };
   const store = useSelector((state) => state);
   const userCarts = useSelector((state) => state.customer?.userCarts);
-  console.log("userCarts", userCarts);
   const user = JSON.parse(localStorage.getItem("user"));
   const [totalAmount, setTotalAmount] = useState(null);
   const [shippingInfo, setShippingInfo] = useState({
@@ -81,20 +80,47 @@ const Checkout = () => {
       total_price: totalAmount,
     };
 
-    dispatch(addOrder(orderData));
+    dispatch(addOrderCod(orderData));
   };
-
   useEffect(() => {
-    if (store.errors || store.customer.orderAdded) {
-      if (store.customer.orderAdded) {
+    if (store.customer.orderCodAdded) {
+      if (store.customer.orderCodAdded) {
         dispatch(getCartUser(user?.userData?._id));
-        dispatch({ type: ADD_ORDER, payload: false });
+        dispatch({ type: ADD_ORDER_COD, payload: false });
         navigate("/success");
       }
     } else {
     }
-  }, [store.errors, store.customer.orderAdded]);
+  }, [store.customer.orderCodAdded]);
 
+  const handleToken = async (token) => {
+    const orderData = {
+      userId: user?.userData?._id,
+      productItems: userCarts.map((cartItem) => ({
+        productId: cartItem._id,
+        quantity: cartItem.quantity,
+        price: cartItem.price,
+      })),
+      shippingAddress: shippingInfo,
+      total_price: totalAmount,
+      tokenId: token.id,
+    };
+
+    dispatch(addOrderOnline(orderData));
+  };
+
+  console.log("store", store);
+
+  useEffect(() => {
+    if (store.customer.orderOnlineAdded) {
+      if (store.customer.orderOnlineAdded) {
+        dispatch(getCartUser(user?.userData?._id));
+        dispatch({ type: ADD_ORDER_ONLINE, payload: false });
+        navigate("/success");
+      }
+    } else {
+    }
+  }, [store.customer.orderOnlineAdded]);
   return (
     <>
       <Header
@@ -107,7 +133,7 @@ const Checkout = () => {
 
       <div className="items-center justify-center w-full m-10 mx-auto">
         <form
-          onSubmit={handleSubmitForm}
+          // onSubmit={handleSubmitForm}
           className="w-full max-w-md p-6 mx-auto space-y-6 bg-white rounded-lg shadow-md"
         >
           <div className="grid grid-cols-2 gap-4">
@@ -175,13 +201,27 @@ const Checkout = () => {
           <div className="text-text1 dark:text-darkStroke">
             Tổng tiền đơn hàng: {totalAmount}
           </div>
-          <button
-            type="submit"
-            className="flex items-center justify-center w-full px-4 py-3 text-base font-semibold text-white rounded-xl bg-secondary min-h-[56px]"
-          >
-            Đặt hàng
-          </button>
         </form>
+        <div className="flex flex-col gap-y-2">
+          <div>
+            <StripeCheckout
+              token={handleToken}
+              stripeKey={KEY}
+              amount={totalAmount}
+              name="Camelia shop"
+              description="Mô tả đơn hàng"
+            />
+          </div>
+          <div>
+            <button
+              // type="submit"
+              className="flex items-center justify-center w-full px-4 py-3 text-base font-semibold text-white rounded-xl bg-secondary min-h-[56px]"
+              onClick={handleSubmitForm}
+            >
+              Thanh toán khi nhân hàng
+            </button>
+          </div>
+        </div>
       </div>
 
       <Footer />

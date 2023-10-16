@@ -1,10 +1,60 @@
 const Order = require("../models/order");
 const Cart = require("../models/cart");
 const Warehousing = require("../models/warehousing");
-
+const KEY = process.env.STRIPE_KEY;
+const stripe = require("stripe")(KEY);
 const asyncHandler = require("express-async-handler");
 
-const createOrder = asyncHandler(async (req, res) => {
+const createOrderPaymentOnline = asyncHandler(async (req, res) => {
+  try {
+    const { userId, productItems, shippingAddress, total_price, tokenId } =
+      req.body;
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: total_price,
+      currency: "vnd",
+      // source: req.body.tokenId,
+    });
+    const newOrder = await new Order({
+      userId,
+      productItems,
+      shippingAddress,
+      total_price,
+      isPayment: true,
+      tokenId,
+    });
+    await newOrder.save();
+
+    for (const item of productItems) {
+      const { productId, quantity } = item;
+      const warehousingProduct = await Warehousing.findOne({ productId });
+
+      if (warehousingProduct) {
+        const updatedQuantity = warehousingProduct.quantity - quantity;
+
+        warehousingProduct.quantity = updatedQuantity;
+        await warehousingProduct.save();
+      } else {
+        console.log(`Product with ID ${productId} not found in the warehouse.`);
+      }
+    }
+
+    await Cart.deleteMany({ userId });
+
+    res.status(200).json({
+      success: true,
+      message: "Order placed successfully!",
+      paymentIntent: paymentIntent,
+      retObj: newOrder,
+    });
+  } catch (error) {
+    const errors = { backendError: String };
+    errors.backendError = error;
+    res.status(500).json(errors);
+  }
+});
+
+const createOrderPaymentCod = asyncHandler(async (req, res) => {
   try {
     const { userId, productItems, shippingAddress, total_price } = req.body;
 
@@ -43,6 +93,46 @@ const createOrder = asyncHandler(async (req, res) => {
     res.status(500).json(errors);
   }
 });
+
+// const createOrderPaymentCod = asyncHandler(async (req, res) => {
+//   try {
+//     const { userId, productItems, shippingAddress, total_price } = req.body;
+
+//     const newOrder = await new Order({
+//       userId,
+//       productItems,
+//       shippingAddress,
+//       total_price,
+//     });
+//     await newOrder.save();
+
+//     for (const item of productItems) {
+//       const { productId, quantity } = item;
+//       const warehousingProduct = await Warehousing.findOne({ productId });
+
+//       if (warehousingProduct) {
+//         const updatedQuantity = warehousingProduct.quantity - quantity;
+
+//         warehousingProduct.quantity = updatedQuantity;
+//         await warehousingProduct.save();
+//       } else {
+//         console.log(`Product with ID ${productId} not found in the warehouse.`);
+//       }
+//     }
+
+//     await Cart.deleteMany({ userId });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Order placed successfully!",
+//       retObj: newOrder,
+//     });
+//   } catch (error) {
+//     const errors = { backendError: String };
+//     errors.backendError = error;
+//     res.status(500).json(errors);
+//   }
+// });
 
 const getOrdersByUser = asyncHandler(async (req, res) => {
   try {
@@ -246,7 +336,9 @@ const Income = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  createOrder,
+  createOrderPaymentCod,
+  createOrderPaymentOnline,
+  // createOrder,
   getOrdersByUser,
   getOrderById,
   updateOrderStatus,

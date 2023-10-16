@@ -28,7 +28,6 @@ const Products = ({ selectedCategoryId }) => {
   }, []);
 
   const activeProducts = products.filter((item) => item?.isActive);
-  console.log("activeProducts", activeProducts);
 
   const filteredProducts = selectedCategoryId
     ? activeProducts.filter(

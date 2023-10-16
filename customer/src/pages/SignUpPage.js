@@ -15,9 +15,9 @@ const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
-  console.log(store);
+
   const [error, setError] = useState({});
-  console.log("error", error.mes);
+
   const [value, setValue] = useState({
     firstName: "",
     lastName: "",
