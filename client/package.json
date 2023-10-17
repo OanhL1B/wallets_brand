@@ -11,7 +11,6 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "antd": "^5.8.1",
     "axios": "^1.4.0",
     "chart.js": "^4.3.3",
     "chartjs-plugin-datalabels": "^2.2.0",
@@ -42,9 +41,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "npm i",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build": "npm i"
   },
   "eslintConfig": {
     "extends": [
