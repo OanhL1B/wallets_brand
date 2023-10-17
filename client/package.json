@@ -43,7 +43,7 @@
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build": "npm i"
+    "build": "npm i npm i react-scripts"
   },
   "eslintConfig": {
     "extends": [
