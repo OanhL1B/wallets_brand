@@ -40,7 +40,7 @@
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build,": "react-scripts build"
+    "build": "npm i"
   },
   "eslintConfig": {
     "extends": [
