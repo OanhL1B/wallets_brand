@@ -10,6 +10,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import axios from "axios";
 import { Avatar } from "@mui/material";
+import { APIPUBLIC } from "../redux/config/config";
 const Header = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const quantity = useSelector((state) => state.customer?.userCarts);
@@ -43,7 +44,7 @@ const Header = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/product");
+        const res = await APIPUBLIC.get("/api/product");
         setProductFilters(res.data.retObj);
       } catch (err) {}
     };
