@@ -1,29 +1,20 @@
-// import { Link } from "react-router-dom";
-
-// const Product = ({ item }) => {
-//   console.log("item", item.quantity);
-//   return (
-//     <div className="relative flex flex-col items-center justify-center w-full h-full p-1 m-5 ">
-//       <Link to={`/product/${item._id}`}>
-//         <img src={item?.thumb} alt="Product" />
-//       </Link>
-//       <div className="text-base text-[#4e2f30] font-normal rounded-lg">
-//         {item?.productName}
-//       </div>
-//       <div className="text-lg font-semibold">{item?.price}₫</div>
-//     </div>
-//   );
-// };
-
-// export default Product;
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { addCart, getCartUser } from "../redux/actions";
+import { useState } from "react";
 
 const Product = ({ item }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   const isOutOfStock = item.quantity === 0;
   const handleClick = async () => {
     if (!user) {
@@ -40,7 +31,11 @@ const Product = ({ item }) => {
     dispatch(getCartUser(user?.userData?._id));
   };
   return (
-    <div className="relative flex flex-col items-center justify-center w-full h-full p-1 m-5">
+    <div
+      className="relative flex flex-col items-center justify-center w-full h-full p-1 m-5"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {isOutOfStock && (
         <div className="absolute p-2 transform -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-75 rounded-lg top-1/2 left-1/2">
           <p className="font-semibold text-red-500">Đã hết hàng</p>
@@ -48,11 +43,15 @@ const Product = ({ item }) => {
       )}
       {isOutOfStock ? (
         <div>
-          <img src={item?.thumb} alt="Product" className="opacity-50" />
+          <img
+            src={isHovered ? item?.images[0] : item.thumb}
+            alt="Product"
+            className="opacity-50"
+          />
         </div>
       ) : (
         <Link to={`/product/${item._id}`}>
-          <img src={item?.thumb} alt="Product" />
+          <img src={isHovered ? item?.images[0] : item.thumb} alt="Product" />
         </Link>
       )}
       <div className="text-base text-[#4e2f30] font-normal w-full">

@@ -22,6 +22,11 @@ const ProductDetail = () => {
   const product_categorys = useSelector((state) => state.customer.allProduct);
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     getProduct();
     dispatch(getProductsByCategory(category));
