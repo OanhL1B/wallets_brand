@@ -19,6 +19,7 @@ const ProductDetail = () => {
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [category, setCategory] = useState();
+  console.log("category", category);
   const product_categorys = useSelector((state) => state.customer.allProduct);
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
@@ -29,7 +30,12 @@ const ProductDetail = () => {
 
   useEffect(() => {
     getProduct();
-    dispatch(getProductsByCategory(category));
+  }, [productId]);
+
+  useEffect(() => {
+    if (category) {
+      dispatch(getProductsByCategory(category));
+    }
   }, [productId]);
 
   const getProduct = async () => {
@@ -38,10 +44,13 @@ const ProductDetail = () => {
 
       setProduct(res.data?.data);
       setCategory(res.data?.data.category);
-      console.log("res.data?.data.category", res.data?.data.category);
+      dispatch(getProductsByCategory(category));
+
       if (res.data.data.thumb) {
         setSelectedImage(res.data.data.thumb);
       }
+
+      dispatch(getProductsByCategory(res.data.data.category));
     } catch {}
   };
 
