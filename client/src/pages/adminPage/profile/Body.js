@@ -46,11 +46,11 @@ const Body = () => {
   const handleEditClick = () => {
     setIsModalOpen(true);
     setValue({
-      firstName: "",
-      lastName: "",
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user?.email,
-      phoneNumber: "",
-      address: "",
+      phoneNumber: user.phoneNumber,
+      address: user.address,
       image: "",
     });
   };
@@ -187,24 +187,11 @@ const Body = () => {
                   <div className={classes.WrapInputLabel}>
                     <h1 className={classes.LabelStyle}>Họ :</h1>
                     <input
-                      placeholder={user?.firstName}
+                      required
+                      placeholder={user?.lastName}
                       className={classes.InputStyle}
                       type="text"
-                      value={value.firstName || user?.firstName}
-                      onChange={(e) =>
-                        setValue({
-                          ...value,
-                          firstName: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div className={classes.WrapInputLabel}>
-                    <h1 className={classes.LabelStyle}>Tên :</h1>
-                    <input
-                      className={classes.InputStyle}
-                      type="text"
-                      value={value.lastName || user?.lastName}
+                      value={value.lastName}
                       onChange={(e) =>
                         setValue({
                           ...value,
@@ -214,11 +201,27 @@ const Body = () => {
                     />
                   </div>
                   <div className={classes.WrapInputLabel}>
-                    <h1 className={classes.LabelStyle}>Số điện thoại :</h1>
+                    <h1 className={classes.LabelStyle}>Tên :</h1>
                     <input
+                      required
                       className={classes.InputStyle}
                       type="text"
-                      value={value.phoneNumber || user?.phoneNumber}
+                      value={value.firstName}
+                      onChange={(e) =>
+                        setValue({
+                          ...value,
+                          firstName: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className={classes.WrapInputLabel}>
+                    <h1 className={classes.LabelStyle}>Số điện thoại :</h1>
+                    <input
+                      required
+                      className={classes.InputStyle}
+                      type="text"
+                      value={value.phoneNumber}
                       onChange={(e) =>
                         setValue({
                           ...value,
@@ -230,9 +233,10 @@ const Body = () => {
                   <div className={classes.WrapInputLabel}>
                     <h1 className={classes.LabelStyle}>Địa chỉ :</h1>
                     <input
+                      required
                       className={classes.InputStyle}
                       type="text"
-                      value={value.address || user.address}
+                      value={value.address}
                       onChange={(e) =>
                         setValue({
                           ...value,

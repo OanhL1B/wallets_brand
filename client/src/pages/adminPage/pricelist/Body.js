@@ -199,6 +199,7 @@ const Body = () => {
                 <div className={classes.WrapInputLabel}>
                   <h1 className={classes.LabelStyle}>Tên bảng giá :</h1>
                   <input
+                    required
                     placeholder={selectedPricelist?.pricelistName}
                     className={classes.InputStyle}
                     type="text"

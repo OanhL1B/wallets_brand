@@ -431,6 +431,7 @@ const Body = () => {
                 <div className={classes.WrapInputLabel}>
                   <h1 className={classes.LabelStyle}>Tên sản phẩm :</h1>
                   <input
+                    required
                     placeholder={selectedProduct?.productName}
                     className={classes.InputStyle}
                     type="text"
@@ -535,6 +536,7 @@ const Body = () => {
               <div>
                 <h1 className={classes.LabelStyle}>Mô tả *:</h1>
                 <ReactQuill
+                  required
                   modules={modules}
                   theme="snow"
                   value={

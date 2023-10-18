@@ -207,6 +207,7 @@ const Body = () => {
                     placeholder={selectedCategory?.categoryName}
                     className={classes.InputStyle}
                     type="text"
+                    required
                     value={value.categoryName}
                     onChange={(e) =>
                       setValue({
