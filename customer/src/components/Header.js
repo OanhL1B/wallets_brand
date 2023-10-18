@@ -6,9 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartUser } from "../redux/actions";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import axios from "axios";
 import { Avatar } from "@mui/material";
 import { APIPUBLIC } from "../redux/config/config";
 const Header = () => {

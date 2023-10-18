@@ -6,7 +6,6 @@ import {
   updateUserbyAdmin,
 } from "../../../redux/actions/adminActions";
 import * as classes from "../../../utils/styles";
-import Swal from "sweetalert2";
 import { SET_ERRORS, UPDATE_USER_BY_ADMIN } from "../../../redux/actionTypes";
 import { MenuItem, Select } from "@mui/material";
 

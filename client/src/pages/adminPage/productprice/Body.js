@@ -58,7 +58,7 @@ const Body = () => {
     setValue({
       productId: productprice?.productId?._id,
       pricelistId: productprice?.pricelistId?._id,
-      price: "",
+      price: productprice?.price,
       productpriceId: productprice._id,
     });
   };
@@ -275,6 +275,7 @@ const Body = () => {
                 <div className={classes.WrapInputLabel}>
                   <h1 className={classes.LabelStyle}>Giá :</h1>
                   <input
+                    required
                     placeholder={selectedProductPrice?.price}
                     className={classes.InputStyle}
                     type="text"

@@ -7,6 +7,7 @@ import Spinner from "../utils/Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import CAMELIA from "./logo.png";
 import ECLLIPSE from "./ellipse.png";
+import { SET_ERRORS } from "../redux/actionTypes";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -38,7 +39,9 @@ const LoginPage = () => {
       setPassword(password);
     }
   }, [store.errors]);
-
+  useEffect(() => {
+    dispatch({ type: SET_ERRORS, payload: {} });
+  }, []);
   return (
     <div className="relative w-full min-h-screen p-10 bg-lite dark:bg-dark isolate">
       <img

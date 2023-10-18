@@ -52,11 +52,11 @@ const ProfilePage = () => {
   const handleEditClick = () => {
     setIsModalOpen(true);
     setValue({
-      firstName: "",
-      lastName: "",
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user?.email,
-      phoneNumber: "",
-      address: "",
+      phoneNumber: user.phoneNumber,
+      address: user.address,
       image: "",
     });
   };
@@ -198,10 +198,11 @@ const ProfilePage = () => {
                     <div className={classes.WrapInputLabel}>
                       <h1 className={classes.LabelStyle}>Tên :</h1>
                       <input
+                        required
                         placeholder={user?.firstName}
                         className={classes.InputStyle}
                         type="text"
-                        value={value.firstName || user?.firstName}
+                        value={value.firstName}
                         onChange={(e) =>
                           setValue({
                             ...value,
@@ -213,9 +214,10 @@ const ProfilePage = () => {
                     <div className={classes.WrapInputLabel}>
                       <h1 className={classes.LabelStyle}>Họ :</h1>
                       <input
+                        required
                         className={classes.InputStyle}
                         type="text"
-                        value={value.lastName || user?.lastName}
+                        value={value.lastName}
                         onChange={(e) =>
                           setValue({
                             ...value,
@@ -228,9 +230,10 @@ const ProfilePage = () => {
                     <div className={classes.WrapInputLabel}>
                       <h1 className={classes.LabelStyle}>Số điện thoại :</h1>
                       <input
+                        required
                         className={classes.InputStyle}
                         type="text"
-                        value={value.phoneNumber || user?.phoneNumber}
+                        value={value.phoneNumber}
                         onChange={(e) =>
                           setValue({
                             ...value,
@@ -242,9 +245,10 @@ const ProfilePage = () => {
                     <div className={classes.WrapInputLabel}>
                       <h1 className={classes.LabelStyle}>Địa chỉ :</h1>
                       <input
+                        required
                         className={classes.InputStyle}
                         type="text"
-                        value={value.address || user.address}
+                        value={value.address}
                         onChange={(e) =>
                           setValue({
                             ...value,

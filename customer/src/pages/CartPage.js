@@ -95,7 +95,7 @@ const Cart = () => {
       )}
       <h1 className="text-2xl font-bold text-center">Giỏ hàng của bạn</h1>
 
-      <div className="w-full my-8 mt-6 item-center bg-bg_product">
+      <div className="w-full my-8 mt-6 item-center bg-bg_product min-h-[150px]">
         {userCarts.length !== 0 && (
           <table className="w-[80%] items-center table-auto  border border-[#c7c2c2] px-8 mx-auto bg-bg_product">
             <thead className="items-center h-20 px-8">
