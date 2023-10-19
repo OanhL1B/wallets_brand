@@ -45,7 +45,6 @@ const createProduct = asyncHandler(async (req, res) => {
       retObj: newProduct,
     });
   } catch (error) {
-    console.log("errors", error);
     const errors = { backendError: String };
     errors.backendError = error;
     res.status(500).json(errors);
@@ -160,50 +159,12 @@ const getProducts = asyncHandler(async (req, res) => {
   }
 });
 
-// const getProductbyCategory = asyncHandler(async (req, res) => {
-//   const categoryId = req.params.categoryId;
-
-//   try {
-//     let products;
-//     if (categoryId === "all") {
-//       // Lấy tất cả sản phẩm khi categoryId là "all"
-//       products = await Product.find({ isActive: true })
-//         .populate({
-//           path: "category",
-//           select: "categoryName",
-//         })
-//         .exec();
-//     } else {
-//       // Lấy sản phẩm theo categoryId khi categoryId không phải là "all"
-//       products = await Product.find({
-//         category: categoryId,
-//         isActive: true,
-//       })
-//         .populate({
-//           path: "category",
-//           select: "categoryName",
-//         })
-//         .exec();
-//     }
-
-//     res.json({ success: true, retObj: products });
-//   } catch (error) {
-//     console.error(
-//       "Lỗi khi lấy thông tin sản phẩm theo danh mục:",
-//       error.message
-//     );
-//     res
-//       .status(500)
-//       .json({ error: "Lỗi khi lấy thông tin sản phẩm theo danh mục" });
-//   }
-// });
 const getProductbyCategory = asyncHandler(async (req, res) => {
   const categoryId = req.params.categoryId;
 
   try {
     let products;
     if (categoryId === "all") {
-      // Lấy tất cả sản phẩm khi categoryId là "all"
       products = await Product.find({ isActive: true })
         .populate({
           path: "category",
@@ -211,7 +172,6 @@ const getProductbyCategory = asyncHandler(async (req, res) => {
         })
         .exec();
     } else {
-      // Lấy sản phẩm theo categoryId khi categoryId không phải là "all"
       products = await Product.find({
         category: categoryId,
         isActive: true,
@@ -360,7 +320,6 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
     res.status(200).json({ success: true, message: "Xóa sản phẩm thành công" });
   } catch (error) {
-    console.log("error", error);
     const errors = { backendError: String };
     errors.backendError = error;
     res.status(500).json(errors);

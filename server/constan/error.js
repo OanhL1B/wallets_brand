@@ -11,8 +11,18 @@ module.exports = {
   // Đăng kí
   SIGNUP_FAIL: "Email đã tồn tại trong hệ thống này",
   SIGNUP_SUCCESS: "Đăng kí tài khoản thành công",
-
   ERROR: "Đã có lỗi xảy ra",
   PRODUCT_ERROR: "Tên sản phẩm bị trùng",
   PRODUCT_SUCCESS: "Thêm mới sản phẩm  thành công!",
+
+  // Giỏ hàng
+  CART_SUCCESS: "Product added to the cart successfully",
+  CART_ITEM_NOTFOUND: "Cart item not found",
+  UPDATE_CART_SUCCESS: "Cart item quantity updated successfully",
+  REMOVE_CART_SUCCESS: "Product removed from the cart successfully",
+
+  //danh mục
+  CATEGORY_ERROR: "Tên danh mục này đã tồn tại, vui lòng chọn một tên khác!",
+  CATEGORY_SUCCESS: "Thêm mới danh mục thành công!",
+  CATEGORY_ITEM_NOTFOUND: "Danh mục không tồn tại",
 };

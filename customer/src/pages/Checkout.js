@@ -116,14 +116,12 @@ const Checkout = () => {
     dispatch(addOrderOnline(orderData));
   };
 
-  console.log("store", store);
-
   useEffect(() => {
     if (store.customer.orderOnlineAdded) {
       if (store.customer.orderOnlineAdded) {
         dispatch(getCartUser(user?.userData?._id));
         dispatch({ type: ADD_ORDER_ONLINE, payload: false });
-        navigate("/success");
+        navigate("/success_online");
       }
     } else {
     }

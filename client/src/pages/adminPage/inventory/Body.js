@@ -127,6 +127,7 @@ const Body = () => {
     });
     setFilteredList(updatedList);
   };
+
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
       <div className="flex rounded-lg border border-[#E1EEEE] ml-3">

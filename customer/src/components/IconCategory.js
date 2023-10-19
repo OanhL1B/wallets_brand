@@ -23,7 +23,6 @@ const IconCategory = () => {
     <div className="flex items-center justify-center w-full h-full mt-4 mb-1 border-t-2 border-b-2">
       <div className="flex px-10">
         <img
-          // src="https://theme.hstatic.net/1000365849/1000614631/14/baloden.svg?v=144"
           src={
             selectedCategory === categories[0]?._id
               ? "https://theme.hstatic.net/1000365849/1000614631/14/balodo.svg?v=178"

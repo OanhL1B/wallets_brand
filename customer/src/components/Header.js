@@ -10,9 +10,9 @@ import { getCartUser } from "../redux/actions";
 import { Avatar } from "@mui/material";
 import { APIPUBLIC } from "../redux/config/config";
 const Header = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const userLocal = JSON.parse(localStorage.getItem("user"));
   const quantity = useSelector((state) => state.customer?.userCarts);
-
+  const user = useSelector((state) => state.customer.usercurrent);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -142,7 +142,7 @@ const Header = () => {
             </div>
 
             <div className="flex items-center space-x-4">
-              {user ? (
+              {userLocal ? (
                 <div onClick={logout}>Đăng xuất</div>
               ) : (
                 <div className="flex items-center space-x-4">
@@ -174,7 +174,7 @@ const Header = () => {
                   )}
                 </div>
               </Link>
-              {user && (
+              {userLocal && (
                 <Link
                   to="/user-order"
                   className="text-gray-600 hover:text-gray-900"
@@ -183,15 +183,15 @@ const Header = () => {
                 </Link>
               )}
             </div>
-            {user && (
+            {userLocal && (
               <div className="flex gap-x-2">
                 <span className="text-xl font-semibold">
-                  {user?.userData?.lastName} {user?.userData?.firstName}{" "}
+                  {user?.firstName} {user?.lastName}{" "}
                 </span>
                 <Link to={"/profile"}>
                   <div className="items-center">
                     <Avatar
-                      src={user?.userData?.image}
+                      src={user?.image}
                       style={{ width: 30, height: 30 }}
                     />
                   </div>

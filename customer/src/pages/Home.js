@@ -5,7 +5,7 @@ import Status from "../components/Status";
 import Footer from "../components/Footer";
 import IngNar from "../components/IngNar";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategories, getProducts } from "../redux/actions";
+import { getCategories, getCurrentUser, getProducts } from "../redux/actions";
 import Title from "../components/Title";
 import IconCategory from "../components/IconCategory";
 import Product_Home from "../components/Product_Home";
@@ -15,6 +15,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(getCategories());
     dispatch(getProducts());
+    dispatch(getCurrentUser());
   }, [dispatch]);
   const products = useSelector((state) => state.customer.allProduct);
 

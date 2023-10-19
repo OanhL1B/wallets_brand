@@ -5,8 +5,6 @@ const {
   isAdminOrEmployee,
 } = require("../middlewares/verifyToken");
 
-// cả admin và nhân viên đều có quyền đối với cập nhật kho
-
 router.get("/", ctrls.getWarehousings);
 
 router.put(
@@ -14,7 +12,5 @@ router.put(
   [verifyAccessToken, isAdminOrEmployee],
   ctrls.updateWarehousing
 );
-
-// router.get("/:id", ctrls.getCategory);
 
 module.exports = router;

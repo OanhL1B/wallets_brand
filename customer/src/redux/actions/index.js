@@ -50,7 +50,6 @@ export const addUser = (formData) => async (dispatch) => {
       dispatch({ type: ADD_USER, payload: true });
     }
   } catch (error) {
-    console.log(error);
     dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
@@ -80,7 +79,6 @@ export const addCart = (formData) => async (dispatch) => {
 export const addOrderCod = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addOrderCod(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Đặt hàng thành công hàng thành công!");
       dispatch({ type: ADD_ORDER_COD, payload: true });
@@ -102,7 +100,6 @@ export const addOrderCod = (formData) => async (dispatch) => {
 export const addOrderOnline = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addOrderOnline(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Đặt hàng thành công hàng thành công!");
       dispatch({ type: ADD_ORDER_ONLINE, payload: true });
@@ -153,7 +150,6 @@ export const getOrderUser = (userId) => async (dispatch) => {
 export const Canceled = (formData) => async (dispatch) => {
   try {
     const { data } = await api.Canceled(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Hủy đơn hàng công hàng thành công!");
       dispatch({ type: CANCELED, payload: true });
@@ -176,7 +172,6 @@ export const Canceled = (formData) => async (dispatch) => {
 export const deleteCart = (formData) => async (dispatch) => {
   try {
     const { data } = await api.deleteCart(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("xóa giỏ hàng thành công!");
       dispatch({ type: DELETE_CART, payload: true });
@@ -265,7 +260,6 @@ export const getProducts = () => async (dispatch) => {
 export const getProductsByCategory = (categoryId) => async (dispatch) => {
   try {
     const { data } = await api.getProductsByCategory(categoryId);
-    console.log("data", data);
     dispatch({ type: GET_PRODUCTS_BY_CATEGORY, payload: data.retObj });
   } catch (error) {
     console.log("Redux Error", error);

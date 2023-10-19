@@ -1,4 +1,3 @@
-//2.
 export const LOGIN = "LOGIN";
 export const SET_ERRORS = "SET_ERRORS";
 export const ADD_CATEGORY = "ADD_CATEGORY";
@@ -26,3 +25,4 @@ export const UPDATE_USER = "UPDATE_USER";
 export const DELETE_CATEGORY = "DELETE_CATEGORY";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const UPDATE_PASSWORD = "UPDATE_PASSWORD";
+export const GET_ORDER_BY_STATUS = "GET_ORDER_BY_STATUS";

@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactModal from "react-modal";
 import * as classes from "../utils/styles";
-import {
-  getCategories,
-  getCurrentUser,
-  getProducts,
-  updateUser,
-} from "../redux/actions";
+import { getCurrentUser, updateUser } from "../redux/actions";
 import { UPDATE_USER } from "../redux/actionTypes";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -61,10 +56,6 @@ const ProfilePage = () => {
     });
   };
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -76,6 +67,11 @@ const ProfilePage = () => {
   };
   const handleUploadError = () => {
     console.log("error");
+  };
+
+  const isValidPhoneNumber = (phoneNumber) => {
+    const phoneNumberRegex = /^(7[0-9]{8}|0[0-9]{9}|\+94[0-9]{9})$/;
+    return phoneNumberRegex.test(phoneNumber);
   };
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -150,7 +146,7 @@ const ProfilePage = () => {
                   style={{ width: "250px", textAlign: "left" }}
                 >
                   <span>
-                    {user?.lastName} {user?.firstName}
+                    {user?.firstName} {user?.lastName}
                   </span>
                   <span>{user?.email}</span>
                   <span>{user?.phoneNumber}</span>
@@ -231,16 +227,23 @@ const ProfilePage = () => {
                       <h1 className={classes.LabelStyle}>Số điện thoại :</h1>
                       <input
                         required
+                        placeholder="Số điện thoại"
                         className={classes.InputStyle}
-                        type="text"
+                        type="number"
                         value={value.phoneNumber}
+                        pattern="(7[0-9]{8}|0[0-9]{9}|\+94[0-9]{9})$"
+                        title="Vui lòng nhập số điện thoại đúng định dạng."
+                        inputMode="numeric"
                         onChange={(e) =>
-                          setValue({
-                            ...value,
-                            phoneNumber: e.target.value,
-                          })
+                          setValue({ ...value, phoneNumber: e.target.value })
                         }
                       />
+                      {!isValidPhoneNumber(value.phoneNumber) && (
+                        <p className="text-red-500">
+                          Số điện thoại không hợp lệ. Vui lòng nhập số điện
+                          thoại đúng định dạng.
+                        </p>
+                      )}
                     </div>
                     <div className={classes.WrapInputLabel}>
                       <h1 className={classes.LabelStyle}>Địa chỉ :</h1>
@@ -264,6 +267,7 @@ const ProfilePage = () => {
                   <button
                     className={classes.adminFormSubmitButton}
                     type="submit"
+                    disabled={!isValidPhoneNumber(value.phoneNumber)}
                   >
                     Lưu
                   </button>

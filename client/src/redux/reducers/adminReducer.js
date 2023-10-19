@@ -12,6 +12,7 @@ import {
   GET_CURRENT_USER,
   GET_INVENTORY,
   GET_ORDERS,
+  GET_ORDER_BY_STATUS,
   GET_USERS,
   LOGIN,
   UPDATE_CATEGORY,
@@ -176,6 +177,11 @@ const adminReducer = (state = initialState, action) => {
       return {
         ...state,
         updatePassworded: action.payload,
+      };
+    case GET_ORDER_BY_STATUS:
+      return {
+        ...state,
+        allOrder: action.payload,
       };
     default:
       return state;

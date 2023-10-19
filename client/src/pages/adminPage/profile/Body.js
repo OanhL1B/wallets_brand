@@ -35,6 +35,7 @@ const Body = () => {
 
   // EDIT
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [value, setValue] = useState({
     firstName: "",
     lastName: "",
@@ -70,6 +71,12 @@ const Body = () => {
   const handleUploadError = () => {
     toast.error("load image error!");
   };
+
+  const isValidPhoneNumber = (phoneNumber) => {
+    const phoneNumberRegex = /^(7[0-9]{8}|0[0-9]{9}|\+94[0-9]{9})$/;
+    return phoneNumberRegex.test(phoneNumber);
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const updatedValue = {};
@@ -88,6 +95,7 @@ const Body = () => {
     } else {
       updatedValue.address = user.address;
     }
+
     if (value.phoneNumber !== "") {
       updatedValue.phoneNumber = value.phoneNumber;
     } else {
@@ -98,6 +106,7 @@ const Body = () => {
     } else {
       updatedValue.image = user.image;
     }
+
     dispatch(updateUser({ ...user, ...updatedValue }));
     dispatch({ type: UPDATE_USER, payload: false });
   };
@@ -215,21 +224,30 @@ const Body = () => {
                       }
                     />
                   </div>
+
                   <div className={classes.WrapInputLabel}>
                     <h1 className={classes.LabelStyle}>Số điện thoại :</h1>
                     <input
                       required
+                      placeholder="Số điện thoại"
                       className={classes.InputStyle}
-                      type="text"
+                      type="number"
                       value={value.phoneNumber}
+                      pattern="(7[0-9]{8}|0[0-9]{9}|\+94[0-9]{9})$"
+                      title="Vui lòng nhập số điện thoại đúng định dạng."
+                      inputMode="numeric"
                       onChange={(e) =>
-                        setValue({
-                          ...value,
-                          phoneNumber: e.target.value,
-                        })
+                        setValue({ ...value, phoneNumber: e.target.value })
                       }
                     />
+                    {!isValidPhoneNumber(value.phoneNumber) && (
+                      <p className="text-red-500">
+                        Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại
+                        đúng định dạng.
+                      </p>
+                    )}
                   </div>
+
                   <div className={classes.WrapInputLabel}>
                     <h1 className={classes.LabelStyle}>Địa chỉ :</h1>
                     <input
@@ -249,7 +267,11 @@ const Body = () => {
               </div>
 
               <div className="flex items-center justify-center mt-10 space-x-6">
-                <button className={classes.adminFormSubmitButton} type="submit">
+                <button
+                  className={classes.adminFormSubmitButton}
+                  type="submit"
+                  disabled={!isValidPhoneNumber(value.phoneNumber)}
+                >
                   Lưu
                 </button>
                 <button

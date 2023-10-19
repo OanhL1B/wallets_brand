@@ -1,6 +1,7 @@
 const Category = require("../models/category");
 const Product = require("../models/product");
 const asyncHandler = require("express-async-handler");
+const message = require("../constan/error");
 
 const createCategory = asyncHandler(async (req, res) => {
   try {
@@ -8,7 +9,7 @@ const createCategory = asyncHandler(async (req, res) => {
     const { categoryName } = req.body;
     const existingCategory = await Category.findOne({ categoryName });
     if (existingCategory) {
-      errors.categoryError = "Danh mục này đã tồn tại";
+      errors.categoryError = message.CATEGORY_ERROR;
       return res.status(400).json(errors);
     }
 
@@ -19,7 +20,7 @@ const createCategory = asyncHandler(async (req, res) => {
     await newCategory.save();
     return res.status(200).json({
       success: true,
-      message: "Thêm mới danh mục thành công!",
+      message: message.CATEGORY_SUCCESS,
       retObj: newCategory,
     });
   } catch (error) {
@@ -74,7 +75,9 @@ const updateCategory = asyncHandler(async (req, res) => {
 
     const category = await Category.findById(categoryId);
     if (!category) {
-      return res.status(400).json({ categoryError: "Danh mục không tồn tại" });
+      return res
+        .status(400)
+        .json({ categoryError: message.CATEGORY_ITEM_NOTFOUND });
     }
 
     const existingCategory = await Category.findOne({
@@ -84,8 +87,7 @@ const updateCategory = asyncHandler(async (req, res) => {
 
     if (existingCategory) {
       return res.status(400).json({
-        categoryError:
-          "Tên danh mục này đã tồn tại, vui lòng chọn một tên khác!",
+        categoryError: message.CATEGORY_ERROR,
       });
     }
 

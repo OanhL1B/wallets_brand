@@ -27,7 +27,6 @@ const createProductprice = asyncHandler(async (req, res) => {
       retObj: newProductprice,
     });
   } catch (error) {
-    console.log("error", error);
     const errors = { backendError: String };
     errors.backendError = error;
     res.status(500).json(errors);

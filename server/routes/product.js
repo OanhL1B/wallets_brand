@@ -5,8 +5,6 @@ const {
   isAdminOrEmployee,
 } = require("../middlewares/verifyToken");
 
-// cả admin và nhân viên đều có quyền đối với sản phẩm nha
-
 router.post("/", [verifyAccessToken, isAdminOrEmployee], ctrls.createProduct);
 router.get("/", ctrls.getProducts);
 

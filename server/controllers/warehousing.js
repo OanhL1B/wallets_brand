@@ -23,31 +23,6 @@ const getWarehousings = asyncHandler(async (req, res) => {
   }
 });
 
-// update danh mục
-// const updateWarehousing = asyncHandler(async (req, res) => {
-//   try {
-//     const errors = { warehousingError: String };
-//     const { productId, quantity } = req.body;
-//     const warehousingEntry = await Warehousing.findOne({ productId });
-//     if (!warehousingEntry) {
-//       errors.warehousingError = "Sản phẩm này chưa tồn tại trong kho này!";
-//       return res.status(400).json(errors);
-//     }
-
-//     warehousingEntry.quantity = quantity;
-//     await warehousingEntry.save();
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Cập nhật số lượng thành công thành công",
-//       data: warehousingEntry,
-//     });
-//   } catch (error) {
-//     const errors = { backendError: String };
-//     errors.backendError = error;
-//     res.status(500).json(errors);
-//   }
-// });
 const updateWarehousing = asyncHandler(async (req, res) => {
   try {
     const errors = { warehousingError: String };

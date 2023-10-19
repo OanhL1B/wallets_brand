@@ -19,7 +19,6 @@ const ProductDetail = () => {
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [category, setCategory] = useState();
-  console.log("category", category);
   const product_categorys = useSelector((state) => state.customer.allProduct);
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();

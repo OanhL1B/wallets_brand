@@ -47,6 +47,8 @@ export const updateUser = (updateUser) =>
 export const getOrders = () => APIV1.get("/api/order");
 export const updateOrderStatus = (updateOrder) =>
   APIV1.put("/api/order", updateOrder);
+export const getOrderbyStatus = (status) =>
+  APIV1.get(`/api/order/status/query?status=${status}`);
 //inventory
 export const getWarehousing = () => APIV1.get("/api/warehousing");
 export const updateWarehousing = (updateWarehousing) =>

@@ -3,6 +3,7 @@ const Pricelist = require("../models/pricelist");
 const ProductPrice = require("../models/productprice");
 
 const asyncHandler = require("express-async-handler");
+const message = require("../constan/error");
 
 const addToCart = asyncHandler(async (req, res) => {
   try {
@@ -17,7 +18,7 @@ const addToCart = asyncHandler(async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Product added to the cart successfully!",
+      message: message.CART_SUCCESS,
       retObj: newCartItem,
     });
   } catch (error) {
@@ -84,14 +85,14 @@ const updateCartItemQuantity = asyncHandler(async (req, res) => {
     const { cartItemId, quantity } = req.body;
     const cartItem = await Cart.findById(cartItemId);
     if (!cartItem) {
-      return res.status(404).json({ error: "Cart item not found" });
+      return res.status(404).json({ error: message.CART_ITEM_NOTFOUND });
     }
     cartItem.quantity = quantity;
     await cartItem.save();
 
     res.status(200).json({
       success: true,
-      message: "Cart item quantity updated successfully",
+      message: message.UPDATE_CART_SUCCESS,
       retObj: cartItem,
     });
   } catch (error) {
@@ -106,16 +107,16 @@ const removeFromCart = asyncHandler(async (req, res) => {
     const { cartItemId } = req.params;
     const cartItem = await Cart.findById(cartItemId);
     if (!cartItem) {
-      return res.status(404).json({ error: "Cart item not found" });
+      return res.status(404).json({ error: message.CART_ITEM_NOTFOUND });
     }
     await cartItem.deleteOne();
     res.status(200).json({
       success: true,
-      message: "Product removed from the cart successfully",
+      message: message.REMOVE_CART_SUCCESS,
     });
   } catch (error) {
     console.log("error", error);
-    res.status(500).json({ backendError: "An error occurred on the backend" });
+    res.status(500).json({ backendError: message.ERROR });
   }
 });
 

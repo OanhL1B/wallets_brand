@@ -47,8 +47,6 @@ const Body = () => {
       setLoading(false);
       setConfirmPassword("");
     } else {
-      // Gửi form đi
-
       dispatch(
         updatePassword({
           userId: user?._id,

@@ -5,8 +5,6 @@ const {
   isAdminOrEmployee,
 } = require("../middlewares/verifyToken");
 
-// cả admin và nhân viên đều có quyền đối với danh mục nha
-
 router.post("/online", [verifyAccessToken], ctrls.createOrderPaymentOnline);
 router.post("/cod", [verifyAccessToken], ctrls.createOrderPaymentCod);
 
@@ -21,5 +19,10 @@ router.put(
   ctrls.updateOrderStatus
 );
 router.delete("/:orderId", [verifyAccessToken], ctrls.cancelOrder);
+router.get(
+  "/status/query",
+  [verifyAccessToken, isAdminOrEmployee],
+  ctrls.getOrderbyStatus
+);
 
 module.exports = router;

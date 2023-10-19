@@ -13,6 +13,7 @@ import {
   GET_CURRENT_USER,
   GET_INVENTORY,
   GET_ORDERS,
+  GET_ORDER_BY_STATUS,
   GET_USERS,
   SET_ERRORS,
   UPDATE_CATEGORY,
@@ -45,6 +46,15 @@ export const getCategories = () => async (dispatch) => {
   try {
     const { data } = await api.getCategories();
     dispatch({ type: GET_ALL_CATEGOIES, payload: data.retObj });
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const getOrderbyStatus = (status) => async (dispatch) => {
+  try {
+    const { data } = await api.getOrderbyStatus(status);
+    dispatch({ type: GET_ORDER_BY_STATUS, payload: data.retObj });
   } catch (error) {
     console.log("Redux Error", error);
   }
@@ -290,7 +300,6 @@ export const updateUser = (formData) => async (dispatch) => {
 export const deleteCategory = (formData) => async (dispatch) => {
   try {
     const { data } = await api.deleteCategory(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Xóa danh mục thành công!");
       dispatch({ type: DELETE_CATEGORY, payload: true });
@@ -303,7 +312,6 @@ export const deleteCategory = (formData) => async (dispatch) => {
 export const deleteProduct = (formData) => async (dispatch) => {
   try {
     const { data } = await api.deleteProduct(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Xóa sản phẩm thành công!");
       dispatch({ type: DELETE_PRODUCT, payload: true });

@@ -13,6 +13,7 @@ import ResetPassword from "./pages/ResetPassword";
 import ProfilePage from "./pages/ProfilePage";
 import Payment from "./pages/Payment";
 import Product_Category from "./pages/Product_Category";
+import SuccessOnline from "./pages/SuccessOnline";
 function App() {
   return (
     <Routes>
@@ -35,6 +36,7 @@ function App() {
         path="/collections/:categoryId"
         element={<Product_Category />}
       ></Route>
+      <Route path="/success_online" element={<SuccessOnline />}></Route>
     </Routes>
   );
 }

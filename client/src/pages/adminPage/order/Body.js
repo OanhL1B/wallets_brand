@@ -1,12 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getOrders } from "../../../redux/actions/adminActions";
+import {
+  getOrderbyStatus,
+  getOrders,
+} from "../../../redux/actions/adminActions";
 import { useNavigate } from "react-router-dom";
 import { SET_ERRORS } from "../../../redux/actionTypes";
+import { MenuItem, Select } from "@mui/material";
 
 import moment from "moment";
 
 const Body = () => {
+  const [selectedStatus, setSelectedStatus] = useState("all");
+
   const navigate = useNavigate();
   const orders = useSelector((state) => state.admin.allOrder);
 
@@ -16,12 +22,37 @@ const Body = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    if (!selectedStatus) return;
+    if (selectedStatus === "all") {
+      dispatch(getOrders());
+    } else {
+      dispatch(getOrderbyStatus(selectedStatus));
+    }
+  }, [selectedStatus]);
+
+  useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
   }, []);
 
   return (
     <div className="flex-[0.8] mt-3 mx-5 item-center">
-      <div className="flex mt-4"></div>
+      <div className="flex mt-4">
+        <h1 className="items-center justify-center mt-2 mr-2">Lọc đơn hàng:</h1>
+
+        <Select
+          value={selectedStatus}
+          onChange={(e) => setSelectedStatus(e.target.value)}
+          className="p-1 bg-gray-100 rounded-md"
+          sx={{ height: 30, width: 200, marginRight: 10 }}
+        >
+          <MenuItem value="all">Tất cả đơn hàng</MenuItem>
+          <MenuItem value="pending">Chưa xác nhận</MenuItem>
+          <MenuItem value="confirm">Đã xác nhận</MenuItem>
+          <MenuItem value="Shippped">Đang giao</MenuItem>
+          <MenuItem value="delivered">Đã giao</MenuItem>
+          <MenuItem value="canceled">Đã hủy</MenuItem>
+        </Select>
+      </div>
       <div className="w-full my-8 mt-6">
         {orders?.length !== 0 && (
           <div className="overflow-auto max-h-[530px]">

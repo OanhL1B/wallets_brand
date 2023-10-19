@@ -5,54 +5,6 @@ const KEY = process.env.STRIPE_KEY;
 const stripe = require("stripe")(KEY);
 const asyncHandler = require("express-async-handler");
 
-// const createOrderPaymentOnline = asyncHandler(async (req, res) => {
-//   try {
-//     const { userId, productItems, shippingAddress, total_price, tokenId } =
-//       req.body;
-
-//     const paymentIntent = await stripe.paymentIntents.create({
-//       amount: total_price,
-//       currency: "vnd",
-//     });
-//     const newOrder = await new Order({
-//       userId,
-//       productItems,
-//       shippingAddress,
-//       total_price,
-//       isPayment: true,
-//       tokenId,
-//     });
-//     await newOrder.save();
-
-//     for (const item of productItems) {
-//       const { productId, quantity } = item;
-//       const warehousingProduct = await Warehousing.findOne({ productId });
-
-//       if (warehousingProduct) {
-//         const updatedQuantity = warehousingProduct.quantity - quantity;
-
-//         warehousingProduct.quantity = updatedQuantity;
-//         await warehousingProduct.save();
-//       } else {
-//         console.log(`Product with ID ${productId} not found in the warehouse.`);
-//       }
-//     }
-
-//     await Cart.deleteMany({ userId });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Order placed successfully!",
-//       paymentIntent: paymentIntent,
-//       retObj: newOrder,
-//     });
-//   } catch (error) {
-//     const errors = { backendError: String };
-//     errors.backendError = error;
-//     res.status(500).json(errors);
-//   }
-// });
-
 const createOrderPaymentOnline = asyncHandler(async (req, res) => {
   try {
     const { userId, productItems, shippingAddress, total_price } = req.body;
@@ -265,53 +217,46 @@ const getOrders = asyncHandler(async (req, res) => {
   }
 });
 
-// biểu đồ thống kê doanh thu theo tháng
+const getOrderbyStatus = asyncHandler(async (req, res) => {
+  const { status } = req.query;
 
-// const Income = asyncHandler(async (req, res) => {
-//   const productId = req.query.pid;
+  try {
+    let query = {};
+    if (status) {
+      query.status = status;
+    }
 
-//   try {
-//     const income = await Order.aggregate([
-//       {
-//         $match: {
-//           ...(productId && {
-//             "productItems.productId": productId,
-//           }),
-//         },
-//       },
-//       {
-//         $project: {
-//           month: { $month: "$createdAt" },
-//           year: { $year: "$createdAt" },
-//           sales: "$total_price",
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: { month: "$month", year: "$year" },
-//           total: { $sum: "$sales" },
-//         },
-//       },
-//       {
-//         $sort: { "_id.year": 1, "_id.month": 1 },
-//       },
-//     ]);
-//     res.status(200).json(income);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
+    const orders = await Order.find(query)
+      .sort({ createdAt: -1 })
+      .populate("userId")
+      .populate({
+        path: "Order_ReviewerId",
+        select: "lastName firstName",
+      });
 
+    res.status(200).json({
+      success: true,
+      message: "Show orders successfully",
+      retObj: orders,
+    });
+  } catch (error) {
+    console.error("Backend Error", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+});
 const Income = asyncHandler(async (req, res) => {
-  const productId = req.query.pid; // Lấy productId từ query parameter pid
+  const productId = req.query.pid;
 
   try {
     const income = await Order.aggregate([
       {
         $match: {
-          status: "delivered", // Chỉ tính đơn hàng đã giao hàng
+          status: "delivered",
           ...(productId && {
-            "productItems.productId": mongoose.Types.ObjectId(productId), // Chuyển productId sang kiểu ObjectId
+            "productItems.productId": mongoose.Types.ObjectId(productId),
           }),
         },
       },
@@ -341,11 +286,11 @@ const Income = asyncHandler(async (req, res) => {
 module.exports = {
   createOrderPaymentCod,
   createOrderPaymentOnline,
-  // createOrder,
   getOrdersByUser,
   getOrderById,
   updateOrderStatus,
   cancelOrder,
   getOrders,
   Income,
+  getOrderbyStatus,
 };
