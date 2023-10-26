@@ -59,20 +59,12 @@ export const addCart = (formData) => async (dispatch) => {
     const { data } = await api.addCart(formData);
     if (data.success === true) {
       toast.success("Thêm vào giỏ hàng thành công!");
-      dispatch({ type: ADD_CART, payload: data.retObj });
+      dispatch({ type: ADD_CART, payload: true });
     } else {
       dispatch({ type: SET_ERRORS, payload: data });
     }
   } catch (error) {
-    if (
-      error.response &&
-      error.response.data &&
-      error.response.data.status === "error"
-    ) {
-      dispatch({ type: SET_ERRORS, payload: error.response });
-    } else {
-      console.log("Unknown error occurred");
-    }
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
   }
 };
 

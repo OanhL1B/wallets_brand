@@ -37,6 +37,7 @@ const initialState = {
   userOrders: [],
   allCategory: [],
   allProduct: [],
+  cartAdded: false,
 };
 
 const customerReducer = (state = initialState, action) => {
@@ -61,27 +62,10 @@ const customerReducer = (state = initialState, action) => {
       };
 
     case ADD_CART:
-      const existingProduct = state.userCarts?.find(
-        (item) => item.productId._id === action.payload.productId
-      );
-
-      if (existingProduct) {
-        state.userCarts = state.userCarts.map((item) =>
-          item.productId._id === action.payload.productId
-            ? {
-                ...item,
-                productId: {
-                  ...item.productId,
-                  quantity: item.productId.quantity + 1,
-                },
-              }
-            : item
-        );
-        return { ...state.userCarts };
-      } else {
-        state.userCarts = [...state.userCarts, { ...action.payload }];
-        return { ...state };
-      }
+      return {
+        ...state,
+        cartAdded: action.payload,
+      };
 
     case GET_CART_USER:
       return {

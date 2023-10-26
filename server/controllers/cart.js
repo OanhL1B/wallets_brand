@@ -1,6 +1,7 @@
 const Cart = require("../models/cart");
 const Pricelist = require("../models/pricelist");
 const ProductPrice = require("../models/productprice");
+const Warehousing = require("../models/warehousing");
 
 const asyncHandler = require("express-async-handler");
 const message = require("../constan/error");
@@ -8,27 +9,53 @@ const message = require("../constan/error");
 const addToCart = asyncHandler(async (req, res) => {
   try {
     const { userId, productId, quantity, price } = req.body;
-    const newCartItem = await new Cart({
-      userId,
-      productId,
-      quantity,
-      price,
-    });
-    await newCartItem.save();
 
-    res.status(200).json({
-      success: true,
-      message: message.CART_SUCCESS,
-      retObj: newCartItem,
-    });
+    const existingCartItem = await Cart.findOne({ userId, productId });
+
+    if (existingCartItem) {
+      existingCartItem.quantity += quantity;
+      await existingCartItem.save();
+
+      res.status(200).json({
+        success: true,
+        message: message.CART_SUCCESS,
+        retObj: existingCartItem,
+      });
+    } else {
+      const warehousingItem = await Warehousing.findOne({ productId });
+      const availableQuantity = warehousingItem ? warehousingItem.quantity : 0;
+
+      if (quantity > availableQuantity) {
+        return res.status(400).json({
+          success: false,
+          message: message.CART_QUANTITY_ERROR,
+        });
+      }
+
+      const newCartItem = new Cart({
+        userId,
+        productId,
+        quantity,
+        price,
+      });
+
+      await newCartItem.save();
+
+      res.status(200).json({
+        success: true,
+        message: message.CART_SUCCESS,
+        retObj: newCartItem,
+      });
+    }
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: message.CART_ERROR,
+      error: error.message,
+    });
   }
 });
-
-// get theo user
 
 const getCartItems = asyncHandler(async (req, res) => {
   try {
@@ -83,10 +110,24 @@ const getCartItems = asyncHandler(async (req, res) => {
 const updateCartItemQuantity = asyncHandler(async (req, res) => {
   try {
     const { cartItemId, quantity } = req.body;
+
     const cartItem = await Cart.findById(cartItemId);
     if (!cartItem) {
       return res.status(404).json({ error: message.CART_ITEM_NOTFOUND });
     }
+
+    const warehousingItem = await Warehousing.findOne({
+      productId: cartItem.productId,
+    });
+    const availableQuantity = warehousingItem ? warehousingItem.quantity : 0;
+
+    if (quantity > availableQuantity) {
+      return res.status(400).json({
+        success: false,
+        message: "Số lượng sản phẩm vượt quá số lượng có sẵn trong kho",
+      });
+    }
+
     cartItem.quantity = quantity;
     await cartItem.save();
 
@@ -96,9 +137,12 @@ const updateCartItemQuantity = asyncHandler(async (req, res) => {
       retObj: cartItem,
     });
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Đã có lỗi xảy ra khi cập nhật mục giỏ hàng",
+      error: error.message,
+    });
   }
 });
 

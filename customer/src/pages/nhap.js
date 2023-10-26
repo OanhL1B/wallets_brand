@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { deleteCart, getCartUser, updateCartQuantity } from "../redux/actions";
 import { Link } from "react-router-dom";
-import { DELETE_CART, SET_ERRORS, UPDATE_CART } from "../redux/actionTypes";
+import { DELETE_CART } from "../redux/actionTypes";
 import Swal from "sweetalert2";
 import Title from "../components/Title";
 import IconCategory from "../components/IconCategory";
@@ -13,10 +13,12 @@ import IconCategory from "../components/IconCategory";
 const Cart = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
+  console.log("store", store.errors.message);
   const [totalAmount, setTotalAmount] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
   const userCarts = useSelector((state) => state.customer?.userCarts);
   const [updatedQuantities, setUpdatedQuantities] = useState({});
+  const [error, setError] = useState();
 
   useEffect(() => {
     dispatch(getCartUser(user?.userData?._id));
@@ -50,7 +52,6 @@ const Cart = () => {
       }
     });
   };
-
   useEffect(() => {
     if (store.errors || store.customer.deletedCart) {
       if (store.customer.deletedCart) {
@@ -83,19 +84,6 @@ const Cart = () => {
       dispatch(getCartUser(user?.userData?._id));
     }, 200);
   }, [updatedQuantities]);
-
-  useEffect(() => {
-    if (store.errors || store.customer.updatedCart) {
-      if (store.customer.updatedCart) {
-        dispatch({ type: SET_ERRORS, payload: {} });
-        dispatch({ type: UPDATE_CART, payload: false });
-      }
-    }
-  }, [store.errors, store.customer.updatedCart]);
-
-  useEffect(() => {
-    dispatch({ type: SET_ERRORS, payload: {} });
-  }, []);
 
   return (
     <div className="bg-gray-100">
@@ -159,7 +147,7 @@ const Cart = () => {
                           type="number"
                           name=""
                           min={1}
-                          max={1000}
+                          max={10}
                           id=""
                           value={
                             updatedQuantities[item.cartId] !== undefined
@@ -180,7 +168,7 @@ const Cart = () => {
           </table>
         )}
       </div>
-      <div className="mr-24 text-right text-red-500 min-h-[40px]">
+      <div className="mr-24 text-right text-red-500">
         {store.errors.message}
       </div>
       <div></div>
@@ -191,18 +179,9 @@ const Cart = () => {
               <div className="flex flex-col items-end mr-36">
                 <h4 className="text-4xl">Tổng tiền: {totalAmount}đ</h4>
                 <Link to="/checkout" className="button">
-                  {store.errors.message ? (
-                    <button
-                      className="px-5 py-3 mt-2 text-white bg-red-600 rounded-lg"
-                      disabled
-                    >
-                      Thanh toán
-                    </button>
-                  ) : (
-                    <button className="px-5 py-3 mt-2 text-white bg-red-600 rounded-lg">
-                      Thanh toán
-                    </button>
-                  )}
+                  <button className="px-5 py-3 mt-2 text-white bg-red-600 rounded-lg">
+                    Thanh toán
+                  </button>
                 </Link>
               </div>
             )}

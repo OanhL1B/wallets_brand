@@ -2,21 +2,20 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import AddIcon from "@mui/icons-material/Add";
-import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { APIPUBLIC } from "../redux/config/config";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart, getCartUser, getProductsByCategory } from "../redux/actions";
 import Title from "../components/Title";
 import IconCategory from "../components/IconCategory";
 import Products from "../components/Products";
+import { ADD_CART, SET_ERRORS } from "../redux/actionTypes";
 const ProductDetail = () => {
   const dispatch = useDispatch();
-
+  const store = useSelector((state) => state);
   const { productId } = useParams();
   const [product, setProduct] = useState({});
+  console.log("product", product);
   const [quantity, setQuantity] = useState(1);
-  const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [category, setCategory] = useState();
   const product_categorys = useSelector((state) => state.customer.allProduct);
@@ -53,24 +52,6 @@ const ProductDetail = () => {
     } catch {}
   };
 
-  const handleQuantity = (type) => {
-    if (error) {
-      setError(null);
-    }
-
-    if (type === "dec") {
-      if (quantity > 0) {
-        setQuantity(quantity - 1);
-      }
-    } else {
-      if (quantity + 1 <= product.quantity) {
-        setQuantity(quantity + 1);
-      } else {
-        setError("Số lượng đã vượt quá số lượng sản phẩm đang có");
-      }
-    }
-  };
-
   const handleClick = async () => {
     if (!user) {
       navigate("/login");
@@ -85,6 +66,19 @@ const ProductDetail = () => {
     );
     dispatch(getCartUser(user?.userData?._id));
   };
+
+  useEffect(() => {
+    if (store.errors || store.customer.cartAdded) {
+      if (store.customer.cartAdded) {
+        dispatch({ type: SET_ERRORS, payload: {} });
+        dispatch({ type: ADD_CART, payload: false });
+      }
+    }
+  }, [store.errors, store.customer.cartAdded]);
+
+  useEffect(() => {
+    dispatch({ type: SET_ERRORS, payload: {} });
+  }, []);
 
   const { images, thumb } = product;
   const imageArray = images || [];
@@ -144,31 +138,34 @@ const ProductDetail = () => {
           <div className="font-base text-[#666666] font-normal">
             {product?.design}
           </div>
-          <div className="flex items-center mt-10 mb-4 font-bold">
-            <span className="font-base text-[#666666] font-normal mr-4">
-              Số lượng
-            </span>
-            <HorizontalRuleIcon
-              onClick={() => handleQuantity("dec")}
-              className="cursor-pointer"
-            />
-            <span className="flex items-center justify-center w-8 h-8 mx-2 border border-secondary">
-              {quantity}
-            </span>
-
-            <AddIcon
-              onClick={() => handleQuantity("inc")}
-              className="cursor-pointer"
-            />
+          <div className="font-base text-[#666666] font-normal">
+            số lượng còn: {product?.quantity}
           </div>
-          {error && <p className="text-red-500">{error}</p>}
 
-          <button
-            onClick={handleClick}
-            className="px-6 py-3 font-medium text-red-500 bg-white border-2 border-red-500 hover:bg-gray-100"
-          >
-            THÊM VÀO GIỎ
-          </button>
+          <div className="flex mt-4 gap-x-8">
+            <input
+              className="w-[100px] text-center"
+              type="number"
+              name=""
+              min={1}
+              max={10}
+              id=""
+              value={quantity}
+              onChange={(e) => {
+                setQuantity(e.target.value);
+              }}
+            />
+            {store.errors.message && (
+              <p className="text-red-500"> {store.errors.message}</p>
+            )}
+
+            <button
+              onClick={handleClick}
+              className="px-6 py-3 font-medium text-red-500 bg-white border-2 border-red-500 hover:bg-gray-100"
+            >
+              THÊM VÀO GIỎ
+            </button>
+          </div>
         </div>
       </div>
       <div className="border-t-2 border-b-2">

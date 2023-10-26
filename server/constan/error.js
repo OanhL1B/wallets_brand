@@ -20,7 +20,9 @@ module.exports = {
   CART_ITEM_NOTFOUND: "Cart item not found",
   UPDATE_CART_SUCCESS: "Cart item quantity updated successfully",
   REMOVE_CART_SUCCESS: "Product removed from the cart successfully",
-
+  CART_QUANTITY_ERROR:
+    "Số lượng sản phẩm trong giỏ hàng vượt quá số lượng có sẵn trong kho",
+  CART_ERROR: "Đã có lỗi xảy ra khi thêm/cập nhật sản phẩm vào giỏ hàng",
   //danh mục
   CATEGORY_ERROR: "Tên danh mục này đã tồn tại, vui lòng chọn một tên khác!",
   CATEGORY_SUCCESS: "Thêm mới danh mục thành công!",
